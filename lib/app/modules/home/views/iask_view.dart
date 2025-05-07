@@ -4,17 +4,22 @@ import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/widgets/app_bar.dart';
+import '../../../../global/widgets/navbar.dart';
+import '../controllers/home_controller.dart';
 
-class IaskView extends GetView {
-  const IaskView({super.key});
+class IaskView extends GetView<HomeController> {
+  IaskView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.askBackground,
+      drawer: NavBar(),
       appBar: CustomAppBar(
+        onMenuPressed: () {
+          controller.scaffoldKey.currentState?.openDrawer();
+        },
         onMorePressed: () {
-          // Handle menu button press
-          print('More options pressed');
+          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K',
         backgroundColor: AppColors.askBlue,

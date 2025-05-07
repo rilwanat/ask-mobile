@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../views/dashboard_view.dart';
@@ -7,6 +8,8 @@ import '../views/profile_view.dart';
 import '../views/requests_view.dart';
 
 class HomeController extends GetxController {
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   var showBottomNav = true.obs;
   final _navIndex = 0.obs;
@@ -17,10 +20,10 @@ class HomeController extends GetxController {
     // print(value);
   }
   final screens = <Widget>[
-    const DashboardView(),
-    const RequestsView(),
-    const IaskView(),
-    const ProfileView(),
+    DashboardView(),
+    RequestsView(),
+    IaskView(),
+    ProfileView(),
   ];
 
   final _isLoading = false.obs;
@@ -33,7 +36,7 @@ class HomeController extends GetxController {
   Future<void> _initializeProfileData() async {
     setLoading(true);
     // await getUserProfile();
-    //await getUserNotifications();
+    // await getUserNotifications();
     // await getUserTransactionsHistory();
     // await getContacts();
     // await getMyBudgets();

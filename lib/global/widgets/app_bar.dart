@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../app_color.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+  final VoidCallback? onMenuPressed;
   final VoidCallback? onMorePressed;
   final String title;
   final String logoPath;
@@ -14,6 +16,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({
     super.key,
+    this.scaffoldKey,
+    this.onMenuPressed,
     this.onMorePressed,
     this.title = 'A.S.K',
     this.logoPath = "assets/images/logo-start.png",
@@ -37,10 +41,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Row(
             children: [
-              Image.asset(
-                logoPath,
-                width: logoSize,
-                height: logoSize,
+              GestureDetector(
+                onTap: onMenuPressed,
+                child: Image.asset(
+                  logoPath,
+                  width: logoSize,
+                  height: logoSize,
+                ),
               ),
               const SizedBox(width: 20),
               Text(
@@ -61,7 +68,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: onMorePressed,
+                  onTap: () {},
                   child: Icon(
                     Icons.more_vert_rounded,
                     color: iconColor,
