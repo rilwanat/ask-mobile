@@ -65,9 +65,9 @@ class OnboardingView extends GetView<OnboardingController> {
                             Text(
                               current['title']!,
                               style: const TextStyle(
-                                fontSize: 40,
+                                fontSize: 36,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: "Outfit-Semibold",
+                                fontFamily: "LatoRegular",
                                 color: AppColors.askBlue,
                               ),
                               textAlign: TextAlign.center,
@@ -75,9 +75,9 @@ class OnboardingView extends GetView<OnboardingController> {
                             Text(
                               current['subtitle']!,
                               style: const TextStyle(
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.w500,
-                                fontFamily: "Outfit",
+                                fontFamily: "LatoRegular",
                                 color: AppColors.askText,
                               ),
                               textAlign: TextAlign.center,

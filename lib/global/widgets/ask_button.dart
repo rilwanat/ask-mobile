@@ -136,8 +136,8 @@ class _FlashButtonState extends State<AskButton>
                         widget.text,
                         style: TextStyle(
                           fontSize: widget.textSize ?? 12,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Outfit",
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "LatoRegular",
                           color: widget.textColor,
                           // letterSpacing: .2,
                         ),

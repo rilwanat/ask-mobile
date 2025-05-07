@@ -25,6 +25,11 @@ class AuthController extends GetxController {
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
 
+  final _obscurePassword = true.obs;
+  bool get obscurePassword => _obscurePassword.value;
+
+  RxString errorMessage = "".obs;
+
   setLoading(bool? b) {
     _isLoading.value = b!;
     update();
@@ -84,6 +89,10 @@ class AuthController extends GetxController {
   setShowContinue(bool? b) {
     _showContinue.value = b!;
     update();
+  }
+
+  toggleObscurePassword() {
+    update([_obscurePassword.value = !_obscurePassword.value]);
   }
 
   @override

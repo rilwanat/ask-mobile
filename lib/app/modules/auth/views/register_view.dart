@@ -6,6 +6,7 @@ import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/LoadingScreen.dart';
 import '../../../../global/widgets/ask_button.dart';
+import '../../../../global/widgets/fade_down_animation.dart';
 import '../../../routes/app_pages.dart';
 import '../bindings/auth_binding.dart';
 import '../controllers/auth_controller.dart';
@@ -34,235 +35,342 @@ class RegisterView extends GetView<AuthController> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: ScreenSize.scaleHeight(context, 70),),
+                        SizedBox(height: ScreenSize.scaleHeight(context, 40),),
                         const SizedBox(height: 30),
                         const Text(
                             "Let us know you",
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
-                              // fontFamily: "Inter",
+                              fontFamily: "LatoRegular",
                               color: AppColors.askText,
                               height: 1.0,
                               // letterSpacing: .2,
                             )
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
                         const Text(
                             "Complete your registration below",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              // fontFamily: "Inter",
+                              fontFamily: "LatoRegular",
                               color: AppColors.askText,
                               // letterSpacing: .2,
                             )
                         ),
-
                         const SizedBox(height: 40),
-                        Container(child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Row(
-                            //   children: [
-                            //     Stack(
-                            //         children: [
-                            //           Container(
-                            //             width: ScreenSize.scaleHeight(context, 50),
-                            //             height: ScreenSize.scaleHeight(context, 50),
-                            //             // padding: const EdgeInsets.all(2),
-                            //             // margin: const EdgeInsets.all(8),
-                            //             decoration: BoxDecoration(
-                            //               border: Border.all(color: AppColors.xippBlue, width: 2),
-                            //               // color: AppColors.white,
-                            //               borderRadius:
-                            //               BorderRadius.circular(ScreenSize.scaleHeight(context, 50)),
-                            //               //boxShadow: buttonShadow
-                            //             ),
-                            //             child: Visibility(
-                            //               visible: true,
-                            //               child: Image.asset(
-                            //                 "assets/images/Ellipse 176.png",
-                            //                 //fit: BoxFit.fitWidth,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           //
-                            //           Positioned(
-                            //               right: 0,
-                            //               bottom: 0,
-                            //               child: Container(
-                            //                 // padding: const EdgeInsets.all(2),
-                            //                 width: 16, height: 16,
-                            //                 decoration: new BoxDecoration(
-                            //                   color: Colors.red,
-                            //                   borderRadius: BorderRadius.circular(26),
-                            //                 ),))
-                            //         ]
-                            //     ),
-                            //     const SizedBox(width: 10,),
-                            //     // Obx(() {
-                            //     //   // final profile = controller.profileData.value;
-                            //     //   final firstName = "";//profile?.data?.firstName ?? "-"; // Default to "Guest" if null
-                            //     //
-                            //     //   return Text(
-                            //     //     "Hi $firstName!",
-                            //     //     style: const TextStyle(
-                            //     //       fontSize: 18,
-                            //     //       fontWeight: FontWeight.w600,
-                            //     //       fontFamily: "Outfit",
-                            //     //       color: AppColors.xippText,
-                            //     //     ),
-                            //     //     textAlign: TextAlign.center,
-                            //     //   );
-                            //     // })
-                            //     const Text(
-                            //       "Hi !",
-                            //       style: TextStyle(
-                            //         fontSize: 18,
-                            //         fontWeight: FontWeight.w600,
-                            //         fontFamily: "Outfit",
-                            //         color: AppColors.xippText,
-                            //       ),
-                            //       textAlign: TextAlign.center,
-                            //     )
-                            //
-                            //
-                            //   ],
-                            // ),
+
+                        const Text(
+                          "Email: ",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "LatoRegular",
+                            // letterSpacing: .2,
+                            color: AppColors.askText,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        FadeDownAnimation(
+                          delayMilliSeconds: 400,
+                          duration: 700,
+                          child: TextFormField(
+                            controller: controller.registerEmailController,
+                            focusNode: controller.registerEmailFocusNode,
+                            //cursorColor: AppColors.blue,
+                            decoration: InputDecoration(
+                              hintText: "Enter your email",
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors
+                                      .askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              contentPadding:
+                              const EdgeInsets.only(left: 20),
+                            ),
+                            keyboardType:
+                            TextInputType.emailAddress,
+                            style: const TextStyle(
+                              letterSpacing: 0.7,
+                              fontSize: 16,
+                              // color: AppColors.eDoctorAppText,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            inputFormatters: const [
+                              //FilteringTextInputFormatter.digitsOnly,
+                              //LengthLimitingTextInputFormatter(13),
+                            ],
+                            validator: (value) {
+                              Pattern pattern =
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                              RegExp regex = RegExp('$pattern');
+                              if (!regex.hasMatch(value!)) {
+                                return 'Please enter a valid Email Address';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        const Text(
+                          "Password: ",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "LatoRegular",
+                            // letterSpacing: .2,
+                            color: AppColors.askText,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        FadeDownAnimation(
+                          delayMilliSeconds: 400,
+                          duration: 700,
+                          child: TextFormField(
+                            controller: controller.registerPasswordController,
+                            focusNode: controller.registerPasswordFocusNode,
+                            obscureText: controller.obscurePassword,
+                            //cursorColor: AppColors.blue,
+                            decoration: InputDecoration(
+                              hintText: "Enter your password",
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors
+                                      .askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              suffixIcon: Obx(
+                                    () => IconButton(
+                                  onPressed: controller
+                                      .toggleObscurePassword,
+                                  icon: Icon(
+                                    controller.obscurePassword
+                                        ? Icons.visibility
+                                        : Icons
+                                        .visibility_off,
+                                    color: AppColors
+                                        .askText,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                              contentPadding:
+                              const EdgeInsets.only(left: 20),
+                            ),
+                            keyboardType:
+                            TextInputType.text,
+                            style: const TextStyle(
+                              letterSpacing: 0.7,
+                              fontSize: 16,
+                              // color: AppColors.eDoctorAppText,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            inputFormatters: const [
+                              //FilteringTextInputFormatter.digitsOnly,
+                              //LengthLimitingTextInputFormatter(13),
+                            ],
+                            validator: (value) {
+                              Pattern pattern =
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                              RegExp regex = RegExp('$pattern');
+                              if (!regex.hasMatch(value!)) {
+                                return 'Please enter a valid Email Address';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        const Text(
+                          "Confirm Password: ",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "LatoRegular",
+                            // letterSpacing: .2,
+                            color: AppColors.askText,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        FadeDownAnimation(
+                          delayMilliSeconds: 400,
+                          duration: 700,
+                          child: TextFormField(
+                            controller: controller.registerConfirmPasswordController,
+                            focusNode: controller.registerPasswordFocusNode,
+                            obscureText: controller.obscurePassword,
+                            //cursorColor: AppColors.blue,
+                            decoration: InputDecoration(
+                              hintText: "Confirm your password",
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors
+                                      .askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: AppColors.askBlue,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(22),
+                              ),
+                              suffixIcon: Obx(
+                                    () => IconButton(
+                                  onPressed: controller
+                                      .toggleObscurePassword,
+                                  icon: Icon(
+                                    controller.obscurePassword
+                                        ? Icons.visibility
+                                        : Icons
+                                        .visibility_off,
+                                    color: AppColors
+                                        .askText,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                              contentPadding:
+                              const EdgeInsets.only(left: 20),
+                            ),
+                            keyboardType:
+                            TextInputType.text,
+                            style: const TextStyle(
+                              letterSpacing: 0.7,
+                              fontSize: 16,
+                              // color: AppColors.eDoctorAppText,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            inputFormatters: const [
+                              //FilteringTextInputFormatter.digitsOnly,
+                              //LengthLimitingTextInputFormatter(13),
+                            ],
+                            validator: (value) {
+                              Pattern pattern =
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                              RegExp regex = RegExp('$pattern');
+                              if (!regex.hasMatch(value!)) {
+                                return 'Please enter a valid Email Address';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
 
 
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         // controller.getUserProfile();
-                            //         // controller.getUserTransactionsHistory();
-                            //         // controller.getMyBudgets();();
-                            //       },
-                            //       child: Container(
-                            //         width: ScreenSize.scaleHeight(context, 26),
-                            //         height: ScreenSize.scaleHeight(context, 26),
-                            //         // padding: const EdgeInsets.all( 2),
-                            //         // margin: const EdgeInsets.all( 8),
-                            //         decoration: BoxDecoration(
-                            //           // border: Border.all(color: AppColors.eDoctorInputBorder),
-                            //           // color: AppColors.red,
-                            //           borderRadius:
-                            //           BorderRadius.circular(ScreenSize.scaleHeight(context, 50)),
-                            //           //boxShadow: buttonShadow
-                            //         ),
-                            //         child: Visibility(
-                            //             visible: true,
-                            //             child: Icon(Icons.refresh, color: AppColors.white,)
-                            //           // Image.asset(
-                            //           //   "assets/images/icons/h-customer-service.png",
-                            //           //   //fit: BoxFit.fitWidth,
-                            //           // ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     const SizedBox(width: 20,),
-                            //
-                            //
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         // Get.toNamed(Routes.ACCOUNTSETTINGS);
-                            //       },
-                            //       child: Container(
-                            //         width: ScreenSize.scaleHeight(context, 26),
-                            //         height: ScreenSize.scaleHeight(context, 26),
-                            //         // padding: const EdgeInsets.all( 2),
-                            //         // margin: const EdgeInsets.all( 8),
-                            //         decoration: BoxDecoration(
-                            //           // border: Border.all(color: AppColors.eDoctorInputBorder),
-                            //           color: Colors.red,
-                            //           borderRadius:
-                            //           BorderRadius.circular(ScreenSize.scaleHeight(context, 50)),
-                            //           //boxShadow: buttonShadow
-                            //         ),
-                            //         child: Visibility(
-                            //           visible: true,
-                            //           child: Image.asset(
-                            //             "assets/images/icons/h-customer-service.png",
-                            //             //fit: BoxFit.fitWidth,
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     const SizedBox(width: 20,),
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         // Get.toNamed(Routes.ACCOUNTSETTINGS);
-                            //       },
-                            //       child: Container(
-                            //         width: ScreenSize.scaleHeight(context, 26),
-                            //         height: ScreenSize.scaleHeight(context, 26),
-                            //         // padding: const EdgeInsets.all( 2),
-                            //         // margin: const EdgeInsets.all( 8),
-                            //         decoration: BoxDecoration(
-                            //           // border: Border.all(color: AppColors.eDoctorInputBorder),
-                            //           // color: AppColors.white,
-                            //           borderRadius:
-                            //           BorderRadius.circular(ScreenSize.scaleHeight(context, 50)),
-                            //           //boxShadow: buttonShadow
-                            //         ),
-                            //         child: Visibility(
-                            //           visible: true,
-                            //           child: Image.asset(
-                            //             "assets/images/icons/h-settings.png",
-                            //             //fit: BoxFit.fitWidth,
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     const SizedBox(width: 20,),
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         // Get.toNamed(Routes.NOTIFICATIONS);
-                            //       },
-                            //       child: Stack(
-                            //           children: [Container(
-                            //             width: ScreenSize.scaleHeight(context, 26),
-                            //             height: ScreenSize.scaleHeight(context, 26),
-                            //             // padding: const EdgeInsets.all( 2),
-                            //             // margin: const EdgeInsets.all( 8),
-                            //             decoration: BoxDecoration(
-                            //               // border: Border.all(color: AppColors.eDoctorInputBorder),
-                            //               // color: AppColors.white,
-                            //               borderRadius:
-                            //               BorderRadius.circular(ScreenSize.scaleHeight(context, 50)),
-                            //               //boxShadow: buttonShadow
-                            //             ),
-                            //             child: Visibility(
-                            //               visible: true,
-                            //               child: Image.asset(
-                            //                 "assets/images/icons/h-notification.png",
-                            //                 //fit: BoxFit.fitWidth,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //
-                            //             Positioned(
-                            //                 right: 0,
-                            //                 top: 0,
-                            //                 child: Container(
-                            //                   // padding: const EdgeInsets.all(2),
-                            //                   width: 12, height: 12,
-                            //                   decoration: new BoxDecoration(
-                            //                     color: Colors.red,
-                            //                     borderRadius: BorderRadius.circular(26),
-                            //                   ),child: const Center(
-                            //                     child: Text("#", style: TextStyle(fontSize: 10, color: AppColors.white),)
-                            //                 ),))
-                            //           ]
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                          ],
-                        )),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              width: ScreenSize.width(context),
+                              alignment: Alignment.bottomCenter,
+                              // color: AppColors.askBlue,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 32,
+                                    ),
+
+                                    AskButton(
+                                      text: "Register with Google",
+                                      function: () {
+                                        // controller.finalStep();
+                                        // controller.skipToBegin();
+                                      },
+                                      backgroundColor: AppColors.askBackground,
+                                      textColor: AppColors.askBlue,
+                                      buttonWidth: ScreenSize.width(context),
+                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                      borderCurve: 26,
+                                      enabled: true,
+                                      border: false,
+                                      borderColor: AppColors.askBlue,
+                                      imgPath: "assets/images/icons/g.png",
+                                      // textSize: 16
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    AskButton(
+                                      text: "Register with Apple",
+                                      function: () {
+                                        // controller.finalStep();
+                                        // controller.skipToBegin();
+                                      },
+                                      backgroundColor: AppColors.askBackground,
+                                      textColor: AppColors.askBlue,
+                                      buttonWidth: ScreenSize.width(context),
+                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                      borderCurve: 26,
+                                      enabled: true,
+                                      border: false,
+                                      borderColor: AppColors.askBlue,
+                                      imgPath: "assets/images/icons/a.png",
+                                      // textSize: 16
+                                    ),
+
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
 
 
                       ]),
@@ -308,7 +416,7 @@ class RegisterView extends GetView<AuthController> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  // fontFamily: "Inter",
+                                  fontFamily: "LatoRegular",
                                   color: AppColors.askBlue
                               ),
                             ),
@@ -316,7 +424,7 @@ class RegisterView extends GetView<AuthController> {
                               onTap: () {
                                 // controller.clearOnboardingFields();
 
-                                Get.to(() => LoginView(),
+                                Get.off(() => LoginView(),
                                     transition: Transition.fadeIn, // Built-in transition type
                                     duration: Duration(milliseconds: 500),
                                     binding: AuthBinding()
@@ -327,7 +435,7 @@ class RegisterView extends GetView<AuthController> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    // fontFamily: "Inter",
+                                    fontFamily: "LatoRegular",
                                     // letterSpacing: .2,
                                     color: AppColors.askBlue),
                               ),
