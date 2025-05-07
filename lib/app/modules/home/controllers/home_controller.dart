@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../views/dashboard_view.dart';
+import '../views/iask_view.dart';
+import '../views/profile_view.dart';
+import '../views/requests_view.dart';
+
 class HomeController extends GetxController {
 
   var showBottomNav = true.obs;
