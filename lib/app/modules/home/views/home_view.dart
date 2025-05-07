@@ -34,12 +34,12 @@ class HomeView extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(ScreenSize.scaleWidth(context, 22)),
             child: BottomNavigationBar(
               elevation: 0,
-              backgroundColor: AppColors.white,
+              backgroundColor: AppColors.askBlue,
               type: BottomNavigationBarType.fixed,
               onTap: controller.handleNavigation,
               currentIndex: controller.navIndex,
-              selectedItemColor: AppColors.askBlue,
-              unselectedItemColor: Colors.grey,
+              selectedItemColor: AppColors.white,
+              unselectedItemColor: AppColors.askBackground,
               selectedLabelStyle: const TextStyle(fontSize: 10),
               unselectedLabelStyle: const TextStyle(fontSize: 10),
               items: [
@@ -73,7 +73,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                   ),
-                  label: 'AI Budget',
+                  label: 'Requests',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
@@ -89,7 +89,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                   ),
-                  label: 'Transactions',
+                  label: 'iAsk',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
@@ -105,7 +105,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                   ),
-                  label: 'Account',
+                  label: 'Profile',
                 ),
               ],
             ),
