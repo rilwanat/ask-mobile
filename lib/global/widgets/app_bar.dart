@@ -70,7 +70,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 GestureDetector(
                   onTap: () {},
                   child: Icon(
-                    Icons.more_vert_rounded,
+                    // Icons.more_vert_rounded,
+                    Icons.help,
                     color: iconColor,
                   ),
                 ),

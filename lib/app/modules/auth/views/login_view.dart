@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
+import '../../../../global/app_strings.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/LoadingScreen.dart';
 import '../../../../global/widgets/ask_button.dart';
 import '../../../../global/widgets/fade_down_animation.dart';
+import '../../../../utils/utils.dart';
 import '../../home/bindings/home_binding.dart';
 import '../../home/views/home_view.dart';
 import '../bindings/auth_binding.dart';
@@ -33,310 +35,316 @@ class LoginView extends GetView<AuthController> {
             Positioned(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: ScreenSize.scaleHeight(context, 40),),
-                        const SizedBox(height: 30),
-                        const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "LatoRegular",
-                              color: AppColors.askText,
-                              height: 1.0,
-                              // letterSpacing: .2,
-                            )
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                            "Please enter your credentials to proceed",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "LatoRegular",
-                              color: AppColors.askText,
-                              // letterSpacing: .2,
-                            )
-                        ),
-                        const SizedBox(height: 40),
-
-                        const Text(
-                          "Email: ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "LatoRegular",
-                            // letterSpacing: .2,
-                            color: AppColors.askText,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        FadeDownAnimation(
-                          delayMilliSeconds: 400,
-                          duration: 700,
-                          child: TextFormField(
-                            controller: controller.loginEmailController,
-                            focusNode: controller.loginEmailFocusNode,
-                            //cursorColor: AppColors.blue,
-                            decoration: InputDecoration(
-                              hintText: "Enter your email",
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors.askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors
-                                      .askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors.askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              contentPadding:
-                              const EdgeInsets.only(left: 20),
+                  child: Container(
+                    height: ScreenSize.height(context),
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: ScreenSize.scaleHeight(context, 40),),
+                            const SizedBox(height: 30),
+                            const Text(
+                                AuthStrings.LOGIN_HEADER,
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "LatoRegular",
+                                  color: AppColors.askText,
+                                  height: 1.0,
+                                  // letterSpacing: .2,
+                                )
                             ),
-                            keyboardType:
-                            TextInputType.emailAddress,
-                            style: const TextStyle(
-                              letterSpacing: 0.7,
-                              fontSize: 16,
-                              // color: AppColors.eDoctorAppText,
-                              fontWeight: FontWeight.w400,
+                            const SizedBox(height: 20),
+                            const Text(
+                                AuthStrings.LOGIN_SUBHEADER,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "LatoRegular",
+                                  color: AppColors.askText,
+                                  // letterSpacing: .2,
+                                )
                             ),
-                            inputFormatters: const [
-                              //FilteringTextInputFormatter.digitsOnly,
-                              //LengthLimitingTextInputFormatter(13),
-                            ],
-                            validator: (value) {
-                              Pattern pattern =
-                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                              RegExp regex = RegExp('$pattern');
-                              if (!regex.hasMatch(value!)) {
-                                return 'Please enter a valid Email Address';
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                        ),
+                            const SizedBox(height: 40),
+                      
+                            const Text(
+                              "Email: ",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "LatoRegular",
+                                // letterSpacing: .2,
+                                color: AppColors.askText,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            FadeDownAnimation(
+                              delayMilliSeconds: 400,
+                              duration: 700,
+                              child: TextFormField(
+                                controller: controller.loginEmailController,
+                                focusNode: controller.loginEmailFocusNode,
+                                //cursorColor: AppColors.blue,
+                                decoration: InputDecoration(
+                                  hintText: "Enter your email",
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors.askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors
+                                          .askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors.askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  contentPadding:
+                                  const EdgeInsets.only(left: 20),
+                                ),
+                                keyboardType:
+                                TextInputType.emailAddress,
+                                style: const TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 16,
+                                  // color: AppColors.eDoctorAppText,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                inputFormatters: const [
+                                  //FilteringTextInputFormatter.digitsOnly,
+                                  //LengthLimitingTextInputFormatter(13),
+                                ],
+                                validator: (value) {
+                                  Pattern pattern =
+                                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                  RegExp regex = RegExp('$pattern');
+                                  if (!regex.hasMatch(value!)) {
+                                    return 'Please enter a valid Email Address';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                      
+                            const SizedBox(height: 20),
+                      
+                            const Text(
+                              "Password: ",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "LatoRegular",
+                                // letterSpacing: .2,
+                                color: AppColors.askText,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            FadeDownAnimation(
+                              delayMilliSeconds: 400,
+                              duration: 700,
+                              child: TextFormField(
+                                controller: controller.loginPasswordController,
+                                focusNode: controller.loginPasswordFocusNode,
+                                obscureText: controller.obscurePassword,
+                                //cursorColor: AppColors.blue,
+                                decoration: InputDecoration(
+                                  hintText: "Enter your password",
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors.askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors
+                                          .askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: AppColors.askBlue,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(22),
+                                  ),
+                                  suffixIcon: Obx(
+                                        () => IconButton(
+                                      onPressed: controller
+                                          .toggleObscurePassword,
+                                      icon: Icon(
+                                        controller.obscurePassword
+                                            ? Icons.visibility
+                                            : Icons
+                                            .visibility_off,
+                                        color: AppColors
+                                            .askText,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  contentPadding:
+                                  const EdgeInsets.only(left: 20),
+                                ),
+                                keyboardType:
+                                TextInputType.text,
+                                style: const TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 16,
+                                  // color: AppColors.eDoctorAppText,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                inputFormatters: const [
+                                  //FilteringTextInputFormatter.digitsOnly,
+                                  //LengthLimitingTextInputFormatter(13),
+                                ],
+                                validator: (value) {
+                                  Pattern pattern =
+                                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                  RegExp regex = RegExp('$pattern');
+                                  if (!regex.hasMatch(value!)) {
+                                    return 'Please enter a valid Email Address';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.end,
+                              children: [
+                                // Row(
+                                //   children: [
+                                //     Container(
+                                //         decoration: BoxDecoration(
+                                //             border: Border.all()
+                                //             //color: AppColors.black,
+                                //             //controller.termsAccepted
+                                //             //    ? AppColors.blue
+                                //             //    : AppColors.lighterGrey,
+                                //             //borderRadius: BorderRadius.circular(12),
+                                //             //boxShadow: buttonShadow
+                                //             ),
+                                //         height: 17,
+                                //         width: 17,
+                                //         child: const Icon(
+                                //           Icons.check,
+                                //           size: 12,
+                                //           color: AppColors.eDoctorBlue,
+                                //         )),
+                                //     const SizedBox(
+                                //       width: 10,
+                                //     ),
+                                //     const Text("Remember Me"),
+                                //   ],
+                                // ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // showForgotPasswordModal(context);
+                                  },
+                                  child: const Text(
+                                    "Forgot password?",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "LatoRegular",
+                                        // letterSpacing: .2,
+                                        color: AppColors.askBlue),
+                                  ),
+                                )
+                              ],
+                            ),
 
-                        const SizedBox(height: 20),
 
-                        const Text(
-                          "Password: ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "LatoRegular",
-                            // letterSpacing: .2,
-                            color: AppColors.askText,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        FadeDownAnimation(
-                          delayMilliSeconds: 400,
-                          duration: 700,
-                          child: TextFormField(
-                            controller: controller.loginPasswordController,
-                            focusNode: controller.loginPasswordFocusNode,
-                            obscureText: controller.obscurePassword,
-                            //cursorColor: AppColors.blue,
-                            decoration: InputDecoration(
-                              hintText: "Enter your password",
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors.askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors
-                                      .askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors.askBlue,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(22),
-                              ),
-                              suffixIcon: Obx(
-                                    () => IconButton(
-                                  onPressed: controller
-                                      .toggleObscurePassword,
-                                  icon: Icon(
-                                    controller.obscurePassword
-                                        ? Icons.visibility
-                                        : Icons
-                                        .visibility_off,
-                                    color: AppColors
-                                        .askText,
-                                    size: 16,
+                            Flexible(
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  width: ScreenSize.width(context),
+                                  alignment: Alignment.bottomCenter,
+                                  // color: AppColors.askBlue,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 32,
+                                        ),
+                      
+                                        AskButton(
+                                          text: "Sign in with Google",
+                                          function: () {
+                                            // controller.finalStep();
+                                            // controller.skipToBegin();
+                                          },
+                                          backgroundColor: AppColors.askSoftTheme,
+                                          textColor: AppColors.askBlue,
+                                          buttonWidth: ScreenSize.width(context),
+                                          buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                          borderCurve: 26,
+                                          enabled: true,
+                                          border: false,
+                                          borderColor: AppColors.askBlue,
+                                          imgPath: "assets/images/icons/g.png",
+                                            // textSize: 16
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        // AskButton(
+                                        //   text: "Sign in with Apple",
+                                        //   function: () {
+                                        //     // controller.finalStep();
+                                        //     // controller.skipToBegin();
+                                        //   },
+                                        //   backgroundColor: AppColors.askSoftTheme,
+                                        //   textColor: AppColors.askBlue,
+                                        //   buttonWidth: ScreenSize.width(context),
+                                        //   buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                        //   borderCurve: 26,
+                                        //   enabled: true,
+                                        //   border: false,
+                                        //   borderColor: AppColors.askBlue,
+                                        //   imgPath: "assets/images/icons/a.png",
+                                        //     // textSize: 16
+                                        // ),
+                      
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                              contentPadding:
-                              const EdgeInsets.only(left: 20),
                             ),
-                            keyboardType:
-                            TextInputType.text,
-                            style: const TextStyle(
-                              letterSpacing: 0.7,
-                              fontSize: 16,
-                              // color: AppColors.eDoctorAppText,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            inputFormatters: const [
-                              //FilteringTextInputFormatter.digitsOnly,
-                              //LengthLimitingTextInputFormatter(13),
-                            ],
-                            validator: (value) {
-                              Pattern pattern =
-                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                              RegExp regex = RegExp('$pattern');
-                              if (!regex.hasMatch(value!)) {
-                                return 'Please enter a valid Email Address';
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.end,
-                          children: [
-                            // Row(
-                            //   children: [
-                            //     Container(
-                            //         decoration: BoxDecoration(
-                            //             border: Border.all()
-                            //             //color: AppColors.black,
-                            //             //controller.termsAccepted
-                            //             //    ? AppColors.blue
-                            //             //    : AppColors.lighterGrey,
-                            //             //borderRadius: BorderRadius.circular(12),
-                            //             //boxShadow: buttonShadow
-                            //             ),
-                            //         height: 17,
-                            //         width: 17,
-                            //         child: const Icon(
-                            //           Icons.check,
-                            //           size: 12,
-                            //           color: AppColors.eDoctorBlue,
-                            //         )),
-                            //     const SizedBox(
-                            //       width: 10,
-                            //     ),
-                            //     const Text("Remember Me"),
-                            //   ],
-                            // ),
-                            GestureDetector(
-                              onTap: () {
-                                // showForgotPasswordModal(context);
-                              },
-                              child: const Text(
-                                "Forgot password?",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "LatoRegular",
-                                    // letterSpacing: .2,
-                                    color: AppColors.askBlue),
-                              ),
-                            )
-                          ],
-                        ),
-
-
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              width: ScreenSize.width(context),
-                              alignment: Alignment.bottomCenter,
-                              // color: AppColors.askBlue,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 32,
-                                    ),
-
-                                    AskButton(
-                                      text: "Sign in with Google",
-                                      function: () {
-                                        // controller.finalStep();
-                                        // controller.skipToBegin();
-                                      },
-                                      backgroundColor: AppColors.askBackground,
-                                      textColor: AppColors.askBlue,
-                                      buttonWidth: ScreenSize.width(context),
-                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                      borderCurve: 26,
-                                      enabled: true,
-                                      border: false,
-                                      borderColor: AppColors.askBlue,
-                                      imgPath: "assets/images/icons/g.png",
-                                        // textSize: 16
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    AskButton(
-                                      text: "Sign in with Apple",
-                                      function: () {
-                                        // controller.finalStep();
-                                        // controller.skipToBegin();
-                                      },
-                                      backgroundColor: AppColors.askBackground,
-                                      textColor: AppColors.askBlue,
-                                      buttonWidth: ScreenSize.width(context),
-                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                      borderCurve: 26,
-                                      enabled: true,
-                                      border: false,
-                                      borderColor: AppColors.askBlue,
-                                      imgPath: "assets/images/icons/a.png",
-                                        // textSize: 16
-                                    ),
-
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-
-
-
-                      ]),
+                      
+                      
+                      
+                      
+                          ]),
+                    ),
+                  ),
                 )),
 
             Obx(() => controller.showContinue ? Positioned(
@@ -355,14 +363,26 @@ class LoginView extends GetView<AuthController> {
                         AskButton(
                             enabled: true,
                             text: "Login",
-                            function: () {
+                            function: () async {
                               // controller.clearAuthToken();
 
-                              Get.to(() => HomeView(),
-                                  transition: Transition.fadeIn, // Built-in transition type
-                                  duration: Duration(milliseconds: 500),
-                                  binding: HomeBinding()
-                              );
+                              String email = controller.loginEmailController.text;
+                              String password = controller.loginPasswordController.text;
+
+                              if (email.isEmpty || password.isEmpty) {
+                                Utils.showTopSnackBar(
+                                    t: "A.S.K Login",
+                                    m: "Email, password cannot be empty",
+                                    tc: AppColors.white,
+                                    d: 3,
+                                    bc: AppColors.askBlue,
+                                    sp: SnackPosition.TOP);
+                              } else {
+                                await controller.loginUser(
+                                  email: email,
+                                  password: password,
+                                );
+                              }
                             },
                             backgroundColor: AppColors.askBlue,
                             textColor: AppColors.white,

@@ -49,12 +49,9 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       height: 26,
                       width: 26,
-                      child: Image.asset(
-                        controller.navIndex == 0 ?
-                        "assets/images/icons/m-home-b.png" :
-                        "assets/images/icons/m-home-a.png",
-                        //fit: BoxFit.fitWidth,
-                      ),
+                      child: Icon(Icons.home,
+                        color: controller.navIndex == 0 ? AppColors.white : AppColors.askGray,
+                      )
                     ),
                   ),
                   label: 'Home',
@@ -65,11 +62,8 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       height: 26,
                       width: 26,
-                      child: Image.asset(
-                        controller.navIndex == 1 ?
-                        "assets/images/icons/m-insight-b.png" :
-                        "assets/images/icons/m-insight-a.png",
-                        //fit: BoxFit.fitWidth,
+                      child: Icon(Icons.request_page,
+                        color: controller.navIndex == 1 ? AppColors.white : AppColors.askGray,
                       ),
                     ),
                   ),
@@ -81,11 +75,8 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       height: 26,
                       width: 26,
-                      child: Image.asset(
-                        controller.navIndex == 2 ?
-                        "assets/images/icons/m-transaction-b.png" :
-                        "assets/images/icons/m-transaction-a.png",
-                        //fit: BoxFit.fitWidth,
+                      child: Icon(Icons.question_answer  ,
+                        color: controller.navIndex == 2 ? AppColors.white : AppColors.askGray,
                       ),
                     ),
                   ),
@@ -97,12 +88,10 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       height: 26,
                       width: 26,
-                      child: Image.asset(
-                        controller.navIndex == 3 ?
-                        "assets/images/icons/m-user-b.png" :
-                        "assets/images/icons/m-user-a.png",
-                        //fit: BoxFit.fitWidth,
-                      ),
+                      child:
+                      Icon(Icons.account_circle,
+                      color: controller.navIndex == 3 ? AppColors.white : AppColors.askGray,
+                      )
                     ),
                   ),
                   label: 'Profile',

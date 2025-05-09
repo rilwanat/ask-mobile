@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/login/UserData.dart';
+
 // import '../models/profile/ProfileResponse.dart';
 
 
@@ -87,24 +89,24 @@ class CachedData {
   // UserType
 
 
-// // patientProfileData
-//   Future<ProfileResponse?> getProfileData() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     String? jsonString = prefs.getString("profileData");
-//     if (jsonString != null) {
-//       Map<String, dynamic> json = jsonDecode(jsonString);
-//       return ProfileResponse.fromJson(json);
-//     }
-//     return null;
-//   }
-//
-//   Future<void> saveProfileData(
-//       ProfileResponse profileDataToSave) async {
-//     final prefs = await SharedPreferences.getInstance();
-//     String jsonString = jsonEncode(profileDataToSave.toJson());
-//     print("saving: " + jsonString);
-//     await prefs.setString("profileData", jsonString);
-//     // print("saved: " + jsonString);
-//   }
-// // patientProfileData
+// patientProfileData
+  Future<UserData?> getProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString("profileData");
+    if (jsonString != null) {
+      Map<String, dynamic> json = jsonDecode(jsonString);
+      return UserData.fromJson(json);
+    }
+    return null;
+  }
+
+  Future<void> saveProfileData(
+      UserData profileDataToSave) async {
+    final prefs = await SharedPreferences.getInstance();
+    String jsonString = jsonEncode(profileDataToSave.toJson());
+    print("saving: " + jsonString);
+    await prefs.setString("profileData", jsonString);
+    // print("saved: " + jsonString);
+  }
+// patientProfileData
 }

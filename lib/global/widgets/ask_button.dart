@@ -100,8 +100,8 @@ class _FlashButtonState extends State<AskButton>
                     widget.imgPath == null
                         ? const SizedBox()
                         : SizedBox(
-                      height: 20,
-                      width: 20,
+                      height: 24,
+                      width: 24,
                       child: Image.asset(
                         widget.imgPath!,
                         fit: BoxFit.contain,

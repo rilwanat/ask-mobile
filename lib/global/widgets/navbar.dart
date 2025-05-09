@@ -4,10 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../app/modules/home/controllers/home_controller.dart';
-import '../../app/routes/app_pages.dart';
 import '../app_color.dart';
-import '../screen_size.dart';
-
 
 class NavBar extends GetView<HomeController> {
   @override
@@ -19,11 +16,46 @@ class NavBar extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserAccountsDrawerHeader(
-              accountName: const Padding(
-                padding: EdgeInsets.only(left: 0.0),
-                child: Text('#', style: TextStyle(color: Colors.black, fontSize: 16,fontFamily: "LatoRegular"), ),
+            currentAccountPictureSize: const Size(64, 64),
+              accountName: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(controller.profileData!.value!.fullname!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                  ],
+                ),
               ),
-              accountEmail: const Text("email"),
+              accountEmail: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(controller.profileData!.value!.emailAddress!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                        const SizedBox(width: 4,),
+                        Icon(controller.profileData!.value!.emailVerified == "Yes" ? Icons.check_circle : Icons.warning_amber_rounded,
+                          color: controller.profileData!.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
+                          size: 18,)
+                      ],
+                    ),
+                    SizedBox(height: 4,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text("KYC Level 2: ", style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                        const SizedBox(width: 4,),
+                        Icon(controller.profileData!.value!.kycStatus == "APPROVED" ? Icons.check_circle : Icons.warning_amber_rounded,
+                          color: controller.profileData!.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
+                          size: 18,)
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               currentAccountPicture: GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -43,9 +75,9 @@ class NavBar extends GetView<HomeController> {
             // ),
             const SizedBox(height: 4,),
             ListTile(
-              tileColor: Colors.white,
-              // leading: Icon(Icons.add, color: Colors.black,),
-              title: const Text('Home', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.home, color: AppColors.askBlue,),
+              title: const Text('Home', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("men");
@@ -56,9 +88,9 @@ class NavBar extends GetView<HomeController> {
             ),
 
             ListTile(
-              tileColor: Colors.white,
-              // leading: Icon(Icons.add, color: Colors.black,),
-              title: const Text('Requests', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.request_page, color: AppColors.askBlue,),
+              title: const Text('Requests', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("women");
@@ -67,10 +99,24 @@ class NavBar extends GetView<HomeController> {
                 // });
               },
             ),
+
             ListTile(
-              tileColor: Colors.white,
-              // leading: Icon(Icons.add, color: Colors.black,),
-              title: const Text('Beneficiaries', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.question_answer, color: AppColors.askBlue,),
+              title: const Text('Ask', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              onTap: () async {
+                Navigator.of(context).pop();
+                // controller.setSelectedCategory("women");
+                // await controller.getCategoryProductsData(category: "women").then((value) {
+                //   // Get.to(() => const ProductsView());
+                // });
+              },
+            ),
+
+            ListTile(
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.add_task, color: AppColors.askBlue,),
+              title: const Text('Beneficiaries', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("essentials");
@@ -81,35 +127,36 @@ class NavBar extends GetView<HomeController> {
             ),
 
             ListTile(
-              tileColor: Colors.white,
-              // leading: Icon(Icons.add, color: Colors.black,),
-              title: const Text('Benefactors', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.person, color: AppColors.askBlue,),
+              title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
               onTap: () {
                 Navigator.of(context).pop();
                 // Get.toNamed(Routes.PRODUCTS);
               },
             ),
 
-            ListTile(
-              tileColor: Colors.white,
-              // leading: Icon(Icons.add, color: Colors.black,),
-              title: const Text('Contact', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Get.toNamed(Routes.PRODUCTS);
-              },
-            ),
+            // ListTile(
+            //   tileColor: Colors.white,
+            //   leading: const Icon(Icons.help, color: Colors.black,),
+            //   title: const Text('Contact', style: TextStyle(color: Colors.black,fontFamily: "LatoRegular",),),
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //     // Get.toNamed(Routes.PRODUCTS);
+            //   },
+            // ),
 
 
             const Divider(),
             InkWell(
               onTap: () {
-                SystemNavigator.pop();
+                controller.logoutUser();
+                // SystemNavigator.pop();
               },
               child: const ListTile(
-                tileColor: Colors.white,
-                // leading: Icon(Icons.logout, color: AppColors.black,),
-                title: Text('Exit', style: TextStyle(color: AppColors.black,fontFamily: "LatoRegular",),),
+                tileColor: AppColors.white,
+                leading: Icon(Icons.logout, color: AppColors.askBlue,),
+                title: Text('Log out', style: TextStyle(color: AppColors.red, fontFamily: "LatoRegular",),),
               ),
             ),
 

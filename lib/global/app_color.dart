@@ -6,20 +6,17 @@ class AppColors {
   static const black = Color(0xFF000000);
 
   static const askBlue = Color(0xFF161C34);
+  static const askOrange = Color(0xFFD85A27);
+  static const askGreen = Color(0xFF1CC939);
   static const askLightBlue = Color(0xFF323E70);
+  static const askSoftTheme = Color(0xFFDEE8FF);
   static const askBackground = Color(0xFFF3F3F3);
   static const askText = Color(0xFF33335B);
+  static const askGray = Color(0xFFAAAAAA);
+
+  static const red = Color(0xFFFF2D55);
 
 
-  // --color-theme: #161c34;
-  // --color-black: #000000;
-  // --color-white: #ffffff;
-  // --color-orange: #d85a27;
-  // --color-gold: #dd9c1e;
-  //
-  // --color-lightTheme: #323e70;
-  // --color-softTheme: #dee8ff;
-  // --color-green: #1cc939;
 }
 
 List<BoxShadow> shadowDefault = [

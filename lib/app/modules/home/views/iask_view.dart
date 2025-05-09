@@ -12,6 +12,7 @@ class IaskView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(

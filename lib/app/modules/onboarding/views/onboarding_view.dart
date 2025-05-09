@@ -10,6 +10,7 @@ import '../../../../global/widgets/ask_button.dart';
 import '../../auth/views/register_view.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/onboarding_controller.dart';
+import '../../../../global/widgets/inverted_radius_clipper.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -72,6 +73,7 @@ class OnboardingView extends GetView<OnboardingController> {
                               ),
                               textAlign: TextAlign.center,
                             ),
+                            SizedBox(height: 10),
                             Text(
                               current['subtitle']!,
                               style: const TextStyle(
@@ -106,7 +108,18 @@ class OnboardingView extends GetView<OnboardingController> {
               right: 0,
               child: Column(
                 children: [
-                  
+
+                  Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..scale(1.0, -1.2), // Flip vertically
+                    child: ClipPath(
+                      clipper: InvertedRadiusClipper(),
+                      child: Container(
+                        color: AppColors.askBlue,
+                        height: 30,
+                      ),
+                    ),
+                  ),
                   Container(
                     color: AppColors.askBlue,
                     height: 10,
