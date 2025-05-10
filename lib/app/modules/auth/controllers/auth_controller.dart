@@ -14,6 +14,8 @@ import '../../home/views/home_view.dart';
 import '../bindings/auth_binding.dart';
 import '../views/login_view.dart';
 
+import '../../../data/models/login/UserData.dart';
+
 class AuthController extends GetxController {
 
   final CachedData _cachedData = CachedData();
@@ -64,8 +66,8 @@ class AuthController extends GetxController {
     registerPasswordController = TextEditingController();
     registerConfirmPasswordController = TextEditingController();
 
-    loginEmailController = TextEditingController();
-    loginPasswordController = TextEditingController();
+    loginEmailController = TextEditingController(text: "rilwan.at@gmail.com");
+    loginPasswordController = TextEditingController(text: "rilwan12345");
   }
 
   _initializeFocusNodes() {
@@ -217,7 +219,7 @@ class AuthController extends GetxController {
         _cachedData.saveAuthToken(response.token!);
         _cachedData.saveUserType("User");
 
-        await _cachedData.saveProfileData(response!.userData!);
+        await _cachedData.saveProfileData(response.userData!);
 
 
         Get.to(() => HomeView(),

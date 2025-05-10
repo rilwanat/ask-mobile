@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/login/UserData.dart';
 
-// import '../models/profile/ProfileResponse.dart';
 
 
 class CachedData {
@@ -93,6 +92,7 @@ class CachedData {
   Future<UserData?> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString("profileData");
+    print("getting: " + jsonString!);
     if (jsonString != null) {
       Map<String, dynamic> json = jsonDecode(jsonString);
       return UserData.fromJson(json);
@@ -104,7 +104,7 @@ class CachedData {
       UserData profileDataToSave) async {
     final prefs = await SharedPreferences.getInstance();
     String jsonString = jsonEncode(profileDataToSave.toJson());
-    print("saving: " + jsonString);
+    // print("saving: " + jsonString);
     await prefs.setString("profileData", jsonString);
     // print("saved: " + jsonString);
   }

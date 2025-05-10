@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
 import '../models/login/LoginResponse.dart';
+import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
 import '../models/requests/HelpRequestsResponse.dart';
 import '../network/dio_client.dart';
@@ -142,6 +143,39 @@ class SecureService {
       );
 
       responseData = BeneficiariesResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // PROFILE
+  Future<ProfileResponse?> getUserProfile({
+    required String email
+  }) async {
+    ProfileResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-mobile-user-profile.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = ProfileResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

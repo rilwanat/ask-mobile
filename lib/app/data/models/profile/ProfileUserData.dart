@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-UserData userDataFromJson(String str) => UserData.fromJson(json.decode(str));
-String userDataToJson(UserData data) => json.encode(data.toJson());
-class UserData {
-  UserData({
+ProfileUserData profileUserDataFromJson(String str) => ProfileUserData.fromJson(json.decode(str));
+String profileUserDataToJson(ProfileUserData data) => json.encode(data.toJson());
+class ProfileUserData {
+  ProfileUserData({
       String? id, 
       String? fullname, 
       String? emailAddress, 
@@ -44,7 +44,7 @@ class UserData {
     _voteWeight = voteWeight;
 }
 
-  UserData.fromJson(dynamic json) {
+  ProfileUserData.fromJson(dynamic json) {
     _id = json['id'];
     _fullname = json['fullname'];
     _emailAddress = json['email_address'];
@@ -84,7 +84,7 @@ class UserData {
   String? _isCheat;
   String? _openedWelcomeMsg;
   String? _voteWeight;
-UserData copyWith({  String? id,
+ProfileUserData copyWith({  String? id,
   String? fullname,
   String? emailAddress,
   String? voterConsistency,
@@ -103,7 +103,7 @@ UserData copyWith({  String? id,
   String? isCheat,
   String? openedWelcomeMsg,
   String? voteWeight,
-}) => UserData(  id: id ?? _id,
+}) => ProfileUserData(  id: id ?? _id,
   fullname: fullname ?? _fullname,
   emailAddress: emailAddress ?? _emailAddress,
   voterConsistency: voterConsistency ?? _voterConsistency,

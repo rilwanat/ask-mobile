@@ -21,3 +21,8 @@ class AuthStrings {
 
 }
 
+class AskStrings {
+  static const String NEW_HELP_REQUEST = "New Help Request";
+
+}
+

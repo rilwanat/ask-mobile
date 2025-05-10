@@ -22,22 +22,22 @@ class NavBar extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(controller.profileData!.value!.fullname!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                    Text(controller.profileData.value!.fullname!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
                   ],
                 ),
               ),
               accountEmail: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
+                child: Obx(() => Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(controller.profileData!.value!.emailAddress!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                        Text(controller.profileData.value!.emailAddress!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
                         const SizedBox(width: 4,),
-                        Icon(controller.profileData!.value!.emailVerified == "Yes" ? Icons.check_circle : Icons.warning_amber_rounded,
-                          color: controller.profileData!.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
+                        Icon(controller.profileData.value!.emailVerified == "Yes" ? Icons.check_circle : Icons.warning_amber_rounded,
+                          color: controller.profileData.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
                           size: 18,)
                       ],
                     ),
@@ -48,13 +48,13 @@ class NavBar extends GetView<HomeController> {
                       children: [
                         const Text("KYC Level 2: ", style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
                         const SizedBox(width: 4,),
-                        Icon(controller.profileData!.value!.kycStatus == "APPROVED" ? Icons.check_circle : Icons.warning_amber_rounded,
-                          color: controller.profileData!.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
+                        Icon(controller.profileData.value!.kycStatus == "APPROVED" ? Icons.check_circle : Icons.warning_amber_rounded,
+                          color: controller.profileData.value!.kycStatus == "Yes" ? AppColors.askGreen : AppColors.red,
                           size: 18,)
                       ],
                     ),
                   ],
-                ),
+                )),
               ),
               currentAccountPicture: GestureDetector(
                 onTap: () {
@@ -150,6 +150,7 @@ class NavBar extends GetView<HomeController> {
             const Divider(),
             InkWell(
               onTap: () {
+                Navigator.of(context).pop();
                 controller.logoutUser();
                 // SystemNavigator.pop();
               },

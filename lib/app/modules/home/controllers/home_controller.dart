@@ -9,6 +9,7 @@ import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
 import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
 import '../../../data/models/login/UserData.dart';
+import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
 import '../../../data/network/dio_error.dart';
 import '../../../data/services/secure_service.dart';
@@ -92,14 +93,72 @@ class HomeController extends GetxController {
   //   // });
   // }
 
+  homeGetUserProfileFromServer() async {
+    setLoading(true);
+    // print("homeGetUserProfileFromServer");
+
+    errorMessage.value = "";
+    try {
+      ProfileResponse? response;
+      response =
+      await SecureService().getUserProfile(email: profileData.value!.emailAddress!);
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "homeGetUserProfileFromServer-h",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        await _cachedData.saveProfileData(UserData.fromJson(response.profileUserData!.toJson()));
+        // print("Saved from H");
+        profileData.value = await _cachedData.getProfileData();
+
+
+
+      } else {
+        errorMessage.value = "homeGetUserProfileFromServer: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "homeGetUserProfileFromServer-h",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "Error",
+          m: "$message",
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
   Future<void> getUserProfile() async {
 
-    // await homeGetUserProfileFromServer();
+
 
     try {
       profileData.value = await _cachedData.getProfileData();
-      print("_cachedData profileData");
-      print(profileData.value!.toJson().toString());
+      // print("_cachedData profileData");
+      // print(profileData.value!.toJson().toString());
+
+      await homeGetUserProfileFromServer();
 
       update();
     } catch (e) {
@@ -192,7 +251,7 @@ class HomeController extends GetxController {
       Utils.showTopSnackBar(
           t: "Error",
           m: message,
-          tc: AppColors.white,
+          tc: AppColors.black,
           d: 3,
           bc: AppColors.red,
           sp: SnackPosition.TOP);
@@ -233,7 +292,7 @@ class HomeController extends GetxController {
             m: errorMessage.value, //"${response.message}",
             tc: AppColors.white,
             d: 3,
-            bc: AppColors.askBlue,
+            bc: AppColors.red,
             sp: SnackPosition.TOP);
       }
 
@@ -286,7 +345,7 @@ class HomeController extends GetxController {
             m: errorMessage.value, //"${response.message}",
             tc: AppColors.white,
             d: 3,
-            bc: AppColors.askBlue,
+            bc: AppColors.red,
             sp: SnackPosition.TOP);
       }
 
