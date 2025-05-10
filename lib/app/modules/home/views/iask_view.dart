@@ -49,7 +49,7 @@ class IaskView extends GetView<HomeController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: ScreenSize.scaleHeight(context, 40),),
-                            const SizedBox(height: 30),
+                            // const SizedBox(height: 30),
 
 
                             Obx(() =>
@@ -275,7 +275,7 @@ class IaskView extends GetView<HomeController> {
                                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                                   backgroundColor: Colors.grey.shade300,
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(2),
+                                                    borderRadius: BorderRadius.circular(8),
                                                   ),
                                                 ),
                                                 child: const Text(
@@ -419,7 +419,7 @@ class IaskView extends GetView<HomeController> {
                                             AskStrings.STRICTLY,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               fontFamily: "LatoRegular",
                                               color: AppColors.black,
                                               // letterSpacing: .2,
@@ -569,7 +569,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                             readOnly: true,
                                             keyboardType:
-                                            TextInputType.emailAddress,
+                                            TextInputType.number,
                                             style: const TextStyle(
                                               //letterSpacing: 0.7,
                                               fontSize: 16,
@@ -653,7 +653,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                             readOnly: true,
                                             keyboardType:
-                                            TextInputType.emailAddress,
+                                            TextInputType.number,
                                             style: const TextStyle(
                                               //letterSpacing: 0.7,
                                               fontSize: 16,
@@ -737,7 +737,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                             readOnly: true,
                                             keyboardType:
-                                            TextInputType.emailAddress,
+                                            TextInputType.text,
                                             style: const TextStyle(
                                               //letterSpacing: 0.7,
                                               fontSize: 16,
@@ -821,7 +821,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                             readOnly: true,
                                             keyboardType:
-                                            TextInputType.emailAddress,
+                                            TextInputType.text,
                                             style: const TextStyle(
                                               //letterSpacing: 0.7,
                                               fontSize: 16,
@@ -905,7 +905,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                             readOnly: true,
                                             keyboardType:
-                                            TextInputType.emailAddress,
+                                            TextInputType.text,
                                             style: const TextStyle(
                                               //letterSpacing: 0.7,
                                               fontSize: 16,
@@ -949,7 +949,7 @@ class IaskView extends GetView<HomeController> {
                                             AskStrings.SELFIE,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               fontFamily: "LatoRegular",
                                               color: AppColors.black,
                                               // letterSpacing: .2,
@@ -958,6 +958,32 @@ class IaskView extends GetView<HomeController> {
                                       ],
                                     ),
                                   ),
+                                  const SizedBox(height: 8,),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        AskButton(
+                                            enabled: true,
+                                            text: "Take Selfie",
+                                            function: () async {
+
+
+                                            },
+                                            backgroundColor: AppColors.askBlue,
+                                            textColor: AppColors.white,
+                                            buttonWidth: ScreenSize.scaleWidth(context, 120),
+                                            buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                            borderCurve: 26,
+                                            border: false,
+                                            textSize: 16
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+
                                   const SizedBox(height: 10),
 
 
@@ -976,23 +1002,37 @@ class IaskView extends GetView<HomeController> {
                                             text: "Verify KYC",
                                             function: () async {
 
-                                              // String email = controller.profileData.value!.emailAddress!;
-                                              // String verificationCode = controller.emailVerificationController.text;
-                                              //
-                                              // if (verificationCode.isEmpty) {
-                                              //   Utils.showTopSnackBar(
-                                              //       t: "A.S.K Verification Code",
-                                              //       m: "Verification code cannot be empty",
-                                              //       tc: AppColors.white,
-                                              //       d: 3,
-                                              //       bc: AppColors.askBlue,
-                                              //       sp: SnackPosition.TOP);
-                                              // } else {
-                                              //   await controller.verifyEmail(
-                                              //     email: email,
-                                              //     verificationCode: verificationCode,
-                                              //   );
-                                              // }
+                                              String email = controller.profileData.value!.emailAddress!;
+
+                                              String phoneNumber = controller.kycPhoneNumberController.text;
+                                              String accountNumber = controller.kycAccountNumberController.text;
+                                              String bankName = controller.kycBankNameController.text;
+                                              String gender = controller.kycGenderController.text;
+                                              String stateOfResidence = controller.kycStateOfResidenceController.text;
+
+
+
+
+                                              if (
+                                              phoneNumber.isEmpty
+                                                  || accountNumber.isEmpty
+                                                  || bankName.isEmpty
+                                                  || gender.isEmpty
+                                                  || stateOfResidence.isEmpty
+                                              ) {
+                                                Utils.showTopSnackBar(
+                                                    t: "A.S.K Verify KYC",
+                                                    m: "KYC Fields cannot be empty",
+                                                    tc: AppColors.white,
+                                                    d: 3,
+                                                    bc: AppColors.askBlue,
+                                                    sp: SnackPosition.TOP);
+                                              } else {
+                                                // await controller.verifyEmail(
+                                                //   email: email,
+                                                //   verificationCode: verificationCode,
+                                                // );
+                                              }
                                             },
                                             backgroundColor: AppColors.askBlue,
                                             textColor: AppColors.white,
