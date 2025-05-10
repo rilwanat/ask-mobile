@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
@@ -17,6 +18,7 @@ import '../../../data/models/beneficiaries/Data.dart' as bd;
 class DashboardView extends GetView<HomeController> {
   DashboardView({super.key});
 
+  final NumberFormat currencyFormat = NumberFormat.currency(locale: 'en_US', symbol: '₦', decimalDigits: 0);
 
 
   @override
@@ -437,7 +439,7 @@ class DashboardView extends GetView<HomeController> {
                                   Container(
                                     // color: Colors.green,
                                     //alignment: Alignment.center,
-                                    //width: 50,
+                                      width: double.infinity,
                                     //padding: EdgeInsets.all(10),
                                     //margin: const EdgeInsets.only(right: 20),
                                       child: Column(
@@ -464,7 +466,7 @@ class DashboardView extends GetView<HomeController> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                helpRequest.nominationCount!,
+                                                controller.formatNominationCount(helpRequest.nominationCount!),
                                                 style: const TextStyle(
                                                   fontFamily: "LatoRegular",
                                                   color: AppColors.askBlue,
@@ -518,7 +520,9 @@ class DashboardView extends GetView<HomeController> {
               ],
             ),
 
-
+                    const SizedBox(
+                      height: 10,
+                    ),
 
             Column(
               children: [
@@ -546,7 +550,7 @@ class DashboardView extends GetView<HomeController> {
                   child: Container(
                     // color: Colors.red,
                     // padding: const EdgeInsets.symmetric(vertical: 4),
-                      height: 230,
+                      height: 260,
                       child: Obx(() => ListView.builder(
                         controller: controller.beneficiariesScrollController,
                         scrollDirection: Axis.horizontal,
@@ -630,7 +634,7 @@ class DashboardView extends GetView<HomeController> {
                                   Container(
                                     // color: Colors.green,
                                     //alignment: Alignment.center,
-                                    //width: 50,
+                                    width: double.infinity,
                                     //padding: EdgeInsets.all(10),
                                     //margin: const EdgeInsets.only(right: 20),
                                       child: Column(
@@ -639,12 +643,12 @@ class DashboardView extends GetView<HomeController> {
                                           Container(
                                             padding: EdgeInsets.symmetric(horizontal: 4),
                                             child: Text(
-                                              beneficiary.amount!,
+                                              currencyFormat.format(double.parse(beneficiary.amount!)),
                                               style: const TextStyle(
-                                                fontFamily: "LatoRegular",
+                                                // fontFamily: "LatoRegular",
                                                 color: Colors.black,
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -657,7 +661,7 @@ class DashboardView extends GetView<HomeController> {
                                               style: const TextStyle(
                                                 fontFamily: "LatoRegular",
                                                 color: Colors.black,
-                                                fontSize: 14.0,
+                                                fontSize: 12.0,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                               maxLines: 1,
@@ -700,8 +704,8 @@ class DashboardView extends GetView<HomeController> {
                                               // );
 
                                             },
-                                            backgroundColor: AppColors.askOrange,
-                                            textColor: AppColors.white,
+                                            backgroundColor: AppColors.askSoftTheme,
+                                            textColor: AppColors.askText,
                                             buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
                                             buttonHeight: 24, //ScreenSize.scaleHeight(context, 20),
                                             borderCurve: 4,
@@ -713,7 +717,7 @@ class DashboardView extends GetView<HomeController> {
                                           ),
                                           AskButton(
                                             enabled: true,
-                                            text: beneficiary.status!,
+                                            text: beneficiary.status![0].toUpperCase() + beneficiary.status!.substring(1),
                                             function: () async {
 
                                               // Utils.showTopSnackBar(
@@ -726,7 +730,7 @@ class DashboardView extends GetView<HomeController> {
                                               // );
 
                                             },
-                                            backgroundColor: AppColors.askGreen,
+                                            backgroundColor: AppColors.askOrange,
                                             textColor: AppColors.white,
                                             buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
                                             buttonHeight: 24, //ScreenSize.scaleHeight(context, 20),
@@ -751,7 +755,9 @@ class DashboardView extends GetView<HomeController> {
               ],
             ),
 
-
+            const SizedBox(
+              height: 30,
+            ),
           ],
         )
       ),

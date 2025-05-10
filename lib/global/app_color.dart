@@ -7,6 +7,7 @@ class AppColors {
 
   static const askBlue = Color(0xFF161C34);
   static const askOrange = Color(0xFFD85A27);
+  static const askLightRed = Color(0xFFFFC9C9);
   static const askGreen = Color(0xFF1CC939);
   static const askLightBlue = Color(0xFF323E70);
   static const askSoftTheme = Color(0xFFDEE8FF);

@@ -23,7 +23,9 @@ class AuthStrings {
 
 class AskStrings {
   static const String COMPLETE_LEVEL1_VERIFICIATION = "Complete Level 1 Verification (Email)";
-  static const String NEW_HELP_REQUEST = "New Help Request";
+  static const String COMPLETE_LEVEL2_VERIFICIATION = "Complete Level 2 Verification (KYC)";
+  static const String STRICTLY = "Strictly for adults above 18 years";
+  static const String SELFIE = "Selfie is mandatory and must clearly capture your face";
 
 }
 

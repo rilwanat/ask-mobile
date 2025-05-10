@@ -71,6 +71,12 @@ class HomeController extends GetxController {
 
   late TextEditingController emailVerificationController;
 
+  late TextEditingController kycPhoneNumberController;
+  late TextEditingController kycAccountNumberController;
+  late TextEditingController kycBankNameController;
+  late TextEditingController kycGenderController;
+  late TextEditingController kycStateOfResidenceController;
+
   Future<void> _initializeProfileData() async {
     setLoading(true);
     await getUserProfile();
@@ -85,6 +91,13 @@ class HomeController extends GetxController {
   }
   _initializeControllers() {
     emailVerificationController = TextEditingController();
+
+
+    kycPhoneNumberController = TextEditingController();
+    kycAccountNumberController = TextEditingController();
+    kycBankNameController = TextEditingController();
+    kycGenderController = TextEditingController();
+    kycStateOfResidenceController = TextEditingController();
   }
   // _initializeFocusNodes() {
   //   xippTransferNumberFocusNode.addListener(_handleFocusChange);
@@ -95,6 +108,11 @@ class HomeController extends GetxController {
   //   //   WidgetsBinding.instance!.addObserver(KeyboardVisibilityObserverHome());
   //   // });
   // }
+
+  String formatNominationCount(String count) {
+    final int value = int.tryParse(count) ?? 0;
+    return value >= 1000 ? '${(value / 1000).toStringAsFixed(1)}K' : value.toString();
+  }
 
   homeGetUserProfileFromServer() async {
     setLoading(true);
