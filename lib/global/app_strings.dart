@@ -22,6 +22,7 @@ class AuthStrings {
 }
 
 class AskStrings {
+  static const String COMPLETE_LEVEL1_VERIFICIATION = "Complete Level 1 Verification (Email)";
   static const String NEW_HELP_REQUEST = "New Help Request";
 
 }

@@ -6,6 +6,8 @@ import '../models/login/LoginResponse.dart';
 import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
 import '../models/requests/HelpRequestsResponse.dart';
+import '../models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../models/verify_email/VerifyEmailResponse.dart';
 import '../network/dio_client.dart';
 
 class SecureService {
@@ -183,5 +185,72 @@ class SecureService {
     }
   }
 
+  // RESEND VERFICATION
+  Future<ResendVerificationCodeResponse?> resendVerificationCode({
+    required String email
+  }) async {
+    ResendVerificationCodeResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-resend-verification-code.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = ResendVerificationCodeResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // VERFIY EMAIL
+  Future<VerifyEmailResponse?> verifyEmail({
+    required String email,
+    required String verificationCode,
+  }) async {
+    VerifyEmailResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "verificationCode": verificationCode,
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-verify-email-code.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = VerifyEmailResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
 
 }

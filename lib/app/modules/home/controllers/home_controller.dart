@@ -11,6 +11,8 @@ import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
+import '../../../data/models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../../../data/models/verify_email/VerifyEmailResponse.dart';
 import '../../../data/network/dio_error.dart';
 import '../../../data/services/secure_service.dart';
 import '../../../data/storage/cached_data.dart';
@@ -67,6 +69,7 @@ class HomeController extends GetxController {
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
 
+  late TextEditingController emailVerificationController;
 
   Future<void> _initializeProfileData() async {
     setLoading(true);
@@ -81,7 +84,7 @@ class HomeController extends GetxController {
     setLoading(false);
   }
   _initializeControllers() {
-    // searchPhoneUsersController = TextEditingController();
+    emailVerificationController = TextEditingController();
   }
   // _initializeFocusNodes() {
   //   xippTransferNumberFocusNode.addListener(_handleFocusChange);
@@ -150,8 +153,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> getUserProfile() async {
-
-
 
     try {
       profileData.value = await _cachedData.getProfileData();
@@ -357,6 +358,121 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Beneficiaries: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+
+  resendVerificationCode({
+    required String email
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      ResendVerificationCodeResponse? response;
+      response =
+      await SecureService().resendVerificationCode(
+          email: email
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        Utils.showTopSnackBar(
+            t: "A.S.K Resend Verification Code",
+            m: "${response!.message.toString()}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Resend Verification Code: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Resend Verification Code",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Resend Verification Code: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  verifyEmail({
+    required String email,
+    required String verificationCode,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      VerifyEmailResponse? response;
+      response =
+      await SecureService().verifyEmail(
+          email: email,
+          verificationCode: verificationCode
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        Utils.showTopSnackBar(
+            t: "A.S.K Verify Email",
+            m: "${response!.message.toString()}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+
+        await homeGetUserProfileFromServer();
+
+      } else {
+        errorMessage.value = "A.S.K Verify Email: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Verify Email",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Verify Email: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,

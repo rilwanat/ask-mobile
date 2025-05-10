@@ -115,10 +115,11 @@ class RegisterView extends GetView<AuthController> {
                                 keyboardType:
                                 TextInputType.emailAddress,
                                 style: const TextStyle(
-                                  letterSpacing: 0.7,
+                                  //letterSpacing: 0.7,
                                   fontSize: 16,
                                   // color: AppColors.eDoctorAppText,
                                   fontWeight: FontWeight.w400,
+                                  fontFamily: "LatoRegular",
                                 ),
                                 inputFormatters: const [
                                   //FilteringTextInputFormatter.digitsOnly,
@@ -203,10 +204,11 @@ class RegisterView extends GetView<AuthController> {
                                 keyboardType:
                                 TextInputType.text,
                                 style: const TextStyle(
-                                  letterSpacing: 0.7,
+                                  //letterSpacing: 0.7,
                                   fontSize: 16,
                                   // color: AppColors.eDoctorAppText,
                                   fontWeight: FontWeight.w400,
+                                  fontFamily: "LatoRegular",
                                 ),
                                 inputFormatters: const [
                                   //FilteringTextInputFormatter.digitsOnly,
@@ -291,10 +293,11 @@ class RegisterView extends GetView<AuthController> {
                                 keyboardType:
                                 TextInputType.text,
                                 style: const TextStyle(
-                                  letterSpacing: 0.7,
+                                  //letterSpacing: 0.7,
                                   fontSize: 16,
                                   // color: AppColors.eDoctorAppText,
                                   fontWeight: FontWeight.w400,
+                                  fontFamily: "LatoRegular",
                                 ),
                                 inputFormatters: const [
                                   //FilteringTextInputFormatter.digitsOnly,
