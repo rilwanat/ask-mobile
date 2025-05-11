@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
+import '../../../data/models/banks/BankCodeResponse.dart';
 import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
@@ -26,6 +28,7 @@ import '../views/requests_view.dart';
 
 import '../../../data/models/requests/Data.dart' as hrd;
 import '../../../data/models/beneficiaries/Data.dart' as bd;
+import '../../../data/models/banks/Data.dart' as bc;
 
 class HomeController extends GetxController {
 
@@ -69,6 +72,8 @@ class HomeController extends GetxController {
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
 
+  RxList<bc.Data?> bankCodeData = RxList<bc.Data?>([]);
+
   late TextEditingController emailVerificationController;
 
   late TextEditingController kycPhoneNumberController;
@@ -77,11 +82,149 @@ class HomeController extends GetxController {
   late TextEditingController kycGenderController;
   late TextEditingController kycStateOfResidenceController;
 
+
+  final _selectedBankName = 'Select'.obs;
+  String get selectedBankName => _selectedBankName.value;
+  void setSelectedBankName(String s) {
+    _selectedBankName.value = s;
+    update();
+  }
+  final _selectedBankCode = ''.obs;
+  String get selectedBankCode => _selectedBankCode.value;
+  void setSelectedBankCode(String s) {
+    _selectedBankCode.value = s;
+    update();
+  }
+
+  final _selectedGender = 'Select'.obs;
+  String get selectedGender => _selectedGender.value;
+  void setSelectedGender(String s) {
+    _selectedGender.value = s;
+    update();
+  }
+
+  final _selectedStateOfResidence = 'Select'.obs;
+  String get selectedStateOfResidence => _selectedStateOfResidence.value;
+  void setSelectedStateOfResidence(String s) {
+    _selectedStateOfResidence.value = s;
+    update();
+  }
+
+  final List<Map<String, String>> gender = [
+    {"label": "Select Gender", "value": "Select"},
+    {"label": "Male", "value": "Male"},
+    {"label": "Female", "value": "Female"},
+  ];
+
+  final List<Map<String, String>> statesOfResidence = [
+    {"label": "Select Residence", "value": "Select"},
+    {"label": "Non Nigerian", "value": "Non Nigerian"},
+    {"label": "Abia", "value": "Abia"},
+    {"label": "Adamawa", "value": "Adamawa"},
+    {"label": "Akwa Ibom", "value": "Akwa Ibom"},
+    {"label": "Anambra", "value": "Anambra"},
+    {"label": "Bauchi", "value": "Bauchi"},
+    {"label": "Bayelsa", "value": "Bayelsa"},
+    {"label": "Benue", "value": "Benue"},
+    {"label": "Borno", "value": "Borno"},
+    {"label": "Cross River", "value": "Cross River"},
+    {"label": "Delta", "value": "Delta"},
+    {"label": "Ebonyi", "value": "Ebonyi"},
+    {"label": "Edo", "value": "Edo"},
+    {"label": "Ekiti", "value": "Ekiti"},
+    {"label": "Enugu", "value": "Enugu"},
+    {"label": "FCT", "value": "Federal Capital Territory"},
+    {"label": "Gombe", "value": "Gombe"},
+    {"label": "Imo", "value": "Imo"},
+    {"label": "Jigawa", "value": "Jigawa"},
+    {"label": "Kaduna", "value": "Kaduna"},
+    {"label": "Kano", "value": "Kano"},
+    {"label": "Katsina", "value": "Katsina"},
+    {"label": "Kebbi", "value": "Kebbi"},
+    {"label": "Kogi", "value": "Kogi"},
+    {"label": "Kwara", "value": "Kwara"},
+    {"label": "Lagos", "value": "Lagos"},
+    {"label": "Nasarawa", "value": "Nasarawa"},
+    {"label": "Niger", "value": "Niger"},
+    {"label": "Ogun", "value": "Ogun"},
+    {"label": "Ondo", "value": "Ondo"},
+    {"label": "Osun", "value": "Osun"},
+    {"label": "Oyo", "value": "Oyo"},
+    {"label": "Plateau", "value": "Plateau"},
+    {"label": "Rivers", "value": "Rivers"},
+    {"label": "Sokoto", "value": "Sokoto"},
+    {"label": "Taraba", "value": "Taraba"},
+    {"label": "Yobe", "value": "Yobe"},
+    {"label": "Zamfara", "value": "Zamfara"},
+  ];
+
+
+
+  // Camera variables
+  Rx<CameraController?> cameraController = Rx<CameraController?>(null);
+  RxBool isCameraInitialized = false.obs;
+  RxString imagePath = ''.obs;
+  // RxBool isCamersLoading = false.obs;
+
+  Future<void> initializeCamera() async {
+    try {
+      // setLoad ing(true);
+
+      // Dispose previous camera if exists
+      if (cameraController.value != null) {
+        await cameraController.value!.dispose();
+      }
+
+      final cameras = await availableCameras();
+      final frontCamera = cameras.firstWhere(
+            (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+
+      cameraController.value = CameraController(
+        frontCamera,
+        ResolutionPreset.medium,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
+
+      await cameraController.value!.initialize();
+      isCameraInitialized(true);
+
+    } catch (e) {
+      Get.snackbar('Error', 'Camera initialization failed: $e');
+      isCameraInitialized(false);
+    } finally {
+      // setLoading(false);
+    }
+  }
+
+  Future<void> takePicture() async {
+    if (!isCameraInitialized.value || cameraController.value == null) {
+      Get.snackbar('Error', 'Camera not ready');
+      return;
+    }
+
+    isCameraInitialized(false);
+    try {
+      // setLoading(true);
+      final XFile file = await cameraController.value!.takePicture();
+      imagePath.value = file.path;
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to take picture: $e');
+    } finally {
+      // setLoading(false);
+    }
+  }
+
+
+
+
   Future<void> _initializeProfileData() async {
     setLoading(true);
     await getUserProfile();
     await getRequests();
     await getBeneficiaries();
+    await getBanks();
 
 
     // await getUserNotifications();
@@ -202,6 +345,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    cameraController.value?.dispose();
     super.onClose();
   }
 
@@ -209,6 +353,9 @@ class HomeController extends GetxController {
   void dispose() {
     helpAutoScrollTimer?.cancel();
     helpScrollController.dispose();
+
+    cameraController.value?.dispose();
+
     super.dispose();
   }
 
@@ -376,6 +523,59 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Beneficiaries: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getBanks() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      BankCodeResponse? response;
+      response =
+      await SecureService().readBankCodes();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        Utils.showTopSnackBar(
+            t: "A.S.K Bank Codes",
+            m: "${response.data!.length.toString().toString()}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+
+        bankCodeData.value = response.data!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Banks: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Bank Codes",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Bank Codes: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,

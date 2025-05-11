@@ -23,8 +23,8 @@ class HomeView extends GetView<HomeController> {
       bottomNavigationBar: Obx(
             () => controller.showBottomNav.value ? Container(
           // color: AppColors.black,
-          height: 60,
-          margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+          height: 70,
+          margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 10),
           // decoration: BoxDecoration(
           //   color: AppColors.xippBlueDark,
           //   borderRadius: BorderRadius.circular(ScreenSize.scaleWidth(context, 22)),

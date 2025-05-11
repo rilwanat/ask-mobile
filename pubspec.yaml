@@ -44,6 +44,8 @@ dependencies:
   intl: ^0.18.1
   jwt_decoder: ^2.0.1
   carousel_slider: ^5.0.0
+  camera: ^0.11.0+2
+  dropdown_search: ^6.0.2
 
 dev_dependencies:
   flutter_test:

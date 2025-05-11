@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
 import '../models/login/LoginResponse.dart';
@@ -246,6 +247,38 @@ class SecureService {
       );
 
       responseData = VerifyEmailResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // BANKCODES
+  Future<BankCodeResponse?> readBankCodes() async {
+    BankCodeResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.get(
+        "/response/ask-read-bank-codes.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = BankCodeResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);
