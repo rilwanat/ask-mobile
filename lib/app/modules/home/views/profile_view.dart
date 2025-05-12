@@ -9,6 +9,7 @@ import '../controllers/home_controller.dart';
 
 class ProfileView extends GetView<HomeController> {
   ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

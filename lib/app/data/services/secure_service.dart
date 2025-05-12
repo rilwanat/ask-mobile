@@ -8,6 +8,7 @@ import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
 import '../models/requests/HelpRequestsResponse.dart';
 import '../models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../models/status_message/StatusMessageResponse.dart';
 import '../models/verify_email/VerifyEmailResponse.dart';
 import '../network/dio_client.dart';
 
@@ -279,6 +280,92 @@ class SecureService {
       );
 
       responseData = BankCodeResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // UPDATE USER KYC
+  Future<StatusMessageResponse?> updateUserKyc({
+    required String email,
+    required String phoneNumber,
+    required String accountNumber,
+    required String bankName,
+    required String bankCode,
+    required String gender,
+    required String residence,
+  }) async {
+    StatusMessageResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "phoneNumber": phoneNumber,
+      "accountNumber": accountNumber,
+      "bankName": bankName,
+      "bankCode": bankCode,
+      "gender": gender,
+      "residence": residence,
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-update-kyc.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = StatusMessageResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // UPDATE USER KYC SELFIE
+  Future<StatusMessageResponse?> updateUserKycSelfie({
+    required String email,
+    required File selfieImage,
+    required String userId,
+  }) async {
+    StatusMessageResponse? responseData;
+
+    // Create FormData for multipart upload
+    FormData formData = FormData.fromMap({
+      "email": email,
+      "image": await MultipartFile.fromFile(
+        selfieImage.path
+        // ,
+        // filename: '$userId-selfie.jpg',
+      ),
+    });
+
+    // print(formDataString);
+
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-update-selfie-image.php",
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = StatusMessageResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:ask_mobile/global/screen_size.dart';
 import 'package:camera/camera.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import '../../../data/models/login/UserData.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
 import '../../../data/models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../../../data/models/status_message/StatusMessageResponse.dart';
 import '../../../data/models/verify_email/VerifyEmailResponse.dart';
 import '../../../data/network/dio_error.dart';
 import '../../../data/services/secure_service.dart';
@@ -111,13 +115,13 @@ class HomeController extends GetxController {
   }
 
   final List<Map<String, String>> gender = [
-    {"label": "Select Gender", "value": "Select"},
+    // {"label": "Select Gender", "value": "Select"},
     {"label": "Male", "value": "Male"},
     {"label": "Female", "value": "Female"},
   ];
 
   final List<Map<String, String>> statesOfResidence = [
-    {"label": "Select Residence", "value": "Select"},
+    // {"label": "Select Residence", "value": "Select"},
     {"label": "Non Nigerian", "value": "Non Nigerian"},
     {"label": "Abia", "value": "Abia"},
     {"label": "Adamawa", "value": "Adamawa"},
@@ -159,6 +163,22 @@ class HomeController extends GetxController {
   ];
 
 
+  //
+  final _countryName = 'Nigeria'.obs;
+  String get countryName => _countryName.value;
+  final _countryCode = '+234'.obs;
+  String get countryCode => _countryCode.value;
+  final _countryFlagUri = 'flags/ng.png'.obs;
+  String get countryFlagUri => _countryFlagUri.value;
+  void onCountryChanged(CountryCode value) {
+    update([
+      _countryFlagUri.value = value.flagUri!,
+      _countryName.value = value.name!,
+      _countryCode.value = value.dialCode!
+    ]);
+  }
+  //
+
 
   // Camera variables
   Rx<CameraController?> cameraController = Rx<CameraController?>(null);
@@ -199,10 +219,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> takePicture() async {
+
     if (!isCameraInitialized.value || cameraController.value == null) {
-      Get.snackbar('Error', 'Camera not ready');
+      Utils.showTopSnackBar(
+          t: "A.S.K KYC",
+          m: "Camera not ready",
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.askBlue,
+          sp: SnackPosition.TOP);
       return;
     }
+
 
     isCameraInitialized(false);
     try {
@@ -210,7 +238,14 @@ class HomeController extends GetxController {
       final XFile file = await cameraController.value!.takePicture();
       imagePath.value = file.path;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to take picture: $e');
+      // Get.snackbar('Error', 'Failed to take picture: $e');
+      Utils.showTopSnackBar(
+          t: "A.S.K KYC",
+          m: 'Failed to take picture: $e',
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.askBlue,
+          sp: SnackPosition.TOP);
     } finally {
       // setLoading(false);
     }
@@ -545,13 +580,13 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Bank Codes",
-            m: "${response.data!.length.toString().toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Bank Codes",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
 
         bankCodeData.value = response.data!;
 
@@ -603,13 +638,15 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Resend Verification Code",
-            m: "${response!.message.toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Resend Verification Code",
+        //     m: "${response!.message.toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(status: null, title: 'A.S.K Resend Verification Code', message: "${response!.message.toString()}");
 
 
 
@@ -661,15 +698,17 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Verify Email",
-            m: "${response!.message.toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Verify Email",
+        //     m: "${response!.message.toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
 
-        await homeGetUserProfileFromServer();
+        // await homeGetUserProfileFromServer();
+
+        Utils.showInformationDialog(status: true, title: 'A.S.K Verify Email', message: "${response!.message.toString()}");
 
       } else {
         errorMessage.value = "A.S.K Verify Email: Something wrong happened. Try again";//response.message!;
@@ -697,6 +736,391 @@ class HomeController extends GetxController {
           bc: AppColors.red,
           sp: SnackPosition.TOP);
     }
+  }
+
+  updateUserKyc({
+    required String email,
+    required String phoneNumber,
+    required String accountNumber,
+    required String bankName,
+    required String bankCode,
+    required String gender,
+    required String residence,
+    required String imagePath,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      StatusMessageResponse? response;
+      response =
+      await SecureService().updateUserKyc(
+          email: email,
+        phoneNumber: phoneNumber,
+        accountNumber: accountNumber,
+        bankName: bankName,
+        bankCode: bankCode,
+        gender: gender,
+        residence: residence,
+
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Update User Kyc",
+        //     m: "${response!.message.toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+        // Utils.showInformationDialog(status: true, title: 'A.S.K Update Kyc', message: "${response!.message.toString()}");
+        //
+        // await homeGetUserProfileFromServer();
+
+        await updateUserKycSelfie(email: email, imagePath: imagePath);
+
+      } else {
+        errorMessage.value = "A.S.K Update Kyc: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Update Kyc",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+        Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: errorMessage.value);
+
+      }
+
+
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Update Kyc: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc: Error', message: "$message");
+
+    }
+  }
+
+
+  updateUserKycSelfie({
+    required String email,
+    required String imagePath,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+
+      // Create File object from path
+      File imageFile = File(imagePath);
+      String userId = profileData.value!.id!;
+
+
+
+      StatusMessageResponse? response;
+      response =
+      await SecureService().updateUserKycSelfie(
+        email: email,
+        selfieImage: imageFile,
+        userId: userId,
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        Utils.showTopSnackBar(
+            t: "A.S.K Update Kyc Selfie",
+            m: "${response!.message.toString()}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+        Utils.showInformationDialog(status: true, title: 'A.S.K Update Kyc Selfie', message: "${response!.message.toString()}");
+
+      } else {
+        errorMessage.value = "A.S.K Update Kyc Selfie: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Update Kyc",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+        Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc Selfie', message: errorMessage.value);
+
+      }
+
+
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Update User Kyc Selfie: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc Selfie', message: "$message");
+
+    }
+  }
+
+
+
+  showBanksDialog() async {
+    final searchController = TextEditingController();
+    final filteredBanks = RxList<bc.Data?>(bankCodeData.value!.toList());
+
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+          // contentPadding: EdgeInsets.symmetric(horizontal: 20),
+          title: Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const Text(
+                //   "Select Bank",
+                //   style: TextStyle(
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w600,
+                //     fontFamily: "LatoRegular",
+                //     // letterSpacing: .2,
+                //     color: AppColors.askText,
+                //   ),
+                // ),
+                // const SizedBox(height: 12),
+                TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: "Search Bank",
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "LatoRegular",
+                    ),
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: AppColors.askGray),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  onChanged: (value) {
+                    filteredBanks.value = bankCodeData.value!
+                        .where((bank) => bank!.bankName!
+                        .toLowerCase()
+                        .contains(value.toLowerCase()))
+                        .toList();
+                  },
+                ),
+              ],
+            ),
+          ),
+          content: Container(
+            width: double.maxFinite,
+            height: ScreenSize.height(context) * .7,
+            padding: EdgeInsets.only(bottom: 20),
+            child: Obx(() => ListView.separated(
+              shrinkWrap: true,
+              itemCount: filteredBanks.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 8);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                final bank = filteredBanks[index]!;
+                return Container(
+                  decoration: BoxDecoration(
+                    // border: Border.all(color: AppColors.askGray, width: 1),
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: AppColors.askSoftTheme
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0,),
+                    visualDensity: VisualDensity.compact,
+                    title: Text(
+                      bank.bankName!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "LatoRegular",
+                      ),
+                    ),
+                    onTap: () {
+                      kycBankNameController.text = bank.bankName!;
+                      setSelectedBankName(bank.bankName ?? '');
+                      setSelectedBankCode(bank.bankCode ?? '');
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+            )),
+          ),
+        );
+      },
+    );
+  }
+
+  showGenderDialog() async {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+          // contentPadding: EdgeInsets.symmetric(horizontal: 20),
+          title: const Text(
+            "Select Gender",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: "LatoRegular",
+              color: AppColors.askText,
+            ),
+          ),
+          content: Container(
+            width: double.maxFinite,
+            height: ScreenSize.height(context) * .2,
+            padding: EdgeInsets.only(bottom: 20),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: gender.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 8);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                final genderItem = gender[index];
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: AppColors.askSoftTheme,
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    visualDensity: VisualDensity.compact,
+                    title: Text(
+                      genderItem["label"]!, // Access the label from the map
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "LatoRegular",
+                      ),
+                    ),
+                    onTap: () {
+                      // Update with your actual controller and selection logic
+                      // For example:
+                      // genderController.text = genderItem["value"]!;
+                      // setSelectedGender(genderItem["value"]!);
+
+                      kycGenderController.text = genderItem["value"]!;
+                      setSelectedGender(genderItem["value"]!);
+
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showStateOfResidenceDialog() async {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+          // contentPadding: EdgeInsets.symmetric(horizontal: 20),
+          title: const Text(
+            "Select State of Residence",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: "LatoRegular",
+              color: AppColors.askText,
+            ),
+          ),
+          content: Container(
+            width: double.maxFinite,
+            height: ScreenSize.height(context) * .7,
+            padding: EdgeInsets.only(bottom: 20),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: statesOfResidence.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 8);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                final statesOfResidenceItem = statesOfResidence[index];
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: AppColors.askSoftTheme,
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    visualDensity: VisualDensity.compact,
+                    title: Text(
+                      statesOfResidenceItem["label"]!, // Access the label from the map
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "LatoRegular",
+                      ),
+                    ),
+                    onTap: () {
+                      // Update with your actual controller and selection logic
+                      // For example:
+                      // genderController.text = genderItem["value"]!;
+                      // setSelectedGender(genderItem["value"]!);
+
+                      kycStateOfResidenceController.text = statesOfResidenceItem["value"]!;
+                      setSelectedStateOfResidence(statesOfResidenceItem["value"]!);
+
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
 }

@@ -355,7 +355,7 @@ class DashboardView extends GetView<HomeController> {
                   child: Container(
                     // color: Colors.red,
                     // padding: const EdgeInsets.symmetric(vertical: 4),
-                      height: 230,
+                      height: 240,
                       child: Obx(() => ListView.builder(
                         controller: controller.helpScrollController,
                         scrollDirection: Axis.horizontal,

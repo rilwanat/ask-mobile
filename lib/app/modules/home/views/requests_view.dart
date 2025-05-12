@@ -9,6 +9,7 @@ import '../controllers/home_controller.dart';
 
 class RequestsView extends GetView<HomeController> {
   RequestsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
