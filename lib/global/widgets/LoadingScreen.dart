@@ -14,7 +14,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: 1.0,
+      opacity: 0.5,
       child: SizedBox(
         height: ScreenSize.height(context),
         width: ScreenSize.width(context),

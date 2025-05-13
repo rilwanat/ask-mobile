@@ -49,7 +49,7 @@ class NavBar extends GetView<HomeController> {
                         const Text("KYC Level 2: ", style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
                         const SizedBox(width: 4,),
                         Icon(controller.profileData.value!.kycStatus == "APPROVED" ? Icons.check_circle : Icons.warning_amber_rounded,
-                          color: controller.profileData.value!.kycStatus == "Yes" ? AppColors.askGreen : AppColors.red,
+                          color: controller.profileData.value!.kycStatus == "APPROVED" ? AppColors.askGreen : AppColors.red,
                           size: 18,)
                       ],
                     ),
@@ -84,55 +84,86 @@ class NavBar extends GetView<HomeController> {
                 // await controller.getCategoryProductsData(category: "men").then((value) {
                 //   // Get.to(() => const ProductsView());
                 // });
-              },
-            ),
-
-            ListTile(
-              tileColor: AppColors.white,
-              leading: const Icon(Icons.request_page, color: AppColors.askBlue,),
-              title: const Text('Requests', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
-              onTap: () async {
-                Navigator.of(context).pop();
-                // controller.setSelectedCategory("women");
-                // await controller.getCategoryProductsData(category: "women").then((value) {
-                //   // Get.to(() => const ProductsView());
-                // });
-              },
-            ),
-
-            ListTile(
-              tileColor: AppColors.white,
-              leading: const Icon(Icons.question_answer, color: AppColors.askBlue,),
-              title: const Text('Ask', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
-              onTap: () async {
-                Navigator.of(context).pop();
-                // controller.setSelectedCategory("women");
-                // await controller.getCategoryProductsData(category: "women").then((value) {
-                //   // Get.to(() => const ProductsView());
-                // });
-              },
-            ),
-
-            ListTile(
-              tileColor: AppColors.white,
-              leading: const Icon(Icons.add_task, color: AppColors.askBlue,),
-              title: const Text('Beneficiaries', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
-              onTap: () async {
-                Navigator.of(context).pop();
-                // controller.setSelectedCategory("essentials");
-                // await controller.getCategoryProductsData(category: "essentials").then((value) {
-                //   // Get.to(() => const ProductsView());
-                // });
+                controller.handleNavigation(0);
               },
             ),
 
             ListTile(
               tileColor: AppColors.white,
               leading: const Icon(Icons.person, color: AppColors.askBlue,),
+              title: const Text('Profile', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              onTap: () async {
+                Navigator.of(context).pop();
+                // controller.setSelectedCategory("women");
+                // await controller.getCategoryProductsData(category: "women").then((value) {
+                //   // Get.to(() => const ProductsView());
+                // });
+                // controller.handleNavigation(1);
+              },
+            ),
+
+            // ListTile(
+            //   tileColor: AppColors.white,
+            //   leading: const Icon(Icons.request_page, color: AppColors.askBlue,),
+            //   title: const Text('Requests', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+            //   onTap: () async {
+            //     Navigator.of(context).pop();
+            //     // controller.setSelectedCategory("women");
+            //     // await controller.getCategoryProductsData(category: "women").then((value) {
+            //     //   // Get.to(() => const ProductsView());
+            //     // });
+            //     controller.handleNavigation(1);
+            //   },
+            // ),
+            //
+            // ListTile(
+            //   tileColor: AppColors.white,
+            //   leading: const Icon(Icons.question_answer, color: AppColors.askBlue,),
+            //   title: const Text('Ask', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+            //   onTap: () async {
+            //     Navigator.of(context).pop();
+            //     // controller.setSelectedCategory("women");
+            //     // await controller.getCategoryProductsData(category: "women").then((value) {
+            //     //   // Get.to(() => const ProductsView());
+            //     // });
+            //     controller.handleNavigation(2);
+            //   },
+            // ),
+            //
+            // ListTile(
+            //   tileColor: AppColors.white,
+            //   leading: const Icon(Icons.add_task, color: AppColors.askBlue,),
+            //   title: const Text('Beneficiaries', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+            //   onTap: () async {
+            //     Navigator.of(context).pop();
+            //     // controller.setSelectedCategory("essentials");
+            //     // await controller.getCategoryProductsData(category: "essentials").then((value) {
+            //     //   // Get.to(() => const ProductsView());
+            //     // });
+            //     controller.handleNavigation(3);
+            //   },
+            // ),
+
+            ListTile(
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.star, color: AppColors.askBlue,),
               title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
               onTap: () {
                 Navigator.of(context).pop();
                 // Get.toNamed(Routes.PRODUCTS);
+              },
+            ),
+
+            ListTile(
+              tileColor: AppColors.white,
+              leading: const Icon(Icons.waving_hand, color: AppColors.askBlue,),
+              title: const Text('Donations', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              onTap: () async {
+                Navigator.of(context).pop();
+                // controller.setSelectedCategory("essentials");
+                // await controller.getCategoryProductsData(category: "essentials").then((value) {
+                //   // Get.to(() => const ProductsView());
+                // });
               },
             ),
 
@@ -148,18 +179,18 @@ class NavBar extends GetView<HomeController> {
 
 
             const Divider(),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-                controller.logoutUser();
-                // SystemNavigator.pop();
-              },
-              child: const ListTile(
-                tileColor: AppColors.white,
-                leading: Icon(Icons.logout, color: AppColors.askBlue,),
-                title: Text('Log out', style: TextStyle(color: AppColors.red, fontFamily: "LatoRegular",),),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //     controller.logoutUser();
+            //     // SystemNavigator.pop();
+            //   },
+            //   child: const ListTile(
+            //     tileColor: AppColors.white,
+            //     leading: Icon(Icons.logout, color: AppColors.askBlue,),
+            //     title: Text('Log out', style: TextStyle(color: AppColors.red, fontFamily: "LatoRegular",),),
+            //   ),
+            // ),
 
             /*Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),

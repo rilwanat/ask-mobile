@@ -1,4 +1,6 @@
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
+import 'package:ask_mobile/app/modules/home/views/beneficiaries_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -376,6 +378,7 @@ class DashboardView extends GetView<HomeController> {
                               // );
                             },
                             onTap: () {
+                              controller.handleNavigation(1);
 
                               // //open product details view
                               // Get.to(() => ProductDetailsView(
@@ -419,14 +422,16 @@ class DashboardView extends GetView<HomeController> {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10), // Match container's border radius
-                                            child: Image(
-                                              image: NetworkImage(
+                                            child: CachedNetworkImage(
+                                              imageUrl:
                                                   "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                      "${helpRequest.requestImage}"
-                                              ),
+                                                  // "https://askfoundations.org/" +
+                                                      "${helpRequest.requestImage}",
                                               fit: BoxFit.cover, // Changed from contain to cover
                                               width: double.infinity,
                                               height: double.infinity,
+                                              placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                              errorWidget: (context, url, error) => const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -498,7 +503,7 @@ class DashboardView extends GetView<HomeController> {
                                               backgroundColor: AppColors.askOrange,
                                               textColor: AppColors.white,
                                               buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
-                                              buttonHeight: 24, //ScreenSize.scaleHeight(context, 20),
+                                              buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
                                               borderCurve: 4,
                                               border: false,
                                               textSize: 12,
@@ -571,6 +576,14 @@ class DashboardView extends GetView<HomeController> {
                               // );
                             },
                             onTap: () {
+                              controller.handleNavigation(3);
+
+                              // Get.to(() => const BeneficiariesView(),
+                              //     transition: Transition.fadeIn, // Built-in transition type
+                              //     duration: const Duration(milliseconds: 500),
+                              //     // binding: AuthBinding()
+                              // );
+
 
                               // //open product details view
                               // Get.to(() => ProductDetailsView(
@@ -595,7 +608,7 @@ class DashboardView extends GetView<HomeController> {
                               decoration: BoxDecoration(
                                 // color: Colors.redAccent,
                                 borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
-                                border: Border.all(width: 1, color: AppColors.askGray),
+                                border: Border.all(width: 1, color: beneficiary.status! == "approved" ? AppColors.askGreen : AppColors.askOrange),
                               ),
                               width: 144,
                               child: Column(
@@ -614,14 +627,16 @@ class DashboardView extends GetView<HomeController> {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10), // Match container's border radius
-                                            child: Image(
-                                              image: NetworkImage(
+                                            child: CachedNetworkImage(
+                                              imageUrl:
                                                   "https://playground.askfoundations.org/backend/api/v1/" +
-                                                      "${beneficiary.user!.profilePicture}"
-                                              ),
+                                                  // "https://askfoundations.org/" + "" +
+                                                      "${beneficiary.user!.profilePicture}",
                                               fit: BoxFit.cover, // Changed from contain to cover
                                               width: double.infinity,
                                               height: double.infinity,
+                                              placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                              errorWidget: (context, url, error) => const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -641,7 +656,7 @@ class DashboardView extends GetView<HomeController> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4),
+                                            padding: const EdgeInsets.symmetric(horizontal: 4),
                                             child: Text(
                                               currencyFormat.format(double.parse(beneficiary.amount!)),
                                               style: const TextStyle(
@@ -689,29 +704,33 @@ class DashboardView extends GetView<HomeController> {
                                           const SizedBox(
                                             height: 4,
                                           ),
-                                          AskButton(
-                                            enabled: true,
-                                            text: beneficiary.remark!,
-                                            function: () async {
+                                          Row(children: [
+                                            Expanded(
+                                              child: AskButton(
+                                                enabled: true,
+                                                text: beneficiary.remark!,
+                                                function: () async {
 
-                                              // Utils.showTopSnackBar(
-                                              //   t: helpRequest.user!.fullname!,
-                                              //   m: "Request view will open",
-                                              //   tc: AppColors.white,
-                                              //   d: 3,
-                                              //   bc: AppColors.askBlue,
-                                              //   sp: SnackPosition.BOTTOM,
-                                              // );
+                                                  // Utils.showTopSnackBar(
+                                                  //   t: helpRequest.user!.fullname!,
+                                                  //   m: "Request view will open",
+                                                  //   tc: AppColors.white,
+                                                  //   d: 3,
+                                                  //   bc: AppColors.askBlue,
+                                                  //   sp: SnackPosition.BOTTOM,
+                                                  // );
 
-                                            },
-                                            backgroundColor: AppColors.askSoftTheme,
-                                            textColor: AppColors.askText,
-                                            buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
-                                            buttonHeight: 24, //ScreenSize.scaleHeight(context, 20),
-                                            borderCurve: 4,
-                                            border: false,
-                                            textSize: 12,
-                                          ),
+                                                },
+                                                backgroundColor: AppColors.askSoftTheme,
+                                                textColor: AppColors.askText,
+                                                buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
+                                                buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
+                                                borderCurve: 4,
+                                                border: false,
+                                                textSize: 12,
+                                              ),
+                                            ),
+                                          ],),
                                           const SizedBox(
                                             height: 4,
                                           ),
@@ -733,7 +752,7 @@ class DashboardView extends GetView<HomeController> {
                                             backgroundColor: AppColors.askOrange,
                                             textColor: AppColors.white,
                                             buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
-                                            buttonHeight: 24, //ScreenSize.scaleHeight(context, 20),
+                                            buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
                                             borderCurve: 4,
                                             border: false,
                                             textSize: 12,

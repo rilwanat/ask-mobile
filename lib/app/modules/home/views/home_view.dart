@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
             () => controller.showBottomNav.value ? Container(
           // color: AppColors.black,
           height: 70,
-          margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           // decoration: BoxDecoration(
           //   color: AppColors.xippBlueDark,
           //   borderRadius: BorderRadius.circular(ScreenSize.scaleWidth(context, 22)),
@@ -37,6 +37,10 @@ class HomeView extends GetView<HomeController> {
               backgroundColor: AppColors.askBlue,
               type: BottomNavigationBarType.fixed,
               onTap: controller.handleNavigation,
+              // onTap: (int index) {
+              //   controller.handleNavigation(index);
+              //   Navigator.of(context).pop();
+              // },
               currentIndex: controller.navIndex,
               selectedItemColor: AppColors.white,
               unselectedItemColor: AppColors.askBackground,
@@ -89,12 +93,14 @@ class HomeView extends GetView<HomeController> {
                       height: 26,
                       width: 26,
                       child:
-                      Icon(Icons.account_circle,
+                      // Icon(Icons.account_circle,
+                      Icon(Icons.add_task,
                       color: controller.navIndex == 3 ? AppColors.white : AppColors.askGray,
                       )
                     ),
                   ),
-                  label: 'Profile',
+                  // label: 'Profile',
+                  label: 'Beneficiaries',
                 ),
               ],
             ),

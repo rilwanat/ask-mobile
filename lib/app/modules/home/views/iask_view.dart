@@ -1133,20 +1133,22 @@ class IaskView extends GetView<HomeController> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Visibility(
-                                          visible: controller.isCameraInitialized.value ? false : true,
+                                          // visible: controller.isCameraInitialized.value ? false : true,
+                                          visible: true,
                                           child: AskButton(
                                             enabled: controller.isCameraInitialized.value ? false : true,
                                             text: (controller.imagePath.value == "" && !controller.isCameraInitialized.value) ? "Camera" : "Retake",
                                             function: () async {
 
                                               if (controller.isCameraInitialized.value) {
-                                                Utils.showTopSnackBar(
-                                                    t: "A.S.K Camera",
-                                                    m: "Already started",
-                                                    tc: AppColors.white,
-                                                    d: 3,
-                                                    bc: AppColors.askBlue,
-                                                    sp: SnackPosition.TOP);
+                                                // Utils.showTopSnackBar(
+                                                //     t: "A.S.K Camera",
+                                                //     m: "Already started",
+                                                //     tc: AppColors.white,
+                                                //     d: 3,
+                                                //     bc: AppColors.askBlue,
+                                                //     sp: SnackPosition.TOP);
+                                                Utils.showInformationDialog(status: null, title: 'A.S.K KYC Camera', message: "Already started. Take your selfie ;)");
                                                 return;
                                               }
 
@@ -1159,8 +1161,8 @@ class IaskView extends GetView<HomeController> {
                                               //   await controller.takePicture();
                                               // }
                                             },
-                                            backgroundColor: AppColors.askBlue,
-                                            textColor: AppColors.white,
+                                            backgroundColor: controller.isCameraInitialized.value ? AppColors.askGray : AppColors.askBlue,
+                                            textColor: controller.isCameraInitialized.value ? AppColors.askText : AppColors.white,
                                             buttonWidth: ScreenSize.scaleWidth(context, 140),
                                             buttonHeight: ScreenSize.scaleHeight(context, 48),
                                             borderCurve: 26,
@@ -1175,7 +1177,9 @@ class IaskView extends GetView<HomeController> {
                                           enabled: true,
                                           text: "Take Selfie",
                                           function: () async {
-
+                                            if (!controller.isCameraInitialized.value) {
+                                              return;
+                                            }
 
 
 
@@ -1183,8 +1187,8 @@ class IaskView extends GetView<HomeController> {
                                               await controller.takePicture();
                                             }
                                           },
-                                          backgroundColor: AppColors.askBlue,
-                                          textColor: AppColors.white,
+                                          backgroundColor: !controller.isCameraInitialized.value ? AppColors.askGray : AppColors.askBlue,
+                                          textColor: !controller.isCameraInitialized.value ? AppColors.askText : AppColors.white,
                                           buttonWidth: ScreenSize.scaleWidth(context, 140),
                                           buttonHeight: ScreenSize.scaleHeight(context, 48),
                                           borderCurve: 26,
@@ -1214,6 +1218,8 @@ class IaskView extends GetView<HomeController> {
                                             text: "Verify KYC",
                                             function: () async {
 
+
+
                                               String email = controller.profileData.value!.emailAddress!;
 
                                               String phoneNumber = controller.countryCode + controller.kycPhoneNumberController.text;
@@ -1235,13 +1241,14 @@ class IaskView extends GetView<HomeController> {
                                                   || stateOfResidence.isEmpty
                                                   || imagePath.isEmpty
                                               ) {
-                                                Utils.showTopSnackBar(
-                                                    t: "A.S.K Verify KYC",
-                                                    m: "KYC selfie and text fields cannot be empty",
-                                                    tc: AppColors.white,
-                                                    d: 3,
-                                                    bc: AppColors.askBlue,
-                                                    sp: SnackPosition.TOP);
+                                                // Utils.showTopSnackBar(
+                                                //     t: "A.S.K Verify KYC",
+                                                //     m: "KYC selfie and text fields cannot be empty",
+                                                //     tc: AppColors.white,
+                                                //     d: 3,
+                                                //     bc: AppColors.askBlue,
+                                                //     sp: SnackPosition.TOP);
+                                                Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: "KYC selfie and text fields cannot be empty");
                                               } else {
                                                 // Utils.showTopSnackBar(
                                                 //     t: "A.S.K Verify KYC",

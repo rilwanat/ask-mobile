@@ -25,6 +25,7 @@ import '../../../data/storage/cached_data.dart';
 import '../../auth/bindings/auth_binding.dart';
 import '../../auth/controllers/auth_controller.dart';
 import '../../auth/views/login_view.dart';
+import '../views/beneficiaries_view.dart';
 import '../views/dashboard_view.dart';
 import '../views/iask_view.dart';
 import '../views/profile_view.dart';
@@ -52,7 +53,8 @@ class HomeController extends GetxController {
     DashboardView(),
     RequestsView(),
     IaskView(),
-    ProfileView(),
+    // ProfileView(),
+    BeneficiariesView(),
   ];
 
   final _isLoading = false.obs;
@@ -75,6 +77,14 @@ class HomeController extends GetxController {
   final ScrollController beneficiariesScrollController = ScrollController();
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
+
+
+  final ScrollController singleRequestScrollController = ScrollController();
+  final RxInt currentRequestIndex = 0.obs;
+  final RxString searchText = ''.obs;
+  late TextEditingController searchRequestsController;
+  RxList<hrd.Data?> filteredRequestsData = RxList<hrd.Data?>([]);
+
 
   RxList<bc.Data?> bankCodeData = RxList<bc.Data?>([]);
 
@@ -228,6 +238,7 @@ class HomeController extends GetxController {
           d: 3,
           bc: AppColors.askBlue,
           sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: null, title: 'A.S.K KYC', message: "Camera not ready");
       return;
     }
 
@@ -276,6 +287,9 @@ class HomeController extends GetxController {
     kycBankNameController = TextEditingController();
     kycGenderController = TextEditingController();
     kycStateOfResidenceController = TextEditingController();
+
+
+    searchRequestsController = TextEditingController();
   }
   // _initializeFocusNodes() {
   //   xippTransferNumberFocusNode.addListener(_handleFocusChange);
@@ -363,12 +377,54 @@ class HomeController extends GetxController {
     }
   }
 
+  void goToNextItem() {
+    if (currentRequestIndex.value < helpRequestsData.length - 1) {
+      currentRequestIndex.value++;
+      scrollToIndex(currentRequestIndex.value);
+    }
+  }
+  void goToPreviousItem() {
+    if (currentRequestIndex.value > 0) {
+      currentRequestIndex.value--;
+      scrollToIndex(currentRequestIndex.value);
+    }
+  }
+  void scrollToIndex(int index) {
+    final double screenWidth = Get.context!.size!.width * .8 + 8;
+    singleRequestScrollController.animateTo(
+      index * screenWidth,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void filterHelpRequests() {
+    final query = searchText.value.toLowerCase().trim();
+
+    if (query.isEmpty) {
+      filteredRequestsData.assignAll(helpRequestsData);
+    } else {
+      filteredRequestsData.assignAll(helpRequestsData.where((request) {
+        final userName = request?.user?.fullname?.toLowerCase() ?? '';
+        final description = request?.description?.toLowerCase() ?? '';
+        return userName.contains(query) || description.contains(query);
+      }).toList());
+    }
+
+    // Optionally reset scroll to first item
+    currentRequestIndex.value = 0;
+    scrollToIndex(0);
+  }
+
+
+
   @override
   void onInit() {
     _initializeControllers();
     _initializeProfileData();
 
     // startAutoScroll();
+    debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
 
     super.onInit();
   }
@@ -380,7 +436,12 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+
     cameraController.value?.dispose();
+    cameraController.value = null;
+    isCameraInitialized.value = false;
+    imagePath.value = '';
+
     super.onClose();
   }
 
@@ -390,12 +451,15 @@ class HomeController extends GetxController {
     helpScrollController.dispose();
 
     cameraController.value?.dispose();
+    cameraController.value = null;
+    isCameraInitialized.value = false;
+    imagePath.value = '';
 
     super.dispose();
   }
 
   void startAutoScroll() {
-    helpAutoScrollTimer = Timer.periodic(Duration(seconds: 7), (timer) {
+    helpAutoScrollTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
       if (helpCurrentIndex < helpRequestsData.length - 1) {
         helpCurrentIndex++;
       } else {
@@ -405,7 +469,7 @@ class HomeController extends GetxController {
       // Animate to the next item
       helpScrollController.animateTo(
         helpCurrentIndex * 160.0, // 144 width + 8 margin on each side
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     });
@@ -474,15 +538,16 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Help Requests",
-            m: "${response.data!.length.toString().toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Help Requests",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
 
         helpRequestsData.value = response.data!;
+        filteredRequestsData.assignAll(helpRequestsData);
 
 
       } else {
@@ -527,13 +592,13 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Beneficiaries",
-            m: "${response.data!.length.toString().toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Beneficiaries",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
 
         beneficiariesData.value = response.data!;
 

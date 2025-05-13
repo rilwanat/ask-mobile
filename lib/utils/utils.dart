@@ -9,6 +9,7 @@ import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:intl/intl.dart';
 
 import '../app/modules/home/bindings/home_binding.dart';
+import '../app/modules/home/views/donations_view.dart';
 import '../app/modules/home/views/home_view.dart';
 import '../global/app_color.dart';
 import '../global/screen_size.dart';
@@ -22,6 +23,8 @@ class Utils {
   static void hideKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
+
+  static NumberFormat currencyFormat = NumberFormat.currency(locale: 'en_US', symbol: '₦', decimalDigits: 0);
 
   static void showTopSnackBar(
       {required String t,
@@ -158,36 +161,64 @@ class Utils {
                   ),
                 ),
                 const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: AskButton(
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: AskButton(
+                          enabled: true,
+                          text: "Okay",
+                          function: () {
+                            Navigator.pop(context);
+
+
+
+                            // if (message == "Account with phone number already exists.") {
+                            //   Get.to(() => const LoginView(),
+                            //       transition: Transition.fadeIn, // Built-in transition type
+                            //       duration: const Duration(milliseconds: 500),
+                            //       binding: AuthBinding()
+                            //   );
+                            // }
+
+                            if (message == "Email verification successful.") {
+                              Get.find<HomeController>().handleNavigation(0);
+                              Get.find<HomeController>().homeGetUserProfileFromServer();
+                            }
+
+                            if (message == "Image and path updated successfully.") {
+                              Get.find<HomeController>().handleNavigation(0);
+                              Get.find<HomeController>().homeGetUserProfileFromServer();
+                            }
+
+
+                          },
+                          backgroundColor: AppColors.askBlue,
+                          textColor: AppColors.white,
+                          buttonWidth: ScreenSize.width(context) * .4,
+                          buttonHeight: ScreenSize.scaleHeight(context, 54),
+                          borderCurve: 26,
+                          border: false,
+                          textSize: 14,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      (message == "Image and path updated successfully.") ?
+                      Expanded(child: AskButton(
                         enabled: true,
-                        text: "Okay",
+                        text: "Boost",
                         function: () {
                           Navigator.pop(context);
-
-
-
-                          // if (message == "Account with phone number already exists.") {
-                          //   Get.to(() => const LoginView(),
-                          //       transition: Transition.fadeIn, // Built-in transition type
-                          //       duration: const Duration(milliseconds: 500),
-                          //       binding: AuthBinding()
-                          //   );
-                          // }
-
-                          if (message == "Email verification successful.") {
-                            Get.find<HomeController>().handleNavigation(0);
-                            Get.find<HomeController>().homeGetUserProfileFromServer();
-                          }
-
-                          if (message == "Image and path updated successfully.") {
-                            Get.find<HomeController>().handleNavigation(0);
-                            Get.find<HomeController>().homeGetUserProfileFromServer();
-                          }
-
+                  //goto donate page
+                            Get.to(() => const DonationsView(),
+                                transition: Transition.fadeIn, // Built-in transition type
+                                duration: const Duration(milliseconds: 500),
+                                binding: HomeBinding()
+                            );
 
                         },
                         backgroundColor: AppColors.askBlue,
@@ -197,27 +228,9 @@ class Utils {
                         borderCurve: 26,
                         border: false,
                         textSize: 14,
-                      ),
-                    ),
-
-
-                    (message == "Image and path updated successfully.") ? Expanded(child: AskButton(
-                      enabled: true,
-                      text: "Boost",
-                      function: () {
-                        Navigator.pop(context);
-//goto donate page
-
-                      },
-                      backgroundColor: AppColors.askBlue,
-                      textColor: AppColors.white,
-                      buttonWidth: ScreenSize.width(context) * .4,
-                      buttonHeight: ScreenSize.scaleHeight(context, 54),
-                      borderCurve: 26,
-                      border: false,
-                      textSize: 14,
-                    )) : Container(),
-                  ],
+                      )) : Container(),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 30),
               ],
