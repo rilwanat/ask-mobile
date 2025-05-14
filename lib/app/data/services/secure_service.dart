@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
+import '../models/cryptos/CryptosResponse.dart';
 import '../models/donations/DonationsResponse.dart';
 import '../models/login/LoginResponse.dart';
+import '../models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
 import '../models/requests/HelpRequestsResponse.dart';
@@ -188,7 +190,39 @@ class SecureService {
     }
   }
 
-  // SPONSORS
+  // CRYPTOS
+  Future<CryptosResponse?> readCryptos() async {
+    CryptosResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-read-cryptos.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = CryptosResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // DONATIONS
   Future<DonationsResponse?> readDonations() async {
     DonationsResponse? responseData;
 
@@ -213,6 +247,38 @@ class SecureService {
       );
 
       responseData = DonationsResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // PAYSTACKSUBSCRIPTIONS
+  Future<PaystackSubscriptionsResponse?> readPaystackSubscriptions() async {
+    PaystackSubscriptionsResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/paystack-subscriptions.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = PaystackSubscriptionsResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);
@@ -411,7 +477,7 @@ class SecureService {
     FormData formData = FormData.fromMap({
       "email": email,
       "image": await MultipartFile.fromFile(
-        selfieImage.path
+          selfieImage.path
         // ,
         // filename: '$userId-selfie.jpg',
       ),

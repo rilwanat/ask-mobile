@@ -313,7 +313,7 @@ class RequestsView extends GetView<HomeController> {
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,
                                                 height: double.infinity,
-                                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
                                                 errorWidget: (context, url, error) => const Icon(Icons.error),
                                               ),
                                             ),

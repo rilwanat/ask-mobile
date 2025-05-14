@@ -13,8 +13,10 @@ import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
 import '../../../data/models/banks/BankCodeResponse.dart';
 import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
+import '../../../data/models/cryptos/CryptosResponse.dart';
 import '../../../data/models/donations/DonationsResponse.dart';
 import '../../../data/models/login/UserData.dart';
+import '../../../data/models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
 import '../../../data/models/resend_verification/ResendVerificationCodeResponse.dart';
@@ -38,6 +40,8 @@ import '../../../data/models/beneficiaries/Data.dart' as bd;
 import '../../../data/models/sponsors/Data.dart' as sd;
 import '../../../data/models/banks/Data.dart' as bc;
 import '../../../data/models/donations/Data.dart' as dd;
+import '../../../data/models/paystack_subscriptions/PlansData.dart' as psd;
+import '../../../data/models/cryptos/Data.dart' as cd;
 
 class HomeController extends GetxController {
 
@@ -89,8 +93,41 @@ class HomeController extends GetxController {
 
   RxList<dd.Data?> donationsData = RxList<dd.Data?>([]);
   final ScrollController donationsScrollController = ScrollController();
-  Timer? donationsAutoScrollTimer;
-  int donationsCurrentIndex = 0;
+  List<dd.Data?> filterDonationsByType(List<dd.Data?> donations, String donateType) {
+    return donations.where((item) => item!.type == donateType).toList();
+  }
+  String formatPrice(String price) {
+    int numericPrice = int.tryParse(price) ?? 0;
+    if (numericPrice >= 1000000) {
+      double millions = numericPrice / 1000000;
+      return millions % 1 == 0 ? '${millions.toInt()}m' : '${millions.toStringAsFixed(1)}m';
+    } else {
+      // Format with thousand separators
+      return numericPrice.toString().replaceAllMapped(
+        RegExp(r'\B(?=(\d{3})+(?!\d))'),
+            (match) => ',',
+      );
+    }
+  }
+
+
+  RxList<cd.Data?> cryptosData = RxList<cd.Data?>([]);
+  Rx<cd.Data?> selectedAsset = Rx<cd.Data?>(null);
+  late final cd.Data defaultCrypto;
+
+
+  RxList<psd.PlansData?> paystackSubscriptionsData = RxList<psd.PlansData?>([]);
+  final ScrollController paystackSubscriptionsScrollController = ScrollController();
+  Map<String, List<psd.PlansData>> groupPlansByInterval(List<psd.PlansData?> plans) {
+    final Map<String, List<psd.PlansData>> groupedPlans = {};
+    for (var plan in plans) {
+      if (plan == null || plan.interval == null) continue;
+      final interval = plan.interval!.toLowerCase();
+      groupedPlans.putIfAbsent(interval, () => []).add(plan);
+    }
+    return groupedPlans;
+  }
+
 
 
   final ScrollController singleRequestScrollController = ScrollController();
@@ -301,7 +338,19 @@ class HomeController extends GetxController {
     await getBeneficiaries();
     await getSponsors();
     await getDonations();
+    await getPaystackSubscriptions();
     await getBanks();
+
+
+    await getCryptos();
+    defaultCrypto = cd.Data(
+      id: "default",
+      network: "Select",
+      address: "A.S.K",
+      image: "/images/ask-cryptos/ask-logox.png",
+    );
+    selectedAsset.value = defaultCrypto;
+
 
 
     // await getUserNotifications();
@@ -715,6 +764,59 @@ class HomeController extends GetxController {
     }
   }
 
+  getCryptos() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      CryptosResponse? response;
+      response =
+      await SecureService().readCryptos();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Cryptos",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        cryptosData.value = response.data!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Crypto Donations: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Donations",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Crypto Donations: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
   getDonations() async {
     setLoading(true);
     //print("registerUser");
@@ -760,6 +862,59 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Donations: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getPaystackSubscriptions() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      PaystackSubscriptionsResponse? response;
+      response =
+      await SecureService().readPaystackSubscriptions();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Sponsors",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        paystackSubscriptionsData.value = response.data!.plansData!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Paystack Subscriptions: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Paystack Subscriptions",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Paystack Subscriptions: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,

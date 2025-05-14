@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
@@ -46,12 +48,12 @@ class DonationsView extends GetView<HomeController> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: ScreenSize.scaleHeight(context, 40),),
+                            // SizedBox(height: ScreenSize.scaleHeight(context, 40),),
                             const SizedBox(height: 30),
                             const Text(
                                 "Donate Now",
                                 style: TextStyle(
-                                  fontSize: 32,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.w700,
                                   fontFamily: "LatoRegular",
                                   color: AppColors.askText,
@@ -70,7 +72,8 @@ class DonationsView extends GetView<HomeController> {
                                   // letterSpacing: .2,
                                 )
                             ),
-                            const SizedBox(height: 40),
+                            // const SizedBox(height: 40),
+                            const SizedBox(height: 20),
 
                             Obx(() => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -104,6 +107,7 @@ class DonationsView extends GetView<HomeController> {
                                         text: "Dollar",
                                         function: () {
                                           controller.setDonationType("dollar");
+                                          controller.selectOption("onetime");
 
                                           //
                                           // Get.to(() => const TransferscanView(),
@@ -140,8 +144,8 @@ class DonationsView extends GetView<HomeController> {
                                     )),
                               ],
                             ),),
-                            const SizedBox(height: 20,),
-                            Row(
+                            const SizedBox(height: 10,),
+                            Obx(() => controller.donationType != "crypto" ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 GestureDetector(
@@ -168,7 +172,7 @@ class DonationsView extends GetView<HomeController> {
                                   ),
                                 ),
                                 SizedBox(width: 20),
-                                GestureDetector(
+                                Obx(() => controller.donationType == "naira" ? GestureDetector(
                                   onTap: () => controller.selectOption('recurring'),
                                   child: Row(
                                     children: [
@@ -190,14 +194,14 @@ class DonationsView extends GetView<HomeController> {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ) : Container()),
                               ],
-                            ),
+                            ) : Container(),),
 
                             const SizedBox(height: 10,),
 
                             Obx(() =>
-                            controller.donationType == "naira" ?
+                            controller.donationType == "naira" && controller.selectedOption == "onetime" ?
                             Container(
                               // color: AppColors.askBlue,
                               width: ScreenSize.width(context),
@@ -210,11 +214,11 @@ class DonationsView extends GetView<HomeController> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     child: Row(
                                       children: [
                                         Text("${Utils.capitalizeEachWord(controller.donationType)} Donation",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600,
                                               fontFamily: "LatoRegular",
@@ -228,7 +232,7 @@ class DonationsView extends GetView<HomeController> {
                                   Wrap(
                                     spacing: 12, // horizontal gap
                                     runSpacing: 12, // vertical gap
-                                    children: controller.donationsData.map((item) {
+                                    children: controller.filterDonationsByType(controller.donationsData, controller.donationType).map((item) {
                                       return GestureDetector(
                                         onTap: () {
                                           // controller.showSelectedPriceToPay(
@@ -238,7 +242,7 @@ class DonationsView extends GetView<HomeController> {
                                           // );
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                           decoration: BoxDecoration(
                                             color: AppColors.white,
                                             borderRadius: BorderRadius.circular(12),
@@ -246,11 +250,11 @@ class DonationsView extends GetView<HomeController> {
                                           width: (ScreenSize.width(context) * .4), // For 2 columns
                                           alignment: Alignment.center,
                                           child: Text(
-                                            item!.price!.toString(),
+                                            "₦${controller.formatPrice(item!.price!.toString())}",
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              fontFamily: "LatoRegular",
+                                              // fontFamily: "LatoRegular",
                                               color: AppColors.askText,
                                             ),
                                           ),
@@ -262,53 +266,378 @@ class DonationsView extends GetView<HomeController> {
                               ),
                             )
                                 :
+                            controller.donationType == "naira" && controller.selectedOption == "recurring" ?
+                            Container(
+                              // color: AppColors.askBlue,
+                                width: ScreenSize.width(context),
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.askBlue,
+                                  borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                  border: Border.all(width: 1, color: AppColors.askGray),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: controller.groupPlansByInterval(controller.paystackSubscriptionsData).entries.map((entry) {
+                                    final interval = entry.key;
+                                    final plans = entry.value;
+
+                                    // Sort plans by amount descending
+                                    plans.sort((a, b) => b.amount!.compareTo(a.amount!));
+
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                  '${interval[0].toUpperCase()}${interval.substring(1)} Commitments',
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "LatoRegular",
+                                                    color: AppColors.white,
+                                                    // letterSpacing: .2,
+                                                  )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                          child: Wrap(
+                                            spacing: 12,
+                                            runSpacing: 12,
+                                            children: plans.map((plan) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  // showSelectedSubscribePriceToPay(
+                                                  //   donateType,
+                                                  //   plan.amount,
+                                                  //   getCurrencySymbol('naira'),
+                                                  //   true,
+                                                  //   plan.planCode,
+                                                  // );
+                                                },
+                                                child: Container(
+                                                  width: (ScreenSize.width(context) * .35),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.white,
+                                                    borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                          "₦${controller.formatPrice(plan.amount!.toString())}",
+                                                          // '${getCurrencySymbol('naira')}${formatPrice(plan.amount)}',
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w600,
+                                                            // fontFamily: "LatoRegular",
+                                                            color: AppColors.askBlue,
+                                                            // letterSpacing: .2,
+                                                          )
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                          plan.name!,
+                                                          style: const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontFamily: "LatoRegular",
+                                                            color: AppColors.askBlue,
+                                                            // letterSpacing: .2,
+                                                          )
+                                                      ),
+                                                      // const SizedBox(height: 2),
+                                                      // Text(
+                                                      //   plan.interval!,
+                                                      //     style: const TextStyle(
+                                                      //       fontSize: 12,
+                                                      //       fontWeight: FontWeight.w500,
+                                                      //       fontFamily: "LatoRegular",
+                                                      //       color: AppColors.askBlue,
+                                                      //       // letterSpacing: .2,
+                                                      //     )
+                                                      // ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 20),
+                                      ],
+                                    );
+                                  }).toList(),
+                                )
+
+                            )
+                                :
                             controller.donationType == "dollar" ?
-                                Container(
-                                  // color: AppColors.askBlue,
-                                  width: ScreenSize.width(context),
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.askBlue,
-                                    borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
-                                    border: Border.all(width: 1, color: AppColors.askGray),
+                            Container(
+                              // color: AppColors.askBlue,
+                              width: ScreenSize.width(context),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.askBlue,
+                                borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                border: Border.all(width: 1, color: AppColors.askGray),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Text("${Utils.capitalizeEachWord(controller.donationType)} Donation",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: "LatoRegular",
+                                              color: AppColors.white,
+                                              // letterSpacing: .2,
+                                            )),
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Text(Utils.capitalizeEachWord(controller.donationType) + " Donation",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "LatoRegular",
+                                  const SizedBox(height: 10,),
+                                  Wrap(
+                                    spacing: 12, // horizontal gap
+                                    runSpacing: 12, // vertical gap
+                                    children: controller.filterDonationsByType(controller.donationsData, controller.donationType).map((item) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // controller.showSelectedPriceToPay(
+                                          //   controller.donationType,
+                                          //   item.price,
+                                          //   getCurrencySymbol(item.type),
+                                          // );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                          decoration: BoxDecoration(
                                             color: AppColors.white,
-                                            // letterSpacing: .2,
-                                          )),
-                                    ],
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          width: (ScreenSize.width(context) * .4), // For 2 columns
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '\$${controller.formatPrice(item!.price!.toString())}',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              // fontFamily: "LatoRegular",
+                                              color: AppColors.askText,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
-                                ) :
+                                ],
+                              ),
+                            ) :
                             controller.donationType == "crypto" ?
-                                Container(
-                                  // color: AppColors.askBlue,
-                                  width: ScreenSize.width(context),
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.askBlue,
-                                    borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
-                                    border: Border.all(width: 1, color: AppColors.askGray),
+                            Container(
+                              // color: AppColors.askBlue,
+                              width: ScreenSize.width(context),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.askBlue,
+                                borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                border: Border.all(width: 1, color: AppColors.askGray),
+                              ),
+                              child: Obx(() => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Text("${Utils.capitalizeEachWord(controller.donationType)} Donation",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: "LatoRegular",
+                                              color: AppColors.white,
+                                              // letterSpacing: .2,
+                                            )),
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Text(Utils.capitalizeEachWord(controller.donationType) + " Donation",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "LatoRegular",
-                                            color: AppColors.white,
-                                            // letterSpacing: .2,
-                                          )),
-                                    ],
-                                  ),
-                                ) :
-                                Container()
+                                  // const SizedBox(height: 10,),
+
+                                  Obx(() {
+                                    final selected = controller.selectedAsset.value;
+                                    final cryptos = controller.cryptosData.where((e) => e != null).toList();
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if (selected != null)
+                                            DropdownButtonFormField<String>(
+                                              value: selected.network,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                                // focusedBorder: OutlineInputBorder(
+                                                //   borderSide: const BorderSide(color: Colors.teal, width: 2),
+                                                //   borderRadius: BorderRadius.circular(8),
+                                                // ),
+                                                filled: true,
+                                                fillColor: AppColors.white,
+                                              ),
+                                              items: [
+                                                const DropdownMenuItem(
+                                                  value: "Select",
+                                                  child: Text("Select Crypto Network", style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "LatoRegular",
+                                                    color: AppColors.askBlue,
+                                                    // letterSpacing: .2,
+                                                  )),
+                                                ),
+                                                ...cryptos.map((asset) {
+                                                  return DropdownMenuItem<String>(
+                                                    value: asset!.network!,
+                                                    child: Text(asset.network!, style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: "LatoRegular",
+                                                      color: AppColors.askBlue,
+                                                      // letterSpacing: .2,
+                                                    )),
+                                                  );
+                                                }).toList(),
+                                              ],
+                                              onChanged: (value) {
+                                                final found = cryptos.firstWhere(
+                                                      (asset) => asset!.network == value,
+                                                  orElse: () => controller.defaultCrypto,
+                                                );
+                                                controller.selectedAsset.value = found;
+                                              },
+                                            ),
+
+                                          const SizedBox(height: 10),
+
+                                          if (selected != null)
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                          selected.address ?? '',
+                                                          style: const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: "LatoRegular",
+                                                            color: AppColors.white,
+                                                            // letterSpacing: .2,
+                                                          )
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 16),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Clipboard.setData(
+                                                          ClipboardData(text: selected.address ?? ''),
+                                                        );
+                                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                                        //   SnackBar(
+                                                        //     content: Text("Wallet address copied:\n${selected.address}"),
+                                                        //     backgroundColor: AppColors.askBlue,
+                                                        //   ),
+                                                        //
+                                                        // );
+                                                        Utils.showTopSnackBar(
+                                                            t: controller.selectedAsset.value!.network!,
+                                                            m: "Wallet address copied:\n${selected.address}",
+                                                            tc: AppColors.white,
+                                                            d: 3,
+                                                            bc: AppColors.askBlue,
+                                                            sp: SnackPosition.TOP);
+                                                      },
+                                                      child: Container(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.white,
+                                                          // border: Border.all(color: Colors.teal, width: 2),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        child: const Text(
+                                                            "Copy",
+                                                            style: const TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.w500,
+                                                              fontFamily: "LatoRegular",
+                                                              color: AppColors.askBlue,
+                                                              // letterSpacing: .2,
+                                                            )
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                const SizedBox(height: 12),
+
+                                                Center(
+                                                  child: Container(
+                                                    width: 200,//double.infinity,
+                                                    height: 200,
+                                                    padding: const EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors.white,
+                                                      borderRadius: BorderRadius.circular(12),
+
+                                                    ),
+                                                    child: selected.image != null
+                                                        ?
+                                                    // Image.network(
+                                                    //   "${const String.fromEnvironment('API_SERVER_URL', defaultValue: 'https://playground.askfoundations.org/')}/${selected.image}",
+                                                    //   fit: BoxFit.contain,
+                                                    // )
+                                                    CachedNetworkImage(
+                                                      imageUrl:
+                                                      "https://playground.askfoundations.org/" +
+                                                          // "https://askfoundations.org/" +
+                                                          "/${selected.image}",
+                                                      fit: BoxFit.contain,//cover, // Changed from contain to cover
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                    )
+                                                        : const Center(child: Text("No image")),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  })
+
+
+
+                                ],
+                              ))
+                              ,
+                            ) :
+                            Container()
                             )
 
 
