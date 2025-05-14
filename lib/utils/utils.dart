@@ -124,7 +124,7 @@ class Utils {
           ),
           elevation: 8,
           content: Container(
-            height: ScreenSize.height(context) * 0.5,
+            height: ScreenSize.height(context) * 0.6,
             width: double.maxFinite,
             child: Column(
               mainAxisSize: MainAxisSize.min,

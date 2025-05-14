@@ -4,6 +4,8 @@ import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
 import '../models/cryptos/CryptosResponse.dart';
+import '../models/dnq/DnqResponse.dart';
+import '../models/dollar_exchange/DollarExchangeResponse.dart';
 import '../models/donations/DonationsResponse.dart';
 import '../models/login/LoginResponse.dart';
 import '../models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
@@ -247,6 +249,38 @@ class SecureService {
       );
 
       responseData = DonationsResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // DOLLAREXCHANGE
+  Future<DollarExchangeResponse?> readDollarExchange() async {
+    DollarExchangeResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/dollar-rate.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = DollarExchangeResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);
@@ -498,6 +532,54 @@ class SecureService {
       );
 
       responseData = StatusMessageResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+
+  // INCREMENT DNQ
+  Future<DnqResponse?> incrementDNQ({
+    required String email,
+    required String price,
+    required String type,
+    required String reference,
+  }) async {
+    DnqResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "price": price,
+      "type": type,
+      "reference": reference
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+  // {
+  //      "status": true,
+  //   "message": "message",
+  //    "dnq": 1,
+  //    "new_vote_weight": 1,
+  //    "userData": []
+  //  }
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-increment-dnq.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = DnqResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

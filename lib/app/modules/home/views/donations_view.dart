@@ -234,12 +234,14 @@ class DonationsView extends GetView<HomeController> {
                                     runSpacing: 12, // vertical gap
                                     children: controller.filterDonationsByType(controller.donationsData, controller.donationType).map((item) {
                                       return GestureDetector(
-                                        onTap: () {
-                                          // controller.showSelectedPriceToPay(
-                                          //   controller.donationType,
-                                          //   item.price,
-                                          //   getCurrencySymbol(item.type),
-                                          // );
+                                        onTap: () async {
+
+                                          num toPay = num.parse(item!.price!);
+
+                                          await controller.makePaymentToFundAccount(
+                                              context: context,
+                                              toPay: toPay,
+                                              currency: 'NGN');
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -413,12 +415,15 @@ class DonationsView extends GetView<HomeController> {
                                     runSpacing: 12, // vertical gap
                                     children: controller.filterDonationsByType(controller.donationsData, controller.donationType).map((item) {
                                       return GestureDetector(
-                                        onTap: () {
-                                          // controller.showSelectedPriceToPay(
-                                          //   controller.donationType,
-                                          //   item.price,
-                                          //   getCurrencySymbol(item.type),
-                                          // );
+                                        onTap: () async {
+
+                                          num toPay = num.parse(item!.price!);
+
+                                          await controller.makePaymentToFundAccount(
+                                              context: context,
+                                              toPay: toPay,
+                                              currency: 'DOL');
+
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

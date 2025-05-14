@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ask_mobile/global/screen_size.dart';
 import 'package:camera/camera.dart';
@@ -14,6 +15,7 @@ import '../../../../utils/utils.dart';
 import '../../../data/models/banks/BankCodeResponse.dart';
 import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
 import '../../../data/models/cryptos/CryptosResponse.dart';
+import '../../../data/models/dnq/DnqResponse.dart';
 import '../../../data/models/donations/DonationsResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
@@ -21,6 +23,7 @@ import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
 import '../../../data/models/resend_verification/ResendVerificationCodeResponse.dart';
 import '../../../data/models/sponsors/SponsorsResponse.dart';
+import '../../../data/models/dollar_exchange/DollarExchangeResponse.dart';
 import '../../../data/models/status_message/StatusMessageResponse.dart';
 import '../../../data/models/verify_email/VerifyEmailResponse.dart';
 import '../../../data/network/dio_error.dart';
@@ -42,6 +45,9 @@ import '../../../data/models/banks/Data.dart' as bc;
 import '../../../data/models/donations/Data.dart' as dd;
 import '../../../data/models/paystack_subscriptions/PlansData.dart' as psd;
 import '../../../data/models/cryptos/Data.dart' as cd;
+import '../../../data/models/dollar_exchange/Data.dart' as der;
+
+import 'package:pay_with_paystack/pay_with_paystack.dart';
 
 class HomeController extends GetxController {
 
@@ -110,6 +116,7 @@ class HomeController extends GetxController {
     }
   }
 
+  RxList<der.Data?> dollarExchangeData = RxList<der.Data?>([]);
 
   RxList<cd.Data?> cryptosData = RxList<cd.Data?>([]);
   Rx<cd.Data?> selectedAsset = Rx<cd.Data?>(null);
@@ -338,6 +345,7 @@ class HomeController extends GetxController {
     await getBeneficiaries();
     await getSponsors();
     await getDonations();
+    await getDollarExchange();
     await getPaystackSubscriptions();
     await getBanks();
 
@@ -862,6 +870,59 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Donations: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getDollarExchange() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      DollarExchangeResponse? response;
+      response =
+      await SecureService().readDollarExchange();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Sponsors",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        dollarExchangeData.value = response.data!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Dollar Exchange: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Dollar Exchange",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Dollar Exchange: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1478,6 +1539,207 @@ class HomeController extends GetxController {
         );
       },
     );
+  }
+
+
+
+  String generateTimestampedReference() {
+    // Get the current timestamp in milliseconds
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // Generate a random alphanumeric string
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    Random rnd = Random();
+    String randomString = String.fromCharCodes(Iterable.generate(
+        4, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
+
+    // Combine the timestamp and the random string
+    return '$timestamp$randomString';
+  }
+  Future<void> makePaymentToFundAccount({
+    required BuildContext context,
+    required num toPay,
+    required String currency
+  }
+      ) async {
+
+    setLoading(true);
+    final uniqueTransRef =  generateTimestampedReference();
+    String email = profileData.value!.emailAddress!;
+
+    num priceToPay = toPay;
+    if (currency == "DOL") {
+       priceToPay = num.parse(dollarExchangeData.value[0]!.rate!) * toPay;
+    }
+
+    // print("#1");
+    try {
+
+      {
+        PayWithPayStack().now(
+            context: context,
+            // secretKey: "sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b", ask
+            secretKey: "sk_test_179bda5714031774fb9342fbf670e074a1b740e5", //rb
+            customerEmail: email,
+            reference: uniqueTransRef,
+            callbackUrl: "https://google.com",
+            currency: currency,//"NGN",
+            paymentChannel:["mobile_money", "card"],
+            amount: double.parse(priceToPay.toString()),
+            transactionCompleted: (paymentData) async {
+              setLoading(false);
+
+              print("Transaction Successful");
+              // Get.back();
+
+              Navigator.of(context).pop();
+
+
+              // showAnimatedTopupDialog(status: "Success", message: "");
+
+              // setLoading(true);
+              // await homeCtrl.getUserProfile();
+              // setLoading(false);
+
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   Utils.showInformationDialog(
+              //       status: true, title: "Success", message: "Transaction Successful");
+              //
+              //   // showAnimatedTopupDialog(
+              //   //     status: "Success",
+              //   //     message: "",
+              //   //     context: context
+              //   // );
+              // });
+
+              if (currency == "NGN") {
+                await incrementDNQ(email: email, price: toPay.toString(), type: "naira", reference: uniqueTransRef);
+              } else {
+                await incrementDNQ(email: email, price: toPay.toString(), type: "dollar", reference: uniqueTransRef);
+              }
+
+
+
+
+
+            },
+            transactionNotCompleted: (reason) async {
+              setLoading(false);
+              print("Transaction Not Successful!");
+              // Get.back();
+
+
+              // Close the current screen or take user to an error page
+              Navigator.of(context).pop();
+              // showAnimatedTopupDialog(status: "Failed", message: "");
+
+              // setLoading(true);
+              // await homeCtrl.getUserProfile();
+              // setLoading(false);
+
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   showAnimatedTopupDialog(
+              //       status: "Failed",
+              //       message: "",
+              //       context: context
+              //   );
+              // });
+
+            });
+      }
+
+      // print("#2");
+
+      setLoading(false);
+
+    } catch (e) {
+      // print("#3");
+      setLoading(false);
+      print("Error during payment: $e"); // Log the error for debugging
+
+      Utils.showTopSnackBar(
+        t: "Payment Error",
+        m: "An error occurred during payment!",
+        tc: AppColors.white,
+        d: 3,
+        bc: AppColors.red,
+        sp: SnackPosition.TOP,
+      );
+    }
+  }
+
+  incrementDNQ({
+    required String email,
+    required String price,
+    required String type,
+    required String reference,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+
+
+
+
+      DnqResponse? response;
+      response =
+      await SecureService().incrementDNQ(
+        email: email,
+        price: price,
+        type: type,
+        reference: reference,
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K incrementDNQ",
+        //     m: "${response!.message.toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+        Utils.showInformationDialog(status: true, title: 'THANK YOU FOR YOUR DONATION !', message: "${response!.message.toString()}"
+        + ", DNQ: " + response.dnq!.toString()
+        + ", NewDNQ: " + response.newVoteWeight!.toString()
+        );
+
+      } else {
+        errorMessage.value = "A.S.K Donation DNQ: Something wrong happened. Try again";//response.message!;
+
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K incrementDNQ",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+        Utils.showInformationDialog(status: false, title: 'A.S.K Donation DNQ', message: errorMessage.value);
+
+      }
+
+
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K incrementDNQ: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false, title: 'A.S.K incrementDNQ', message: "$message");
+
+    }
   }
 
 }
