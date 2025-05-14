@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../app/modules/home/bindings/home_binding.dart';
 import '../app/modules/home/views/donations_view.dart';
@@ -276,4 +279,63 @@ class Utils {
     // Combine whole part and fractional part as a double
     return double.parse('$wholePart.$fractionalPart');
   }
+
+  static String timeElapsedSince(DateTime fromDate) {
+    final now = DateTime.now();
+    int years = now.year - fromDate.year;
+    int months = now.month - fromDate.month;
+    int days = now.day - fromDate.day;
+
+    if (days < 0) {
+      final prevMonth = DateTime(now.year, now.month, 0);
+      days += prevMonth.day;
+      months -= 1;
+    }
+
+    if (months < 0) {
+      months += 12;
+      years -= 1;
+    }
+
+    String pluralize(int value, String unit) {
+      return "$value $unit${value == 1 ? '' : 's'}";
+    }
+
+    if (years > 0) {
+      return "${pluralize(years, 'year')}, ${pluralize(months, 'month')}, ${pluralize(days, 'day')}";
+    } else if (months > 0) {
+      return "${pluralize(months, 'month')}, ${pluralize(days, 'day')}";
+    } else {
+      return pluralize(days, 'day');
+    }
+  }
+
+  //share
+  Future<void> shareFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/example.txt');
+
+    // Write some data to the file for sharing
+    await file.writeAsString('Hello, Flutter!');
+
+    Share.shareXFiles(
+      [XFile(file.path)],
+      text: 'Check out this file!',
+    );
+  }
+  static void shareLink(String link) {
+    Share.share(
+      link,
+      subject: 'Help me with my request',
+    );
+  }
+  static void shareText(String text) {
+    Share.share(
+      'Please vote for me via this link!',
+      subject: text,
+    );
+  }
+// share
+
+
 }

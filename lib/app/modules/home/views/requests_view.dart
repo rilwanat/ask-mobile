@@ -348,14 +348,14 @@ class RequestsView extends GetView<HomeController> {
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 16,
+                                  height: 4,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     AskButton(
                                       enabled: true,
-                                      text: "Confirm Nominate",
+                                      text: "Confirm Nomination",
                                       function: () async {
               
                                         Utils.showTopSnackBar(
@@ -369,6 +369,30 @@ class RequestsView extends GetView<HomeController> {
               
                                       },
                                       backgroundColor: AppColors.askOrange,
+                                      textColor: AppColors.white,
+                                      buttonWidth: ScreenSize.scaleWidth(context, 200),
+                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                      borderCurve: 12,
+                                      border: false,
+                                      textSize: 14,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AskButton(
+                                      enabled: true,
+                                      text: "Share",
+                                      function: () async {
+
+                                        Utils.shareLink("https://playground.askfoundations.org" "/help-request/${helpRequest.helpToken}");
+
+                                      },
+                                      backgroundColor: AppColors.askBlue,
                                       textColor: AppColors.white,
                                       buttonWidth: ScreenSize.scaleWidth(context, 200),
                                       buttonHeight: ScreenSize.scaleHeight(context, 50),

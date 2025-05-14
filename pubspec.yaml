@@ -33,6 +33,7 @@ dependencies:
   cached_network_image: ^3.4.1
   pay_with_paystack: ^1.0.14
   share_plus: ^11.0.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

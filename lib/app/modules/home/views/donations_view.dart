@@ -315,7 +315,7 @@ class DonationsView extends GetView<HomeController> {
                                             runSpacing: 12,
                                             children: plans.map((plan) {
                                               return GestureDetector(
-                                                onTap: () {
+                                                onTap: () async {
                                                   // showSelectedSubscribePriceToPay(
                                                   //   donateType,
                                                   //   plan.amount,
@@ -323,6 +323,15 @@ class DonationsView extends GetView<HomeController> {
                                                   //   true,
                                                   //   plan.planCode,
                                                   // );
+
+                                                  // num toPay = num.parse(plan!.amount!.toString());
+                                                  //
+                                                  // await controller.makePaymentToFundAccount(
+                                                  //     context: context,
+                                                  //     toPay: toPay,
+                                                  //     currency: 'NGN');
+
+
                                                 },
                                                 child: Container(
                                                   width: (ScreenSize.width(context) * .35),

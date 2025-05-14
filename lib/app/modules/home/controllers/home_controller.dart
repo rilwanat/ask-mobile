@@ -1578,12 +1578,11 @@ class HomeController extends GetxController {
       {
         PayWithPayStack().now(
             context: context,
-            // secretKey: "sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b", ask
-            secretKey: "sk_test_179bda5714031774fb9342fbf670e074a1b740e5", //rb
+            secretKey: "sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b",
             customerEmail: email,
             reference: uniqueTransRef,
             callbackUrl: "https://google.com",
-            currency: currency,//"NGN",
+            currency: "NGN",
             paymentChannel:["mobile_money", "card"],
             amount: double.parse(priceToPay.toString()),
             transactionCompleted: (paymentData) async {
