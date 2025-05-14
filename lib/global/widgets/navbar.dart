@@ -1,9 +1,13 @@
 
+import 'package:ask_mobile/app/modules/home/views/benefactors_view.dart';
+import 'package:ask_mobile/app/modules/home/views/donations_view.dart';
+import 'package:ask_mobile/app/modules/home/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../app/modules/home/controllers/home_controller.dart';
+import '../../utils/utils.dart';
 import '../app_color.dart';
 
 class NavBar extends GetView<HomeController> {
@@ -22,7 +26,7 @@ class NavBar extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(controller.profileData.value!.fullname!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                    Text(Utils.capitalizeEachWord(controller.profileData.value!.fullname!), style: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: "LatoRegular"), ),
                   ],
                 ),
               ),
@@ -34,7 +38,7 @@ class NavBar extends GetView<HomeController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(controller.profileData.value!.emailAddress!, style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                        Text(controller.profileData.value!.emailAddress!, style: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: "LatoRegular"), ),
                         const SizedBox(width: 4,),
                         Icon(controller.profileData.value!.emailVerified == "Yes" ? Icons.check_circle : Icons.warning_amber_rounded,
                           color: controller.profileData.value!.emailVerified == "Yes" ? AppColors.askGreen : AppColors.red,
@@ -46,7 +50,7 @@ class NavBar extends GetView<HomeController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text("KYC Level 2: ", style: TextStyle(color: AppColors.white, fontSize: 14, fontFamily: "LatoRegular"), ),
+                        const Text("Level 2 Verification (KYC): ", style: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: "LatoRegular"), ),
                         const SizedBox(width: 4,),
                         Icon(controller.profileData.value!.kycStatus == "APPROVED" ? Icons.check_circle : Icons.warning_amber_rounded,
                           color: controller.profileData.value!.kycStatus == "APPROVED" ? AppColors.askGreen : AppColors.red,
@@ -60,10 +64,13 @@ class NavBar extends GetView<HomeController> {
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: Image.asset("assets/images/logo-start.png")),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: Image.asset("assets/images/logo-start.png")),
+                ),
               ),
               decoration: const BoxDecoration(
                 color: AppColors.askBlue,
@@ -77,7 +84,7 @@ class NavBar extends GetView<HomeController> {
             ListTile(
               tileColor: AppColors.white,
               leading: const Icon(Icons.home, color: AppColors.askBlue,),
-              title: const Text('Home', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              title: const Text('Home', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("men");
@@ -91,14 +98,16 @@ class NavBar extends GetView<HomeController> {
             ListTile(
               tileColor: AppColors.white,
               leading: const Icon(Icons.person, color: AppColors.askBlue,),
-              title: const Text('Profile', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              title: const Text('Profile', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("women");
                 // await controller.getCategoryProductsData(category: "women").then((value) {
-                //   // Get.to(() => const ProductsView());
+                //   //
                 // });
                 // controller.handleNavigation(1);
+
+                Get.to(() => ProfileView());
               },
             ),
 
@@ -147,23 +156,27 @@ class NavBar extends GetView<HomeController> {
             ListTile(
               tileColor: AppColors.white,
               leading: const Icon(Icons.star, color: AppColors.askBlue,),
-              title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
               onTap: () {
                 Navigator.of(context).pop();
                 // Get.toNamed(Routes.PRODUCTS);
+
+                Get.to(() => BenefactorsView());
               },
             ),
 
             ListTile(
               tileColor: AppColors.white,
               leading: const Icon(Icons.waving_hand, color: AppColors.askBlue,),
-              title: const Text('Donations', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular",),),
+              title: const Text('Donations', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
               onTap: () async {
                 Navigator.of(context).pop();
                 // controller.setSelectedCategory("essentials");
                 // await controller.getCategoryProductsData(category: "essentials").then((value) {
                 //   // Get.to(() => const ProductsView());
                 // });
+
+                Get.to(() => DonationsView());
               },
             ),
 

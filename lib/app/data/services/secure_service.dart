@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
+import '../models/donations/DonationsResponse.dart';
 import '../models/login/LoginResponse.dart';
 import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
 import '../models/requests/HelpRequestsResponse.dart';
 import '../models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../models/sponsors/SponsorsResponse.dart';
 import '../models/status_message/StatusMessageResponse.dart';
 import '../models/verify_email/VerifyEmailResponse.dart';
 import '../network/dio_client.dart';
@@ -147,6 +149,70 @@ class SecureService {
       );
 
       responseData = BeneficiariesResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // SPONSORS
+  Future<SponsorsResponse?> readSponsors() async {
+    SponsorsResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-read-sponsors.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = SponsorsResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // SPONSORS
+  Future<DonationsResponse?> readDonations() async {
+    DonationsResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-read-donations.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = DonationsResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

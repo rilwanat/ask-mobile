@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
+import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../controllers/home_controller.dart';
@@ -13,17 +14,17 @@ class ProfileView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.scaffoldKey,
       backgroundColor: AppColors.askBackground,
-      drawer: NavBar(),
-      appBar: CustomAppBar(
+      // drawer: NavBar(),
+      appBar: CustomAppBarPage(
         onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
+          // controller.scaffoldKey.currentState?.openDrawer();
+          Get.back();
         },
         onMorePressed: () {
           // controller.scaffoldKey.currentState?.openDrawer();
         },
-        title: 'A.S.K',
+        title: 'A.S.K - Profile',
         backgroundColor: AppColors.askBlue,
       ),
       body: const Center(

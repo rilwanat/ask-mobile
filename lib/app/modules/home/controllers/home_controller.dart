@@ -13,10 +13,12 @@ import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
 import '../../../data/models/banks/BankCodeResponse.dart';
 import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
+import '../../../data/models/donations/DonationsResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
 import '../../../data/models/resend_verification/ResendVerificationCodeResponse.dart';
+import '../../../data/models/sponsors/SponsorsResponse.dart';
 import '../../../data/models/status_message/StatusMessageResponse.dart';
 import '../../../data/models/verify_email/VerifyEmailResponse.dart';
 import '../../../data/network/dio_error.dart';
@@ -33,7 +35,9 @@ import '../views/requests_view.dart';
 
 import '../../../data/models/requests/Data.dart' as hrd;
 import '../../../data/models/beneficiaries/Data.dart' as bd;
+import '../../../data/models/sponsors/Data.dart' as sd;
 import '../../../data/models/banks/Data.dart' as bc;
+import '../../../data/models/donations/Data.dart' as dd;
 
 class HomeController extends GetxController {
 
@@ -77,6 +81,16 @@ class HomeController extends GetxController {
   final ScrollController beneficiariesScrollController = ScrollController();
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
+
+  RxList<sd.Data?> sponsorsData = RxList<sd.Data?>([]);
+  final ScrollController sponsorsScrollController = ScrollController();
+  Timer? sponsorsAutoScrollTimer;
+  int sponsorsCurrentIndex = 0;
+
+  RxList<dd.Data?> donationsData = RxList<dd.Data?>([]);
+  final ScrollController donationsScrollController = ScrollController();
+  Timer? donationsAutoScrollTimer;
+  int donationsCurrentIndex = 0;
 
 
   final ScrollController singleRequestScrollController = ScrollController();
@@ -123,6 +137,20 @@ class HomeController extends GetxController {
     _selectedStateOfResidence.value = s;
     update();
   }
+
+
+  final _donationType = 'naira'.obs;
+  String get donationType => _donationType.value;
+  void setDonationType(String s) {
+    _donationType.value = s;
+    update();
+  }
+  var selectedOption = 'onetime'.obs;
+  void selectOption(String value) {
+    selectedOption.value = value;
+  }
+
+
 
   final List<Map<String, String>> gender = [
     // {"label": "Select Gender", "value": "Select"},
@@ -266,10 +294,13 @@ class HomeController extends GetxController {
 
 
   Future<void> _initializeProfileData() async {
+
     setLoading(true);
     await getUserProfile();
     await getRequests();
     await getBeneficiaries();
+    await getSponsors();
+    await getDonations();
     await getBanks();
 
 
@@ -623,6 +654,112 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Beneficiaries: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getSponsors() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      SponsorsResponse? response;
+      response =
+      await SecureService().readSponsors();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Sponsors",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        sponsorsData.value = response.data!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Sponsors: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Sponsors",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Sponsors: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getDonations() async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      DonationsResponse? response;
+      response =
+      await SecureService().readDonations();
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Sponsors",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        donationsData.value = response.data!;
+
+
+      } else {
+        errorMessage.value = "A.S.K Donations: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Donations",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Donations: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,

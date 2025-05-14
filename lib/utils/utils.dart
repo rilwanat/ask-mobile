@@ -90,6 +90,18 @@ class Utils {
     }
   }
 
+  static String capitalizeEachWord(String text) {
+    if (text.trim().isEmpty) return text;
+    return text
+        .trim()
+        .split(RegExp(r'\s+'))
+        .map((word) =>
+    word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}' : '')
+        .join(' ');
+  }
+
+
+
 
   static void showInformationDialog({
     required bool? status,
