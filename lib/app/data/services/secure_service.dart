@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
+import '../models/create_help_request/CreateHelpRequestResponse.dart';
 import '../models/cryptos/CryptosResponse.dart';
 import '../models/dnq/DnqResponse.dart';
 import '../models/dollar_exchange/DollarExchangeResponse.dart';
 import '../models/donations/DonationsResponse.dart';
 import '../models/login/LoginResponse.dart';
+import '../models/my_requests/MyHelpRequestsResponse.dart';
 import '../models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
@@ -121,6 +124,39 @@ class SecureService {
       );
 
       responseData = HelpRequestsResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // MY HELP REQUESTS
+  Future<MyHelpRequestsResponse?> readMyHelpRequests({
+    required String email,
+}) async {
+    MyHelpRequestsResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email
+    };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-my-help-request-get.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = MyHelpRequestsResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);
@@ -580,6 +616,48 @@ class SecureService {
       );
 
       responseData = DnqResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+
+  // CREATEREQUEST
+  Future<CreateHelpRequestResponse?> createHelpRequest({
+    required String email,
+    required String description,
+    required String fullname,
+    required File image,
+  }) async {
+    CreateHelpRequestResponse? responseData;
+
+    // Create FormData for multipart upload
+    FormData formData = FormData.fromMap({
+      "email": email,
+      "description": description,
+      "fullname": fullname,
+      "image": await MultipartFile.fromFile(
+          image.path,
+        contentType: MediaType("image", "jpeg"),
+      ),
+    });
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-my-help-request-create.php",
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = CreateHelpRequestResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

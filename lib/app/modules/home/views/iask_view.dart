@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/app_strings.dart';
@@ -54,15 +56,22 @@ class IaskView extends GetView<HomeController> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: ScreenSize.scaleHeight(context, 40),),
-                            // const SizedBox(height: 30),
+                            SizedBox(height: 10,),
+
+                            SizedBox(height: 8,),
 
 
                             Obx(() =>
-                            (controller.profileData.value!.emailVerified == null
+                            (
+                                (
+                                    controller.profileData.value!.emailVerified == null
                                 || controller.profileData.value!.emailVerified == ""
                                 || controller.profileData.value!.emailVerified == "No"
-                            ) ?
+                                )
+                                && controller.profileData.value!.isCheat != "Yes"
+                            )
+                                ?
+                            //KYC EMAIL
                             Container(
                               // color: AppColors.askGreen,
                               child: Column(
@@ -358,13 +367,18 @@ class IaskView extends GetView<HomeController> {
                                   ),
                                 ],
                               ),
-                            ) :
+                            )
+                                :
 
-                            //KYC
+                            //KYC ACCOUNT
                             Obx(() =>
-                            (controller.profileData.value!.kycStatus != "APPROVED"
+                            (
+                                (
+                                    controller.profileData.value!.kycStatus != "APPROVED"
                                 || controller.profileData.value!.kycStatus == ""
                                 || controller.profileData.value!.kycStatus == null
+                            )
+                                    && controller.profileData.value!.isCheat != "Yes"
                             ) ?
                             Container(
                               // color: AppColors.askGreen,
@@ -1310,6 +1324,836 @@ class IaskView extends GetView<HomeController> {
                             ),
                             ),
 
+
+                            (
+                            controller.profileData.value!.emailVerified == "Yes" &&
+                            controller.profileData.value!.kycStatus == "APPROVED"
+                            ) ? Container(
+                              color: AppColors.askOrange,
+                              // height: 60,
+                              child: Column(
+                                children: [
+
+                                ],
+                              ),
+                            ) :
+                                Container(
+                                ),
+
+
+
+
+
+                                  //pending or user is cheat
+                                  (
+                                        controller.profileData.value!.kycStatus != "APPROVED" ||
+                                        controller.profileData.value!.isCheat == "Yes"
+
+                                ) ? Container(
+                                  // color: AppColors.red,
+                                  // height: 60,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(0.0), // equivalent to p-4
+                                              child: Column(
+                                                children: [
+                                                  const SizedBox(height: 0),
+                                                  const Text(
+                                                    'Your KYC is pending approval',
+                                                    textAlign: TextAlign.center, style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: "LatoRegular",
+                                                    color: AppColors.askText,
+                                                  ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Container(
+                                                    color: AppColors.askBlue,
+                                                    height: 2,
+                                                    width: 64,
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  const Icon(Icons.info, size: 70, color: AppColors.askBlue),
+                                                  const SizedBox(height: 8),
+                                                  const Text(
+                                                    'Please wait for the approval process to complete.', style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "LatoRegular",
+                                                    color: AppColors.askText,
+                                                  ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  if (controller.profileData.value!.isCheat == 'Yes')
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(top: 8),
+                                                      child: Column(
+                                                        children: [
+                                                          // const Icon(Icons.warning, size: 32, color: AppColors.red),
+                                                          const SizedBox(height: 8),
+                                                          Text(
+                                                            'Your account has been flagged for cheating.', style: const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontFamily: "LatoRegular",
+                                                            color: AppColors.red,
+                                                          ),
+                                                            textAlign: TextAlign.center,
+
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                    ,
+                                )
+                                      :
+
+                                      //create request
+                                  controller.myHelpRequestsData.value == null ?
+                                Container(
+                                  // color: AppColors.askOrange,
+                                  // height: 100,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "New Help Request",
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: "LatoRegular",
+                                              color: AppColors.askText,
+                                              height: 1.0,
+                                              // letterSpacing: .2,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            color: AppColors.askBlue,
+                                            height: 2,
+                                            width: 64,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8,),
+                                      // const SizedBox(height: 20),
+                                      // const Text(
+                                      //     AuthStrings.LOGIN_SUBHEADER,
+                                      //     style: TextStyle(
+                                      //       fontSize: 16,
+                                      //       fontWeight: FontWeight.w400,
+                                      //       fontFamily: "LatoRegular",
+                                      //       color: AppColors.askText,
+                                      //       // letterSpacing: .2,
+                                      //     )
+                                      // ),
+                                      const SizedBox(height: 0),
+                                      // Email Field
+                                      // Padding(
+                                      //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      //   child: Column(
+                                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                                      //     children: [
+                                      //       const Text(
+                                      //         "Email: ",
+                                      //         style: TextStyle(
+                                      //           fontSize: 14,
+                                      //           fontWeight: FontWeight.w500,
+                                      //           fontFamily: "LatoRegular",
+                                      //           // letterSpacing: .2,
+                                      //           color: AppColors.askText,
+                                      //         ),
+                                      //       ),
+                                      //       const SizedBox(height: 4),
+                                      //       FadeDownAnimation(
+                                      //         delayMilliSeconds: 400,
+                                      //         duration: 700,
+                                      //         child: TextFormField(
+                                      //           initialValue: controller.profileData.value!.emailAddress,
+                                      //           // controller: controller.loginEmailController,
+                                      //           // focusNode: controller.loginEmailFocusNode,
+                                      //           //cursorColor: AppColors.blue,
+                                      //           decoration: InputDecoration(
+                                      //             hintText: "Email",
+                                      //             // filled: true,
+                                      //             // fillColor: AppColors.white,
+                                      //             border: OutlineInputBorder(
+                                      //               borderSide: const BorderSide(
+                                      //                 color: AppColors.askBlue,
+                                      //               ),
+                                      //               borderRadius:
+                                      //               BorderRadius.circular(8),
+                                      //             ),
+                                      //             enabledBorder: OutlineInputBorder(
+                                      //               borderSide: const BorderSide(
+                                      //                 color: AppColors
+                                      //                     .askBlue,
+                                      //               ),
+                                      //               borderRadius:
+                                      //               BorderRadius.circular(8),
+                                      //             ),
+                                      //             focusedBorder: OutlineInputBorder(
+                                      //               borderSide: const BorderSide(
+                                      //                 color: AppColors.askBlue,
+                                      //               ),
+                                      //               borderRadius:
+                                      //               BorderRadius.circular(8),
+                                      //             ),
+                                      //             contentPadding:
+                                      //             const EdgeInsets.only(left: 20),
+                                      //           ),
+                                      //           readOnly: true,
+                                      //           keyboardType:
+                                      //           TextInputType.emailAddress,
+                                      //           style: const TextStyle(
+                                      //             //letterSpacing: 0.7,
+                                      //             fontSize: 16,
+                                      //             color: AppColors.black,
+                                      //             fontWeight: FontWeight.w400,
+                                      //             fontFamily: "LatoRegular",
+                                      //           ),
+                                      //           inputFormatters: const [
+                                      //             //FilteringTextInputFormatter.digitsOnly,
+                                      //             //LengthLimitingTextInputFormatter(13),
+                                      //           ],
+                                      //           validator: (value) {
+                                      //             Pattern pattern =
+                                      //                 r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                      //             RegExp regex = RegExp('$pattern');
+                                      //             if (!regex.hasMatch(value!)) {
+                                      //               return 'Please enter a valid Email Address';
+                                      //             } else {
+                                      //               return null;
+                                      //             }
+                                      //           },
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(height: 4),
+
+                                      // Description Field
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Description: ",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "LatoRegular",
+                                                // letterSpacing: .2,
+                                                color: AppColors.askText,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            FadeDownAnimation(
+                                              delayMilliSeconds: 400,
+                                              duration: 700,
+                                              child: TextFormField(
+                                                controller: controller.helpRequestDescriptionController,
+                                                // focusNode: controller.loginEmailFocusNode,
+                                                //cursorColor: AppColors.blue,
+                                                decoration: InputDecoration(
+                                                  hintText: "Describe your Help Request here...",
+                                                  // fillColor: AppColors.white,
+                                                  border: OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                      color: AppColors.askBlue,
+                                                    ),
+                                                    borderRadius:
+                                                    BorderRadius.circular(8),
+                                                  ),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                      color: AppColors
+                                                          .askBlue,
+                                                    ),
+                                                    borderRadius:
+                                                    BorderRadius.circular(8),
+                                                  ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                      color: AppColors.askBlue,
+                                                    ),
+                                                    borderRadius:
+                                                    BorderRadius.circular(8),
+                                                  ),
+                                                  contentPadding:
+                                                  const EdgeInsets.only(left: 20),
+                                                ),
+                                                // readOnly: true,
+                                                maxLines: 5,
+                                                keyboardType:
+                                                TextInputType.text,
+                                                style: const TextStyle(
+                                                  // //letterSpacing: 0.7,
+                                                  fontSize: 16,
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "LatoRegular",
+                                                ),
+                                                inputFormatters: const [
+                                                  //FilteringTextInputFormatter.digitsOnly,
+                                                  //LengthLimitingTextInputFormatter(13),
+                                                ],
+                                                validator: (value) {
+
+                                                },
+                                              ),
+                                            ),
+
+
+
+                                          ],
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 4),
+                                      //Select an image
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                              //   const Text(
+                                              //   "Select an Image:: ",
+                                              //   style: TextStyle(
+                                              //     fontSize: 14,
+                                              //     fontWeight: FontWeight.w500,
+                                              //     fontFamily: "LatoRegular",
+                                              //     // letterSpacing: .2,
+                                              //     color: AppColors.askText,
+                                              //   ),
+                                              // ),
+                                                GestureDetector(
+                                                    onTap: () async {
+                                                              final ImagePicker picker = ImagePicker();
+                                                              {
+                                                                final pickedFile =
+                                                                    await picker.pickImage(
+                                                                        source: ImageSource.gallery);
+                                                                if (pickedFile != null) {
+                                                                  controller.setLoading(true);
+                                                                  controller.helpRequestImage.value = File(pickedFile.path);
+
+                                                                  controller.setLoading(false);
+
+
+                                                                }
+                                                              }
+                                                    },
+                                                    child: Container(
+
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.askBlue,
+                                                          border: Border.all(color: AppColors.askBlue, width: 2),
+                                                          borderRadius: BorderRadius.circular(30),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                        child: const Text("Select an Image", style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500,
+                                                          fontFamily: "LatoRegular",
+                                                          color: AppColors.white,)))),
+                                                ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Center(
+                                              child: Obx(() => FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: controller.helpRequestImage.value != null
+                                                    ? Image.file(
+                                                  controller.helpRequestImage.value!,
+                                                  width: 240,
+                                                  height: 240,
+                                                  fit: BoxFit.cover,
+                                                )
+                                                    : const Text('No image selected'),
+                                              )),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      Container(
+                                        width: ScreenSize.width(context),
+                                        alignment: Alignment.bottomCenter,
+                                        // color: AppColors.askBlue,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            AskButton(
+                                                enabled: true,
+                                                text: controller.isLoading ? 'Please wait..' : "Create Request",
+                                                function: () async {
+
+                                                  String email = controller.profileData.value!.emailAddress!;
+                                                  String description = controller.helpRequestDescriptionController.text;
+                                                  String fullname = controller.profileData.value!.fullname!;
+                                                  File? image = controller.helpRequestImage.value!;
+
+                                                  if (
+                                                  description != "" &&
+                                                      image.path != "") {
+
+                                                    controller.createHelpRequest(
+                                                        email: email,
+                                                        description: description,
+                                                        fullname: fullname,
+                                                        image: image
+                                                    );
+
+                                                  } else {
+                                                    Utils.showInformationDialog(status: null,
+                                                        title: 'A.S.K Help Request',
+                                                        message: "Enter a Help Request description and select an image to upload");
+                                                  }
+                                                },
+                                                backgroundColor: AppColors.askBlue,
+                                                textColor: AppColors.white,
+                                                buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                borderCurve: 26,
+                                                border: false,
+                                                textSize: 16
+                                            ),
+
+
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                      :
+                                      //edit request
+                                  Container(
+                                    // color: AppColors.askOrange,
+                                    // height: 100,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Edit Help Request",
+                                              style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: "LatoRegular",
+                                                color: AppColors.askText,
+                                                height: 1.0,
+                                                // letterSpacing: .2,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              color: AppColors.askBlue,
+                                              height: 2,
+                                              width: 64,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        // const SizedBox(height: 20),
+                                        // const Text(
+                                        //     AuthStrings.LOGIN_SUBHEADER,
+                                        //     style: TextStyle(
+                                        //       fontSize: 16,
+                                        //       fontWeight: FontWeight.w400,
+                                        //       fontFamily: "LatoRegular",
+                                        //       color: AppColors.askText,
+                                        //       // letterSpacing: .2,
+                                        //     )
+                                        // ),
+                                        const SizedBox(height: 0),
+                                        // Help Token Field
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Help Token: ${controller.myHelpRequestsData.value!.helpToken!}",
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              // const SizedBox(height: 4),
+                                              // FadeDownAnimation(
+                                              //   delayMilliSeconds: 400,
+                                              //   duration: 700,
+                                              //   child: TextFormField(
+                                              //     initialValue: controller.myHelpRequestsData.value!.helpToken!,
+                                              //     // controller: controller.loginEmailController,
+                                              //     // focusNode: controller.loginEmailFocusNode,
+                                              //     //cursorColor: AppColors.blue,
+                                              //     decoration: InputDecoration(
+                                              //       hintText: "Help Token",
+                                              //       // filled: true,
+                                              //       // fillColor: AppColors.white,
+                                              //       border: OutlineInputBorder(
+                                              //         borderSide: const BorderSide(
+                                              //           color: AppColors.askBlue,
+                                              //         ),
+                                              //         borderRadius:
+                                              //         BorderRadius.circular(8),
+                                              //       ),
+                                              //       enabledBorder: OutlineInputBorder(
+                                              //         borderSide: const BorderSide(
+                                              //           color: AppColors
+                                              //               .askBlue,
+                                              //         ),
+                                              //         borderRadius:
+                                              //         BorderRadius.circular(8),
+                                              //       ),
+                                              //       focusedBorder: OutlineInputBorder(
+                                              //         borderSide: const BorderSide(
+                                              //           color: AppColors.askBlue,
+                                              //         ),
+                                              //         borderRadius:
+                                              //         BorderRadius.circular(8),
+                                              //       ),
+                                              //       contentPadding:
+                                              //       const EdgeInsets.only(left: 20),
+                                              //     ),
+                                              //     readOnly: true,
+                                              //     keyboardType:
+                                              //     TextInputType.text,
+                                              //     style: const TextStyle(
+                                              //       //letterSpacing: 0.7,
+                                              //       fontSize: 16,
+                                              //       color: AppColors.black,
+                                              //       fontWeight: FontWeight.w400,
+                                              //       fontFamily: "LatoRegular",
+                                              //     ),
+                                              //     inputFormatters: const [
+                                              //       //FilteringTextInputFormatter.digitsOnly,
+                                              //       //LengthLimitingTextInputFormatter(13),
+                                              //     ],
+                                              //     validator: (value) {
+                                              //       // Pattern pattern =
+                                              //       //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                              //       // RegExp regex = RegExp('$pattern');
+                                              //       // if (!regex.hasMatch(value!)) {
+                                              //       //   return 'Please enter a valid Email Address';
+                                              //       // } else {
+                                              //       //   return null;
+                                              //       // }
+                                              //     },
+                                              //   ),
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+
+                                        // Description Field
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Description: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: TextFormField(
+                                                  controller: controller.helpRequestDescriptionController,
+                                                  // focusNode: controller.loginEmailFocusNode,
+                                                  //cursorColor: AppColors.blue,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Describe your Help Request here...",
+                                                    // fillColor: AppColors.white,
+                                                    border: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors
+                                                            .askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    contentPadding:
+                                                    const EdgeInsets.only(left: 20),
+                                                  ),
+                                                  // readOnly: true,
+                                                  maxLines: 5,
+                                                  keyboardType:
+                                                  TextInputType.text,
+                                                  style: const TextStyle(
+                                                    // //letterSpacing: 0.7,
+                                                    fontSize: 16,
+                                                    color: AppColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "LatoRegular",
+                                                  ),
+                                                  inputFormatters: const [
+                                                    //FilteringTextInputFormatter.digitsOnly,
+                                                    //LengthLimitingTextInputFormatter(13),
+                                                  ],
+                                                  validator: (value) {
+
+                                                  },
+                                                ),
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 4),
+                                        //Select an image
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  //   const Text(
+                                                  //   "Select an Image:: ",
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 14,
+                                                  //     fontWeight: FontWeight.w500,
+                                                  //     fontFamily: "LatoRegular",
+                                                  //     // letterSpacing: .2,
+                                                  //     color: AppColors.askText,
+                                                  //   ),
+                                                  // ),
+                                                  GestureDetector(
+                                                      onTap: () async {
+                                                        final ImagePicker picker = ImagePicker();
+                                                        {
+                                                          final pickedFile =
+                                                          await picker.pickImage(
+                                                              source: ImageSource.gallery);
+                                                          if (pickedFile != null) {
+                                                            controller.setLoading(true);
+                                                            controller.helpRequestImage.value = File(pickedFile.path);
+
+                                                            controller.setLoading(false);
+
+
+                                                          }
+                                                        }
+                                                      },
+                                                      child: Container(
+
+                                                          decoration: BoxDecoration(
+                                                            color: AppColors.askBlue,
+                                                            border: Border.all(color: AppColors.askBlue, width: 2),
+                                                            borderRadius: BorderRadius.circular(30),
+                                                          ),
+                                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                          child: const Text("Change Image", style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: "LatoRegular",
+                                                            color: AppColors.white,)))),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Center(
+                                                child: Obx(() => FadeDownAnimation(
+                                                  delayMilliSeconds: 400,
+                                                  duration: 700,
+                                                  child: controller.myHelpRequestsData.value != null && controller.helpRequestImage.value == null ?
+                                                  SizedBox(
+                                                    width: 250,//double.infinity,
+                                                    height: 250,//double.infinity,
+                                                    child: AspectRatio(
+                                                      aspectRatio: 1,
+                                                      child: Container(
+                                                        // height: 250,//double.infinity,
+                                                        // width: 250,//double.infinity,
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.askBlue,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(10), // Match container's border radius
+                                                          child: CachedNetworkImage(
+                                                            imageUrl:
+                                                            "https://playground.askfoundations.org/backend/api/v1/" +
+                                                                // "https://askfoundations.org/" + "" +
+                                                                "${controller.myHelpRequestsData.value!.requestImage!}",
+                                                            fit: BoxFit.cover, // Changed from contain to cover
+                                                            width: 250,//double.infinity,
+                                                            height: 250,//double.infinity,
+                                                            placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                      :
+                                                  SizedBox(
+                                                    width: 250,//double.infinity,
+                                                    height: 250,//double.infinity,
+                                                    child: AspectRatio(
+                                                      aspectRatio: 1,
+                                                      child: Container(
+                                                        // height: 250,//double.infinity,
+                                                        // width: 250,//double.infinity,
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.askBlue,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(10), // Match container's border radius
+                                                          child: Image.file(
+                                                            controller.helpRequestImage.value!,
+                                                            // width: 250,//double.infinity,
+                                                            // height: 250,//double.infinity,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+
+
+
+                                                  ,
+                                                )),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                          width: ScreenSize.width(context),
+                                          alignment: Alignment.bottomCenter,
+                                          // color: AppColors.askBlue,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              AskButton(
+                                                  enabled: true,
+                                                  text: controller.isLoading ? 'Please wait..' : "Edit Request",
+                                                  function: () async {
+
+                                                    // String email = controller.profileData.value!.emailAddress!;
+                                                    // String description = controller.helpRequestDescriptionController.text;
+                                                    // String fullname = controller.profileData.value!.fullname!;
+                                                    // File? image = controller.helpRequestImage.value!;
+                                                    //
+                                                    // if (
+                                                    // description != "" &&
+                                                    //     image.path != "") {
+                                                    //
+                                                    //   controller.createHelpRequest(
+                                                    //       email: email,
+                                                    //       description: description,
+                                                    //       fullname: fullname,
+                                                    //       image: image
+                                                    //   );
+                                                    //
+                                                    // } else {
+                                                    //   Utils.showInformationDialog(status: null,
+                                                    //       title: 'A.S.K Help Request',
+                                                    //       message: "Enter a Help Request description and select an image to upload");
+                                                    // }
+                                                  },
+                                                  backgroundColor: AppColors.askBlue,
+                                                  textColor: AppColors.white,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                  borderCurve: 26,
+                                                  border: false,
+                                                  textSize: 16
+                                              ),
+
+
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
 
 
 

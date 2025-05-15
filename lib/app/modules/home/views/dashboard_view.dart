@@ -349,7 +349,7 @@ class DashboardView extends GetView<HomeController> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 4,),
+                      const SizedBox(height: 8,),
                       Container(
                         color: AppColors.askBlue,
                         height: 2,
@@ -547,7 +547,7 @@ class DashboardView extends GetView<HomeController> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 4,),
+                      const SizedBox(height: 8,),
                       Container(
                         color: AppColors.askBlue,
                         height: 2,

@@ -110,7 +110,10 @@ class Utils {
     required bool? status,
     required String title,
     required String message,
+    String? meta,
   }) async {
+
+    List<String> parts = message.split('#');
 
     showDialog(
       context: Get.context!,
@@ -158,23 +161,31 @@ class Utils {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
-                  child: FadeDownAnimation(
-                    delayMilliSeconds: 400,
-                    duration: 700,
-                    child: Text(
-                      message,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.askText,
-                        fontFamily: "LatoRegular",
+                Column(
+                  children: List.generate(parts.length, (index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ScreenSize.scaleWidth(context, 24),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                      child: FadeDownAnimation(
+                        delayMilliSeconds: 400,
+                        duration: 700,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Text(
+                            parts[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.askText,
+                              fontFamily: "LatoRegular",
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),),
                 const Spacer(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
@@ -185,7 +196,7 @@ class Utils {
                         child: AskButton(
                           enabled: true,
                           text: "Okay",
-                          function: () {
+                          function: () async {
                             Navigator.pop(context);
 
 
@@ -208,6 +219,15 @@ class Utils {
                               Get.find<HomeController>().homeGetUserProfileFromServer();
                             }
 
+                            if (message == "Help Request created successfully.")
+                            {
+                              await Get.find<HomeController>().getRequests();
+                              Get.find<HomeController>().handleNavigation(1);
+                              await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+
+                              await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
+                            }
+
 
                           },
                           backgroundColor: AppColors.askBlue,
@@ -228,12 +248,12 @@ class Utils {
                         text: "Boost",
                         function: () {
                           Navigator.pop(context);
-                  //goto donate page
-                            Get.to(() => const DonationsView(),
-                                transition: Transition.fadeIn, // Built-in transition type
-                                duration: const Duration(milliseconds: 500),
-                                binding: HomeBinding()
-                            );
+                          //goto donate page
+                          Get.to(() => const DonationsView(),
+                              transition: Transition.fadeIn, // Built-in transition type
+                              duration: const Duration(milliseconds: 500),
+                              binding: HomeBinding()
+                          );
 
                         },
                         backgroundColor: AppColors.askBlue,

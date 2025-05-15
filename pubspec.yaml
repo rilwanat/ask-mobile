@@ -34,6 +34,8 @@ dependencies:
   pay_with_paystack: ^1.0.14
   share_plus: ^11.0.0
   path_provider: ^2.1.5
+  image_picker: ^1.1.2
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:

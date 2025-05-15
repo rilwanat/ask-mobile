@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:ask_mobile/app/data/models/create_help_request/CreateHelpRequestResponse.dart';
 import 'package:ask_mobile/global/screen_size.dart';
 import 'package:camera/camera.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -18,6 +19,7 @@ import '../../../data/models/cryptos/CryptosResponse.dart';
 import '../../../data/models/dnq/DnqResponse.dart';
 import '../../../data/models/donations/DonationsResponse.dart';
 import '../../../data/models/login/UserData.dart';
+import '../../../data/models/my_requests/MyHelpRequestsResponse.dart';
 import '../../../data/models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
@@ -38,6 +40,7 @@ import '../views/iask_view.dart';
 import '../views/profile_view.dart';
 import '../views/requests_view.dart';
 
+import '../../../data/models/my_requests/RequestData.dart' as mhrd;
 import '../../../data/models/requests/Data.dart' as hrd;
 import '../../../data/models/beneficiaries/Data.dart' as bd;
 import '../../../data/models/sponsors/Data.dart' as sd;
@@ -58,9 +61,12 @@ class HomeController extends GetxController {
   var showBottomNav = true.obs;
   final _navIndex = 0.obs;
   int get navIndex => _navIndex.value;
-  void handleNavigation(int value) {
+  void handleNavigation(int value) async {
     update([_navIndex.value = value]);
-    // if (value == 2) showBottomNav.value = false;
+    if (value == 2) {
+      //go and get myrequests
+    await getMyHelpRequests(email: profileData.value!.emailAddress!);
+  }
     // print(value);
   }
   final screens = <Widget>[
@@ -81,6 +87,10 @@ class HomeController extends GetxController {
   RxString errorMessage = "".obs;
 
   Rx<UserData?> profileData = Rx<UserData?>(null);
+
+
+
+  Rx<mhrd.RequestData?> myHelpRequestsData = Rx<mhrd.RequestData?>(null);
 
   RxList<hrd.Data?> helpRequestsData = RxList<hrd.Data?>([]);
   final ScrollController helpScrollController = ScrollController();
@@ -154,6 +164,8 @@ class HomeController extends GetxController {
   late TextEditingController kycGenderController;
   late TextEditingController kycStateOfResidenceController;
 
+  late TextEditingController helpRequestDescriptionController;
+  Rx<File?> helpRequestImage = Rx<File?>(null);
 
   final _selectedBankName = 'Select'.obs;
   String get selectedBankName => _selectedBankName.value;
@@ -342,12 +354,14 @@ class HomeController extends GetxController {
     setLoading(true);
     await getUserProfile();
     await getRequests();
+    await getMyHelpRequests(email: profileData.value!.emailAddress!);
     await getBeneficiaries();
     await getSponsors();
     await getDonations();
     await getDollarExchange();
     await getPaystackSubscriptions();
     await getBanks();
+
 
 
     await getCryptos();
@@ -378,6 +392,9 @@ class HomeController extends GetxController {
 
 
     searchRequestsController = TextEditingController();
+
+
+    helpRequestDescriptionController = TextEditingController();
   }
   // _initializeFocusNodes() {
   //   xippTransferNumberFocusNode.addListener(_handleFocusChange);
@@ -484,6 +501,18 @@ class HomeController extends GetxController {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+  Future<void> scrollToNewRequest(int requestId) async {
+    final double screenWidth = Get.context!.size!.width * .8 + 8;
+    final index = filteredRequestsData.indexWhere((e) => e?.id == requestId);
+    if (index != -1) {
+      await Future.delayed(Duration(milliseconds: 300)); // Wait for widget build
+      singleRequestScrollController.animateTo(
+        index * screenWidth,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void filterHelpRequests() {
@@ -658,6 +687,64 @@ class HomeController extends GetxController {
       //
       Utils.showTopSnackBar(
           t: "A.S.K Help Requests: Error",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  getMyHelpRequests({
+    required String email,
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      MyHelpRequestsResponse? response;
+      response =
+      await SecureService().readMyHelpRequests(email: email);
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K My Help Requests",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        myHelpRequestsData.value = response!.requestData;
+
+        helpRequestDescriptionController.text = response!.requestData!.description!;
+        helpRequestImage.value = null;
+
+
+      } else {
+        errorMessage.value = "A.S.K My Help Requests: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K My Help Requests",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.red,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K My Help Requests: Error",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1174,7 +1261,7 @@ class HomeController extends GetxController {
       StatusMessageResponse? response;
       response =
       await SecureService().updateUserKyc(
-          email: email,
+        email: email,
         phoneNumber: phoneNumber,
         accountNumber: accountNumber,
         bankName: bankName,
@@ -1307,6 +1394,84 @@ class HomeController extends GetxController {
     }
   }
 
+  createHelpRequest({
+    required String email,
+    required String description,
+    required String fullname,
+    required File image,
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      CreateHelpRequestResponse? response;
+      response =
+      await SecureService().createHelpRequest(
+          email: email,
+          description: description,
+          fullname: fullname,
+          image: image
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Create Help Request",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        helpRequestDescriptionController.clear();
+        helpRequestImage.value = null;
+
+        Utils.showInformationDialog(status: true,
+            title: 'A.S.K Help Request',
+            message: "${response!.message}",
+            meta: response!.id
+        );
+
+
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Create Help Request: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Create Help Request",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Create Help Request: Error",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Create Help Request: Error',
+          message: "$message");
+    }
+  }
+
 
 
   showBanksDialog() async {
@@ -1378,8 +1543,8 @@ class HomeController extends GetxController {
                 return Container(
                   decoration: BoxDecoration(
                     // border: Border.all(color: AppColors.askGray, width: 1),
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: AppColors.askSoftTheme
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: AppColors.askSoftTheme
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0,),
@@ -1569,7 +1734,7 @@ class HomeController extends GetxController {
 
     num priceToPay = toPay;
     if (currency == "DOL") {
-       priceToPay = num.parse(dollarExchangeData.value[0]!.rate!) * toPay;
+      priceToPay = num.parse(dollarExchangeData.value[0]!.rate!) * toPay;
     }
 
     // print("#1");
@@ -1703,8 +1868,8 @@ class HomeController extends GetxController {
         //     bc: AppColors.askBlue,
         //     sp: SnackPosition.TOP);
         Utils.showInformationDialog(status: true, title: 'THANK YOU FOR YOUR DONATION !', message: "${response!.message.toString()}"
-        + ", DNQ: " + response.dnq!.toString()
-        + ", NewDNQ: " + response.newVoteWeight!.toString()
+            + ", DNQ: " + response.dnq!.toString()
+            + ", NewDNQ: " + response.newVoteWeight!.toString()
         );
 
       } else {
