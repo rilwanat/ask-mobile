@@ -20,6 +20,7 @@ import '../../../data/models/dnq/DnqResponse.dart';
 import '../../../data/models/donations/DonationsResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/my_requests/MyHelpRequestsResponse.dart';
+import '../../../data/models/nominate/NominateResponse.dart';
 import '../../../data/models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../../../data/models/profile/ProfileResponse.dart';
 import '../../../data/models/requests/HelpRequestsResponse.dart';
@@ -58,10 +59,18 @@ class HomeController extends GetxController {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+//   // Make it observable and nullable since it might not be set immediately
+//   final selectedHelpRequestId = Rxn<hrd.Data>();
+// // Call this when you have the data
+//   void setSelectedHelpRequest(hrd.Data request) {
+//     selectedHelpRequest.value = request;
+//   }
+
+
   var showBottomNav = true.obs;
   final _navIndex = 0.obs;
   int get navIndex => _navIndex.value;
-  void handleNavigation(int value) async {
+  Future<void> handleNavigation(int value) async {
     update([_navIndex.value = value]);
     if (value == 2) {
       //go and get myrequests
@@ -144,6 +153,8 @@ class HomeController extends GetxController {
     }
     return groupedPlans;
   }
+
+
 
 
 
@@ -349,7 +360,7 @@ class HomeController extends GetxController {
 
 
 
-  Future<void> _initializeProfileData() async {
+  Future<void> initializeProfileData() async {
 
     setLoading(true);
     await getUserProfile();
@@ -502,16 +513,41 @@ class HomeController extends GetxController {
       curve: Curves.easeInOut,
     );
   }
+  // Future<void> scrollToNewRequest(int requestId) async {
+  //   final double screenWidth = Get.context!.size!.width * .8 + 8;
+  //   final index = filteredRequestsData.indexWhere((e) => e?.id == requestId);
+  //   if (index != -1) {
+  //     await Future.delayed(Duration(milliseconds: 300)); // Wait for widget build
+  //     singleRequestScrollController.animateTo(
+  //       index * screenWidth,
+  //       duration: Duration(milliseconds: 500),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   }
+  // }
   Future<void> scrollToNewRequest(int requestId) async {
-    final double screenWidth = Get.context!.size!.width * .8 + 8;
-    final index = filteredRequestsData.indexWhere((e) => e?.id == requestId);
-    if (index != -1) {
-      await Future.delayed(Duration(milliseconds: 300)); // Wait for widget build
-      singleRequestScrollController.animateTo(
-        index * screenWidth,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+    try {
+      if (Get.context == null) return;
+
+      final double screenWidth = Get.context!.size!.width * .8 + 8;
+      final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
+
+      if (index != -1) {
+        await Future.delayed(Duration(milliseconds: 300));
+
+        if (!singleRequestScrollController.hasClients) return;
+
+        final targetPosition = index * screenWidth;
+        final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
+
+        await singleRequestScrollController.animateTo(
+          targetPosition.clamp(0.0, maxScrollExtent),
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    } catch (e) {
+      // Optional: Add error handling if needed
     }
   }
 
@@ -538,7 +574,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     _initializeControllers();
-    _initializeProfileData();
+    initializeProfileData();
 
     // startAutoScroll();
     debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
@@ -1468,6 +1504,80 @@ class HomeController extends GetxController {
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Create Help Request: Error',
+          message: "$message");
+    }
+  }
+
+  handleNominate({
+    required String email,
+    required String helpToken,
+    required String fingerPrint
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      NominateResponse? response;
+      response =
+      await SecureService().handleNominate(
+          email: email,
+          helpToken: helpToken,
+          fingerPrint: fingerPrint
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Create Help Request",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+
+        Utils.showInformationDialog(status: true,
+            title: 'A.S.K Nominate',
+            message: "${response!.message!.toUpperCase()} # Increase your influence to decide beneficiary by boosting your DNQ.",
+            // meta: response!.id
+        );
+
+
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Nominate: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Nominate",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Create Help Request: Error",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Nominate: Error',
           message: "$message");
     }
   }

@@ -11,6 +11,7 @@ import '../models/dollar_exchange/DollarExchangeResponse.dart';
 import '../models/donations/DonationsResponse.dart';
 import '../models/login/LoginResponse.dart';
 import '../models/my_requests/MyHelpRequestsResponse.dart';
+import '../models/nominate/NominateResponse.dart';
 import '../models/paystack_subscriptions/PaystackSubscriptionsResponse.dart';
 import '../models/profile/ProfileResponse.dart';
 import '../models/register/RegisterResponse.dart';
@@ -658,6 +659,49 @@ class SecureService {
       );
 
       responseData = CreateHelpRequestResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // HANDLENOMINATE
+  Future<NominateResponse?> handleNominate({
+    required String email,
+    required String helpToken,
+    required String fingerPrint
+  }) async {
+    NominateResponse? responseData;
+
+    // // Create FormData for multipart upload
+    // FormData formData = FormData.fromMap({
+    //   "email": email,
+    //   "description": description,
+    //   "fullname": fullname
+    // });
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "helpToken": helpToken,
+      "fingerPrint": fingerPrint
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-nominate.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = NominateResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
       print(s);

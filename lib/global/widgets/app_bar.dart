@@ -1,4 +1,7 @@
+import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../app_color.dart';
 
@@ -14,7 +17,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double logoSize;
   final double titleFontSize;
 
-  const CustomAppBar({
+  // Declare the controller
+  final HomeController homeCtrl = Get.find<HomeController>();
+
+  CustomAppBar({
     super.key,
     this.scaffoldKey,
     this.onMenuPressed,
@@ -65,22 +71,48 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 20,
-            width: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    // Icons.more_vert_rounded,
-                    Icons.help,
-                    color: iconColor,
-                  ),
+          Row(
+            children: [
+              SizedBox(
+                height: 20,
+                width: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        homeCtrl.initializeProfileData();
+                      },
+                      child: Icon(
+                        // Icons.more_vert_rounded,
+                        Icons.refresh,
+                        color: iconColor,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+
+              const SizedBox(width: 10,),
+
+              SizedBox(
+                height: 20,
+                width: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        // Icons.more_vert_rounded,
+                        Icons.help,
+                        color: iconColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
+import '../../../../global/widgets/LoadingScreen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/ask_button.dart';
 import '../../../../global/widgets/fade_down_animation.dart';
@@ -15,7 +16,9 @@ import '../controllers/home_controller.dart';
 import '../../../data/models/requests/Data.dart' as hrd;
 
 class RequestsView extends GetView<HomeController> {
-  RequestsView({super.key});
+  RequestsView({
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,9 @@ class RequestsView extends GetView<HomeController> {
         title: 'A.S.K - Requests',
         backgroundColor: AppColors.askBlue,
       ),
-      body: Column(
+      body: Obx(() => controller.isLoading
+          ? const LoadingScreen()
+          :Column(
         children: [
           SizedBox(height: 10,),
           // const Text(
@@ -357,15 +362,25 @@ class RequestsView extends GetView<HomeController> {
                                       enabled: true,
                                       text: "Confirm Nomination",
                                       function: () async {
-              
-                                        Utils.showTopSnackBar(
-                                          t: helpRequest.user!.fullname!,
-                                          m: "Request view will open",
-                                          tc: AppColors.white,
-                                          d: 3,
-                                          bc: AppColors.askBlue,
-                                          sp: SnackPosition.BOTTOM,
+
+                                        String email = controller.profileData.value!.emailAddress!;
+                                        String helpToken = helpRequest.helpToken!;
+                                        String fingerPrint = await Utils.getDeviceId().toString();
+
+                                        controller.handleNominate(
+                                            email: email,
+                                            helpToken: helpToken,
+                                            fingerPrint: fingerPrint
                                         );
+              
+                                        // Utils.showTopSnackBar(
+                                        //   t: helpRequest.user!.fullname!,
+                                        //   m: "Request view will open",
+                                        //   tc: AppColors.white,
+                                        //   d: 3,
+                                        //   bc: AppColors.askBlue,
+                                        //   sp: SnackPosition.BOTTOM,
+                                        // );
               
                                       },
                                       backgroundColor: AppColors.askOrange,
@@ -412,7 +427,7 @@ class RequestsView extends GetView<HomeController> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

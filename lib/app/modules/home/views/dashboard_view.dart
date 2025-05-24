@@ -382,8 +382,11 @@ class DashboardView extends GetView<HomeController> {
                                     //   sp: SnackPosition.BOTTOM,
                                     // );
                                   },
-                                  onTap: () {
-                                    controller.handleNavigation(1);
+                                  onTap: () async {
+                                    controller.searchRequestsController.clear();
+
+                                    await controller.handleNavigation(1);
+                                    await controller.scrollToNewRequest(int.parse(helpRequest.id!));
 
                                     // //open product details view
                                     // Get.to(() => ProductDetailsView(
@@ -494,15 +497,20 @@ class DashboardView extends GetView<HomeController> {
                                                   enabled: true,
                                                   text: "Nominate",
                                                   function: () async {
+                                                    controller.searchRequestsController.clear();
 
-                                                    Utils.showTopSnackBar(
-                                                      t: helpRequest.user!.fullname!,
-                                                      m: "Request view will open",
-                                                      tc: AppColors.white,
-                                                      d: 3,
-                                                      bc: AppColors.askBlue,
-                                                      sp: SnackPosition.BOTTOM,
-                                                    );
+                                                    await controller.handleNavigation(1);
+                                                    await controller.scrollToNewRequest(int.parse(helpRequest.id!));
+
+
+                                                    // Utils.showTopSnackBar(
+                                                    //   t: helpRequest.user!.fullname!,
+                                                    //   m: "Request view will open",
+                                                    //   tc: AppColors.white,
+                                                    //   d: 3,
+                                                    //   bc: AppColors.askBlue,
+                                                    //   sp: SnackPosition.BOTTOM,
+                                                    // );
 
                                                   },
                                                   backgroundColor: AppColors.askOrange,
