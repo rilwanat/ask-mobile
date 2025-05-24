@@ -220,14 +220,34 @@ class Utils {
                               Get.find<HomeController>().homeGetUserProfileFromServer();
                             }
 
-                            if (message == "Help Request created successfully.")
-                            {
+                            if (message == "Help Request created successfully."
+                            ||
+                                message == "A.S.K Request Deleted Successfully."
+                            ) {
                               await Get.find<HomeController>().getRequests();
                               Get.find<HomeController>().handleNavigation(1);
                               await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
 
                               await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
                             }
+
+                            // if (message.contains("Successfully Nominated!")) {
+                            //
+                            // }
+
+                            if (
+                            message == "Help Request updated successfully."
+                            ||
+                                message == "Help Request image updated successfully."
+                            ) {
+                              await Get.find<HomeController>().getRequests();
+                              // Get.find<HomeController>().handleNavigation(1);
+                              // await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+
+                              await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
+                            }
+
+
 
 
                           },
@@ -243,7 +263,9 @@ class Utils {
 
                       const SizedBox(width: 10),
 
-                      (message == "Image and path updated successfully.") ?
+                      (message == "Image and path updated successfully.")
+                          ||
+                          (message.contains("Successfully Nominated!".toUpperCase())) ?
                       Expanded(child: AskButton(
                         enabled: true,
                         text: "Boost",

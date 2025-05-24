@@ -365,12 +365,12 @@ class RequestsView extends GetView<HomeController> {
 
                                         String email = controller.profileData.value!.emailAddress!;
                                         String helpToken = helpRequest.helpToken!;
-                                        String fingerPrint = await Utils.getDeviceId().toString();
+                                        String? fingerPrint = await Utils.getDeviceId();
 
                                         controller.handleNominate(
                                             email: email,
                                             helpToken: helpToken,
-                                            fingerPrint: fingerPrint
+                                            fingerPrint: fingerPrint!
                                         );
               
                                         // Utils.showTopSnackBar(

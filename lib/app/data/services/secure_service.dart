@@ -653,7 +653,117 @@ class SecureService {
         data: formData,
         options: Options(
           headers: {
+            // 'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = CreateHelpRequestResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // UPDATEREQUESTIMAGE
+  Future<CreateHelpRequestResponse?> updateHelpRequestImage({
+    required String email,
+    required File image
+  }) async {
+    CreateHelpRequestResponse? responseData;
+
+    // Create FormData for multipart upload
+    FormData formData = FormData.fromMap({
+      "email": email,
+      "image": await MultipartFile.fromFile(
+        image.path,
+        contentType: MediaType("image", "jpeg"),
+      ),
+    });
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-my-help-request-update-image.php",
+        data: formData,
+        options: Options(
+          headers: {
             'Content-Type': 'multipart/form-data'
+            // 'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = CreateHelpRequestResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // UPDATEREQUEST
+  Future<CreateHelpRequestResponse?> updateHelpRequest({
+    required String email,
+    required String description,
+    required String helpToken
+  }) async {
+    CreateHelpRequestResponse? responseData;
+
+    // Create FormData for multipart upload
+    FormData formData = FormData.fromMap({
+      "email": email,
+      "description": description,
+      "help_token": helpToken
+    });
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-my-help-request-update.php",
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = CreateHelpRequestResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // DELETEREQUEST
+  Future<CreateHelpRequestResponse?> deleteHelpRequest({
+    required String email,
+    required String helpToken
+  }) async {
+    CreateHelpRequestResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "helpToken": helpToken
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-my-help-request-delete.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
           }, // Specify the content type
         ),
       );

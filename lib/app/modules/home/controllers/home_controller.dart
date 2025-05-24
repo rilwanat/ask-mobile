@@ -1508,6 +1508,229 @@ class HomeController extends GetxController {
     }
   }
 
+  updateHelpRequestImage({
+    required String email,
+    required File image,
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      CreateHelpRequestResponse? response;
+      response =
+      await SecureService().updateHelpRequestImage(
+          email: email,
+          image: image
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Create Help Request",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        // helpRequestDescriptionController.clear();
+        // helpRequestImage.value = null;
+
+        Utils.showInformationDialog(status: true,
+            title: 'A.S.K Update Help Request Image',
+            message: "${response!.message}",
+            // meta: response!.id
+        );
+
+
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Update Help Request Image: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Update Help Request Image",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Update Help Request: Error",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Update Help Request Image: Error',
+          message: "$message");
+    }
+  }
+
+  updateHelpRequest({
+    required String email,
+    required String description,
+    required String helpToken
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      CreateHelpRequestResponse? response;
+      response =
+      await SecureService().updateHelpRequest(
+          email: email,
+          description: description,
+          helpToken: helpToken
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Update Help Request",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+        //
+        // helpRequestDescriptionController.clear();
+        // helpRequestImage.value = null;
+
+        Utils.showInformationDialog(status: true,
+            title: 'A.S.K Update Help Request',
+            message: "${response!.message}",
+            meta: response!.id
+        );
+
+
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Update Help Request: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Update Help Request",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Update Help Request: Error",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Update Help Request: Error',
+          message: "$message");
+    }
+  }
+
+
+  deleteHelpRequest({
+    required String email,
+    required String helpToken
+  }) async {
+    setLoading(true);
+    //print("registerUser");
+
+    errorMessage.value = "";
+    try {
+      CreateHelpRequestResponse? response;
+      response =
+      await SecureService().deleteHelpRequest(
+          email: email,
+          helpToken: helpToken
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Delete Help Request",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+
+        Utils.showInformationDialog(status: true,
+            title: 'A.S.K Delete Help Request',
+            message: "${response!.message}",
+            meta: response!.id
+        );
+
+
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Delete Help Request: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Delete Help Request",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Create Help Request: Error",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Delete Help Request: Error',
+          message: "$message");
+    }
+  }
+
   handleNominate({
     required String email,
     required String helpToken,
@@ -1526,7 +1749,7 @@ class HomeController extends GetxController {
           fingerPrint: fingerPrint
       );
 
-      // print(response!.toJson().toString());
+      print(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1541,7 +1764,7 @@ class HomeController extends GetxController {
 
         Utils.showInformationDialog(status: true,
             title: 'A.S.K Nominate',
-            message: "${response!.message!.toUpperCase()} # Increase your influence to decide beneficiary by boosting your DNQ.",
+            message: "${response!.message!.toUpperCase()}# Increase your influence to decide beneficiary by boosting your DNQ.",
             // meta: response!.id
         );
 

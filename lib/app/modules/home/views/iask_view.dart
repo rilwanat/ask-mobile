@@ -2110,30 +2110,33 @@ class IaskView extends GetView<HomeController> {
                                               ),
                                               AskButton(
                                                   enabled: true,
-                                                  text: controller.isLoading ? 'Please wait..' : "Edit Request",
+                                                  text: controller.isLoading ? 'Please wait..' : "Update Request Image",
                                                   function: () async {
 
-                                                    // String email = controller.profileData.value!.emailAddress!;
+                                                    String email = controller.profileData.value!.emailAddress!;
                                                     // String description = controller.helpRequestDescriptionController.text;
+                                                    String helpToken = controller.myHelpRequestsData.value!.helpToken!;
                                                     // String fullname = controller.profileData.value!.fullname!;
-                                                    // File? image = controller.helpRequestImage.value!;
+                                                    File? image = controller.helpRequestImage.value!;
                                                     //
-                                                    // if (
-                                                    // description != "" &&
-                                                    //     image.path != "") {
-                                                    //
-                                                    //   controller.createHelpRequest(
-                                                    //       email: email,
-                                                    //       description: description,
-                                                    //       fullname: fullname,
-                                                    //       image: image
-                                                    //   );
-                                                    //
-                                                    // } else {
-                                                    //   Utils.showInformationDialog(status: null,
-                                                    //       title: 'A.S.K Help Request',
-                                                    //       message: "Enter a Help Request description and select an image to upload");
-                                                    // }
+
+                                                    // print(description);
+                                                    if (
+                                                    // description != ""
+                                                    // &&
+                                                    image.path != ""
+                                                    ) {
+
+                                                      controller.updateHelpRequestImage(
+                                                          email: email,
+                                                          image: image
+                                                      );
+
+                                                    } else {
+                                                      Utils.showInformationDialog(status: null,
+                                                          title: 'A.S.K Edit Help Request',
+                                                          message: "Enter a Help Request description to update");
+                                                    }
                                                   },
                                                   backgroundColor: AppColors.askBlue,
                                                   textColor: AppColors.white,
@@ -2143,7 +2146,84 @@ class IaskView extends GetView<HomeController> {
                                                   border: false,
                                                   textSize: 16
                                               ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              AskButton(
+                                                  enabled: true,
+                                                  text: controller.isLoading ? 'Please wait..' : "Edit Request",
+                                                  function: () async {
 
+                                                    String email = controller.profileData.value!.emailAddress!;
+                                                    String description = controller.helpRequestDescriptionController.text;
+                                                    String helpToken = controller.myHelpRequestsData.value!.helpToken!;
+                                                    // String fullname = controller.profileData.value!.fullname!;
+                                                    // File? image = controller.helpRequestImage.value!;
+                                                    //
+
+                                                    print(description);
+                                                    if (
+                                                    description != ""
+                                                        // &&
+                                                        // image.path != ""
+                                                    ) {
+
+                                                      controller.updateHelpRequest(
+                                                          email: email,
+                                                          description: description,
+                                                          helpToken: helpToken
+                                                      );
+
+                                                    } else {
+                                                      Utils.showInformationDialog(status: null,
+                                                          title: 'A.S.K Edit Help Request',
+                                                          message: "Enter a Help Request description to update");
+                                                    }
+                                                  },
+                                                  backgroundColor: AppColors.askBlue,
+                                                  textColor: AppColors.white,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                  borderCurve: 26,
+                                                  border: false,
+                                                  textSize: 16
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              AskButton(
+                                                  enabled: true,
+                                                  text: controller.isLoading ? 'Please wait..' : "Delete Request",
+                                                  function: () async {
+
+                                                    String email = controller.profileData.value!.emailAddress!;
+                                                    String helpToken = controller.myHelpRequestsData.value!.helpToken!;
+                                                    // String fullname = controller.profileData.value!.fullname!;
+                                                    // File? image = controller.helpRequestImage.value!;
+                                                    //
+                                                    // if (
+                                                    // description != "" &&
+                                                    //     image.path != "") {
+                                                    //
+                                                      controller.deleteHelpRequest(
+                                                          email: email,
+                                                          helpToken: helpToken
+                                                      );
+                                                    //
+                                                    // } else {
+                                                    //   Utils.showInformationDialog(status: null,
+                                                    //       title: 'A.S.K Help Request',
+                                                    //       message: "Enter a Help Request description and select an image to upload");
+                                                    // }
+                                                  },
+                                                  backgroundColor: AppColors.red,
+                                                  textColor: AppColors.white,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                  borderCurve: 26,
+                                                  border: false,
+                                                  textSize: 16
+                                              ),
 
                                               const SizedBox(
                                                 height: 16,
