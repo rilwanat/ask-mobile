@@ -1064,15 +1064,17 @@ class IaskView extends GetView<HomeController> {
                                     child: const Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                            AskStrings.SELFIE,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: "LatoRegular",
-                                              color: AppColors.black,
-                                              // letterSpacing: .2,
-                                            )
+                                        Expanded(
+                                          child: Text(
+                                              AskStrings.SELFIE,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "LatoRegular",
+                                                color: AppColors.black,
+                                                // letterSpacing: .2,
+                                              )
+                                          ),
                                         ),
                                       ],
                                     ),

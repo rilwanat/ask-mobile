@@ -404,7 +404,8 @@ class RequestsView extends GetView<HomeController> {
                                       text: "Share",
                                       function: () async {
 
-                                        Utils.shareLink("https://playground.askfoundations.org" "/help-request/${helpRequest.helpToken}");
+                                        // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
 
                                       },
                                       backgroundColor: AppColors.askBlue,

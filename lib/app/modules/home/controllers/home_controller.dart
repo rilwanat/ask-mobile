@@ -363,33 +363,35 @@ class HomeController extends GetxController {
   Future<void> initializeProfileData() async {
 
     setLoading(true);
-    await getUserProfile();
-    await getRequests();
-    await getMyHelpRequests(email: profileData.value!.emailAddress!);
-    await getBeneficiaries();
-    await getSponsors();
-    await getDonations();
-    await getDollarExchange();
-    await getPaystackSubscriptions();
-    await getBanks();
+    try {
+      // Run all independent requests in parallel
+      await Future.wait<void>([
+        getUserProfile(),
+        getRequests(),
+        getMyHelpRequests(email: profileData.value!.emailAddress!),
+        getBeneficiaries(),
+        getSponsors(),
+        getDonations(),
+        getDollarExchange(),
+        getPaystackSubscriptions(),
+        getBanks(),
+        getCryptos(),
+      ]);
 
-
-
-    await getCryptos();
-    defaultCrypto = cd.Data(
-      id: "default",
-      network: "Select",
-      address: "A.S.K",
-      image: "/images/ask-cryptos/ask-logox.png",
-    );
-    selectedAsset.value = defaultCrypto;
-
-
-
-    // await getUserNotifications();
-    // await getUserTransactionsHistory();
-    // await getMyBudgets();
-    setLoading(false);
+      defaultCrypto = cd.Data(
+        id: "default",
+        network: "Select",
+        address: "A.S.K",
+        image: "/images/ask-cryptos/ask-logox.png",
+      );
+      selectedAsset.value = defaultCrypto;
+    } catch (e) {
+      // Handle errors appropriately
+      debugPrint('Error initializing profile data: $e');
+      // Consider showing an error to the user
+    } finally {
+      setLoading(false);
+    }
   }
   _initializeControllers() {
     emailVerificationController = TextEditingController();

@@ -66,8 +66,8 @@ class AuthController extends GetxController {
     registerPasswordController = TextEditingController();
     registerConfirmPasswordController = TextEditingController();
 
-    loginEmailController = TextEditingController(text: "rilwan.at@gmail.com");
-    loginPasswordController = TextEditingController(text: "rilwan12345");
+    loginEmailController = TextEditingController();
+    loginPasswordController = TextEditingController();
   }
 
   _initializeFocusNodes() {

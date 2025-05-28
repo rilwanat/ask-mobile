@@ -144,9 +144,9 @@ class ProfileView extends GetView<HomeController> {
               // infoTile('Gender:', controller.profileData.value!.gender!),
               infoTile('State of Residence:', controller.profileData.value!.stateOfResidence!),
               infoTile('Level 1 Verification (Email):', controller.profileData.value!.emailVerified!),
-              infoTile('Level 2 Verification (KYC):', controller.profileData.value!.kycStatus! ?? 'N/A'),
+              infoTile('Level 2 Verification (KYC):', controller.profileData.value?.kycStatus ?? 'N/A'),
               // infoTile('Voter Consistency', controller.profileData.value!.voterConsistency.toString()),
-              infoTile('Vote Weight:', controller.profileData.value!.voteWeight.toString()),
+              infoTile('DNQ:', controller.profileData.value!.voteWeight.toString()),
 
               // infoTile('Account Name', controller.profileData.value!.accountName!),
               infoTile('Account Number:', controller.profileData.value!.accountNumber!),

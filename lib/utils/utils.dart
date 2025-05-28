@@ -354,27 +354,27 @@ class Utils {
   }
 
   //share
-  Future<void> shareFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final File file = File('${directory.path}/example.txt');
-
-    // Write some data to the file for sharing
-    await file.writeAsString('Hello, Flutter!');
-
-    Share.shareXFiles(
-      [XFile(file.path)],
-      text: 'Check out this file!',
-    );
-  }
+  // Future<void> shareFile() async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final File file = File('${directory.path}/example.txt');
+  //
+  //   // Write some data to the file for sharing
+  //   await file.writeAsString('Hello, Flutter!');
+  //
+  //   Share.shareXFiles(
+  //     [XFile(file.path)],
+  //     text: 'Check out this file!',
+  //   );
+  // }
   static void shareLink(String link) {
     Share.share(
       link,
-      subject: 'Help me with my request',
+      subject: "Help me win A.S.K Foundation's weekly financial support! Nominate me via link",
     );
   }
   static void shareText(String text) {
     Share.share(
-      'Please vote for me via this link!',
+      "Help me win A.S.K Foundation's weekly financial support! Nominate me via link: " + text,
       subject: text,
     );
   }
