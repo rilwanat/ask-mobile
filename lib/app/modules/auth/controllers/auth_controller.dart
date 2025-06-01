@@ -24,8 +24,12 @@ class AuthController extends GetxController {
   late TextEditingController registerPasswordController;
   late TextEditingController registerConfirmPasswordController;
 
+  late TextEditingController resetCodeController;
   late TextEditingController loginEmailController;
   late TextEditingController loginPasswordController;
+
+  late TextEditingController newPasswordController;
+  late TextEditingController confirmPasswordController;
 
   final FocusNode registerEmailFocusNode = FocusNode();
   final FocusNode registerPasswordFocusNode = FocusNode();
@@ -66,8 +70,13 @@ class AuthController extends GetxController {
     registerPasswordController = TextEditingController();
     registerConfirmPasswordController = TextEditingController();
 
+    resetCodeController = TextEditingController();
+
     loginEmailController = TextEditingController();
     loginPasswordController = TextEditingController();
+
+    newPasswordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
   }
 
   _initializeFocusNodes() {
@@ -179,7 +188,7 @@ class AuthController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Registration: Error",
+          t: "A.S.K Registration: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -228,6 +237,8 @@ class AuthController extends GetxController {
             binding: HomeBinding()
         );
 
+        resetCodeController.clear();
+
         loginEmailController.clear();
         loginPasswordController.clear();
 
@@ -250,12 +261,222 @@ class AuthController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Login: Error",
+          t: "A.S.K Login: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
           bc: AppColors.red,
           sp: SnackPosition.TOP);
+    }
+  }
+
+
+  Future<LoginResponse?> sendMobileResetPassordCode({
+    required String email
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      LoginResponse? response;
+      response =
+      await SecureService().sendMobileResetPassordCode(
+          email: email
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Reset Password",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        // Utils.showInformationDialog(status: null, title: 'A.S.K Reset Password', message: "${response!.message.toString()}");
+
+
+        // Get.to(() => HomeView(),
+        //     transition: Transition.fadeIn, // Built-in transition type
+        //     duration: Duration(milliseconds: 500),
+        //     binding: HomeBinding()
+        // );
+
+        // resetCodeController.clear();
+
+
+      } else {
+        errorMessage.value = "A.S.K Reset Password: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Reset Password",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+      return response;
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Reset Password: Attention",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+
+      return null;
+    }
+  }
+
+  Future<LoginResponse?> validateMobileResetPassordCode({
+    required String email,
+    required String emailCode,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      LoginResponse? response;
+      response =
+      await SecureService().validateMobileResetPasswordCode(
+          email: email, emailCode: emailCode
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Reset Password",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        // Utils.showInformationDialog(status: null, title: 'A.S.K Reset Password', message: "${response!.message.toString()}");
+
+
+        // Get.to(() => HomeView(),
+        //     transition: Transition.fadeIn, // Built-in transition type
+        //     duration: Duration(milliseconds: 500),
+        //     binding: HomeBinding()
+        // );
+
+        resetCodeController.clear();
+
+
+      } else {
+        errorMessage.value = "A.S.K Validate Password Reset Code: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Validate Password Reset Code",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+      return response;
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Validate Password Reset Code: Attention",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+
+      return null;
+    }
+  }
+
+  Future<LoginResponse?> resetPassword({
+    required String email,
+    required String newPassword
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      LoginResponse? response;
+      response =
+      await SecureService().resetPassword(
+          email: email, newPassword: newPassword
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Reset Password",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        // Utils.showInformationDialog(status: null, title: 'A.S.K Reset Password', message: "${response!.message.toString()}");
+
+
+        // Get.to(() => HomeView(),
+        //     transition: Transition.fadeIn, // Built-in transition type
+        //     duration: Duration(milliseconds: 500),
+        //     binding: HomeBinding()
+        // );
+
+        // resetCodeController.clear();
+
+
+      } else {
+        errorMessage.value = "A.S.K Reset Password: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Reset Password",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+      return response;
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Reset Password: Attention",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+
+      return null;
     }
   }
 

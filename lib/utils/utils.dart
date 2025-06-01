@@ -272,6 +272,8 @@ class Utils {
                           ||
                           (message.contains("Successfully Nominated!".toUpperCase()))
                           ||
+                          (message.contains("Level 2 Verification (KYC) Successful!".toUpperCase()))
+                          ||
                           (message == "You can increase your influence in deciding beneficiary by boosting your daily nomination quota through becoming a donor.")
                           ?
                       Expanded(child: AskButton(
@@ -418,6 +420,24 @@ class Utils {
       return iosInfo.identifierForVendor; // IDFV (changes on app reinstall)
     }
     return null;
+  }
+
+
+
+  static bool validateEmail(String? value) {
+    String pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    RegExp regex = RegExp(pattern);  // Remove the quotes around $pattern
+
+    if (value == null || value.isEmpty) {
+      // return 'Please enter an Email Address';
+      return false;
+    }
+    if (!regex.hasMatch(value)) {
+      // return 'Please enter a valid Email Address';
+      return false;
+    }
+    // return null;
+    return true;
   }
 
 }

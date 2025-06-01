@@ -747,6 +747,7 @@ class HomeController extends GetxController {
 
       // Force remove the controller
       Get.delete<AuthController>(force: true);
+      Get.delete<HomeController>(force: true);
       // Optional: Force recreate the controller
       // Get.put(AuthController());
 

@@ -819,4 +819,108 @@ class SecureService {
     }
   }
 
+
+  // SEND MOBILE RESET CODE PASSWORD
+  Future<LoginResponse?> sendMobileResetPassordCode({
+    required String email
+  }) async {
+    LoginResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/mobile-forgot-password.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = LoginResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // VALIDATE RESET CODE
+  Future<LoginResponse?> validateMobileResetPasswordCode({
+    required String email,
+    required String emailCode,
+  }) async {
+    LoginResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "verificationCode": emailCode,
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/mobile-forgot-password-validate-code.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = LoginResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // RESET PASSWORD
+  Future<LoginResponse?> resetPassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    LoginResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "newPassword": newPassword,
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/reset-password.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = LoginResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
 }
