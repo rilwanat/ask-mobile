@@ -7,10 +7,12 @@ import 'package:get/get.dart';
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/LoadingScreen.dart';
+import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/app_bar_page.dart';
 
 import '../../../../global/widgets/ask_button.dart';
 import '../../../../global/widgets/fade_down_animation.dart';
+import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 import '../controllers/home_controller.dart';
 
@@ -19,16 +21,29 @@ class DonationsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: AppColors.askBackground,
+      // appBar: CustomAppBarPage(
+      //   onMenuPressed: () {
+      //     // controller.scaffoldKey.currentState?.openDrawer();
+      //     Get.back();
+      //   },
+      //   onMorePressed: () {
+      //     // controller.scaffoldKey.currentState?.openDrawer();
+      //   },
+      //   title: 'A.S.K - Donate',
+      //   backgroundColor: AppColors.askBlue,
+      // ),
+      key: controller.scaffoldKey,
       backgroundColor: AppColors.askBackground,
-      appBar: CustomAppBarPage(
+      drawer: NavBar(),
+      appBar: CustomAppBar(
         onMenuPressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
-          Get.back();
+          controller.scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
           // controller.scaffoldKey.currentState?.openDrawer();
         },
-        title: 'A.S.K - Donate',
+        title: 'A.S.K- Donate',
         backgroundColor: AppColors.askBlue,
       ),
       body: Container(
@@ -36,7 +51,7 @@ class DonationsView extends GetView<HomeController> {
         width: ScreenSize.width(context),
         child: Obx(() => controller.isLoading
             ? const LoadingScreen()
-            :Stack(
+            : Stack(
           children: [
             Positioned(
                 child: Padding(
@@ -201,7 +216,7 @@ class DonationsView extends GetView<HomeController> {
                             const SizedBox(height: 10,),
 
                             Obx(() =>
-                            controller.donationType == "naira" && controller.selectedOption == "onetime" ?
+                            controller.donationType == "naira" && controller.selectedOption.value == "onetime" ?
                             Container(
                               // color: AppColors.askBlue,
                               width: ScreenSize.width(context),
@@ -268,7 +283,7 @@ class DonationsView extends GetView<HomeController> {
                               ),
                             )
                                 :
-                            controller.donationType == "naira" && controller.selectedOption == "recurring" ?
+                            controller.donationType == "naira" && controller.selectedOption.value == "recurring" ?
                             Container(
                               // color: AppColors.askBlue,
                                 width: ScreenSize.width(context),
@@ -513,7 +528,7 @@ class DonationsView extends GetView<HomeController> {
                                               items: [
                                                 const DropdownMenuItem(
                                                   value: "Select",
-                                                  child: Text("Select Crypto Network", style: const TextStyle(
+                                                  child: Text("Select Crypto Network", style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: "LatoRegular",

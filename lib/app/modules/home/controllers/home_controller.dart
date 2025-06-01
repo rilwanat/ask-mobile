@@ -9,6 +9,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
@@ -37,6 +39,7 @@ import '../../auth/controllers/auth_controller.dart';
 import '../../auth/views/login_view.dart';
 import '../views/beneficiaries_view.dart';
 import '../views/dashboard_view.dart';
+import '../views/donations_view.dart';
 import '../views/iask_view.dart';
 import '../views/profile_view.dart';
 import '../views/requests_view.dart';
@@ -82,8 +85,8 @@ class HomeController extends GetxController {
     DashboardView(),
     RequestsView(),
     IaskView(),
-    // ProfileView(),
-    BeneficiariesView(),
+    DonationsView(),
+
   ];
 
   final _isLoading = false.obs;
@@ -110,6 +113,35 @@ class HomeController extends GetxController {
   final ScrollController beneficiariesScrollController = ScrollController();
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
+  final bd.Data defaultBeneficiaries = bd.Data.fromJson({
+  "id": "1",
+  "emailAddress": "ask@askfoundations.org",
+  "date": "2025-04-15 12:32:00",
+  "amount": "50000",
+  "status": "approved",
+  "dateResolved": "2025-04-15 12:32:00",
+  "nominationCount": "0",
+  "remark": "Financial Support",
+  "user": {
+  "id": "1",
+  "fullname": "Ashabi Shobande Kokumo",
+  "emailAddress": "ask@askfoundations.org",
+  "phone": "08000000001",
+  "kycStatus": "verified",
+  "accountNumber": "0987654321",
+  "accountName": "Ask Shobande",
+  "bankName": "A.S.K Bank",
+  "gender": "Female",
+  "state": "Lagos",
+  "profilePicture": "../../../../images/help-requests-images/ask-logox.png",
+  "emailVerified": "true",
+  "registrationDate": "2025-04-15 12:32:00",
+  "userType": "user",
+  "eligibility": "true",
+  "isCheat": "false",
+  "openedWelcomeMsg": "false"
+  }
+});
 
   RxList<sd.Data?> sponsorsData = RxList<sd.Data?>([]);
   final ScrollController sponsorsScrollController = ScrollController();
@@ -134,6 +166,8 @@ class HomeController extends GetxController {
       );
     }
   }
+
+
 
   RxList<der.Data?> dollarExchangeData = RxList<der.Data?>([]);
 
@@ -368,15 +402,19 @@ class HomeController extends GetxController {
       await Future.wait<void>([
         getUserProfile(),
         getRequests(),
-        getMyHelpRequests(email: profileData.value!.emailAddress!),
         getBeneficiaries(),
+        // getMyHelpRequests(email: profileData.value!.emailAddress!),
         getSponsors(),
+
         getDonations(),
+        getCryptos(),
+
         getDollarExchange(),
         getPaystackSubscriptions(),
         getBanks(),
-        getCryptos(),
+
       ]);
+      getMyHelpRequests(email: profileData.value!.emailAddress!);
 
       defaultCrypto = cd.Data(
         id: "default",
@@ -385,6 +423,10 @@ class HomeController extends GetxController {
         image: "/images/ask-cryptos/ask-logox.png",
       );
       selectedAsset.value = defaultCrypto;
+
+
+
+
     } catch (e) {
       // Handle errors appropriately
       debugPrint('Error initializing profile data: $e');
@@ -575,14 +617,71 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+
     _initializeControllers();
     initializeProfileData();
+
+    _initializeNotifications();
 
     // startAutoScroll();
     debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
 
     super.onInit();
   }
+
+  //
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  Future<void> _initializeNotifications() async {
+    // await requestExactAlarmPermission();
+    await requestNotificationPermission();
+    await initNotifications();
+    await testImmediateNotification();
+  }
+  // Future<void> requestExactAlarmPermission() async {
+  //   if (await Permission.scheduleExactAlarm.request().isDenied) {
+  //     print("Exact alarm permission is required!");
+  //   }
+  // }
+  Future<void> requestNotificationPermission() async {
+    if (await Permission.notification.request().isDenied) {
+      print("Notification permission denied!");
+    } else {
+      print("Notification permission granted!");
+    }
+  }
+  Future<void> initNotifications() async {
+    const AndroidInitializationSettings androidSettings =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // const AndroidInitializationSettings androidSettings =
+    // AndroidInitializationSettings('custom_icon');
+
+
+    final InitializationSettings initSettings = InitializationSettings(android: androidSettings);
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        print("Notification clicked: ${response.payload}");
+      },
+    );
+  }
+  Future<void> testImmediateNotification() async {
+    const AndroidNotificationDetails androidDetails =
+    AndroidNotificationDetails('test_channel', 'Test Notifications');
+
+    const NotificationDetails generalNotificationDetails =
+    NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'A.S.K Notification',
+      'This is a test notification.',
+      generalNotificationDetails,
+    );
+  }
+  //
+
 
   @override
   void onReady() {
@@ -724,7 +823,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Help Requests: Error",
+          t: "A.S.K Help Requests: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -782,7 +881,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K My Help Requests: Error",
+          t: "A.S.K My Help Requests: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -815,10 +914,10 @@ class HomeController extends GetxController {
 
         beneficiariesData.value = response.data!;
 
-
       } else {
         errorMessage.value = "A.S.K Beneficiaries: Something wrong happened. Try again";//response.message!;
 
+        beneficiariesData.value = [defaultBeneficiaries];
         Utils.showTopSnackBar(
             t: "A.S.K Beneficiaries",
             m: errorMessage.value, //"${response.message}",
@@ -828,6 +927,8 @@ class HomeController extends GetxController {
             sp: SnackPosition.TOP);
       }
 
+
+
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
@@ -835,7 +936,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Beneficiaries: Error",
+          t: "A.S.K Beneficiaries: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -888,7 +989,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Sponsors: Error",
+          t: "A.S.K Sponsors: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -941,7 +1042,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Crypto Donations: Error",
+          t: "A.S.K Crypto Donations: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -965,7 +1066,7 @@ class HomeController extends GetxController {
       setLoading(false);
       if (response!.status == true) {
         // Utils.showTopSnackBar(
-        //     t: "A.S.K Sponsors",
+        //     t: "A.S.K Donations",
         //     m: "${response.data!.length.toString().toString()}",
         //     tc: AppColors.white,
         //     d: 3,
@@ -973,7 +1074,7 @@ class HomeController extends GetxController {
         //     sp: SnackPosition.TOP);
 
         donationsData.value = response.data!;
-
+        setDonationType("naira");
 
       } else {
         errorMessage.value = "A.S.K Donations: Something wrong happened. Try again";//response.message!;
@@ -994,7 +1095,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Donations: Error",
+          t: "A.S.K Donations: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1018,7 +1119,7 @@ class HomeController extends GetxController {
       setLoading(false);
       if (response!.status == true) {
         // Utils.showTopSnackBar(
-        //     t: "A.S.K Sponsors",
+        //     t: "A.S.K Dollar Exchange",
         //     m: "${response.data!.length.toString().toString()}",
         //     tc: AppColors.white,
         //     d: 3,
@@ -1047,7 +1148,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Dollar Exchange: Error",
+          t: "A.S.K Dollar Exchange: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1071,7 +1172,7 @@ class HomeController extends GetxController {
       setLoading(false);
       if (response!.status == true) {
         // Utils.showTopSnackBar(
-        //     t: "A.S.K Sponsors",
+        //     t: "A.S.K Paystack Subscriptions",
         //     m: "${response.data!.length.toString().toString()}",
         //     tc: AppColors.white,
         //     d: 3,
@@ -1100,7 +1201,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Paystack Subscriptions: Error",
+          t: "A.S.K Paystack Subscriptions: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1153,7 +1254,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Bank Codes: Error",
+          t: "A.S.K Bank Codes: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1212,7 +1313,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Resend Verification Code: Error",
+          t: "A.S.K Resend Verification Code: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1272,7 +1373,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Verify Email: Error",
+          t: "A.S.K Verify Email: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
@@ -1329,13 +1430,13 @@ class HomeController extends GetxController {
       } else {
         errorMessage.value = "A.S.K Update Kyc: Something wrong happened. Try again";//response.message!;
 
-        Utils.showTopSnackBar(
-            t: "A.S.K Update Kyc",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Update Kyc",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
         Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: errorMessage.value);
 
       }
@@ -1348,14 +1449,14 @@ class HomeController extends GetxController {
       //print(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      Utils.showTopSnackBar(
-          t: "A.S.K Update Kyc: Error",
-          m: "$message",
-          tc: AppColors.black,
-          d: 3,
-          bc: AppColors.red,
-          sp: SnackPosition.TOP);
-      Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc: Error', message: "$message");
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Update Kyc: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc: Attention', message: "$message");
 
     }
   }
@@ -1389,17 +1490,20 @@ class HomeController extends GetxController {
       //
       setLoading(false);
       if (response!.status == true) {
-        Utils.showTopSnackBar(
-            t: "A.S.K Update Kyc Selfie",
-            m: "${response!.message.toString()}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
-        Utils.showInformationDialog(status: true, title: 'A.S.K Update Kyc Selfie', message: "${response!.message.toString()}");
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Update KYC Selfie",
+        //     m: "${response!.message.toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        // Level 2 Verification (KYC) Successful!
+        // Utils.showInformationDialog(status: true, title: 'A.S.K Update KYC Selfie', message: "${response!.message.toString()}");
+        Utils.showInformationDialog(status: true, title: 'A.S.K Update KYC & Selfie', message: "Level 2 Verification (KYC) Successful!");
 
       } else {
-        errorMessage.value = "A.S.K Update Kyc Selfie: Something wrong happened. Try again";//response.message!;
+        errorMessage.value = "A.S.K Update KYC Selfie: Something wrong happened. Try again";//response.message!;
 
         Utils.showTopSnackBar(
             t: "A.S.K Update Kyc",
@@ -1408,7 +1512,7 @@ class HomeController extends GetxController {
             d: 3,
             bc: AppColors.askBlue,
             sp: SnackPosition.TOP);
-        Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc Selfie', message: errorMessage.value);
+        Utils.showInformationDialog(status: false, title: 'A.S.K Update KYC Selfie', message: errorMessage.value);
 
       }
 
@@ -1421,13 +1525,13 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K Update User Kyc Selfie: Error",
+          t: "A.S.K Update User KYC Selfie: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,
           bc: AppColors.red,
           sp: SnackPosition.TOP);
-      Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc Selfie', message: "$message");
+      Utils.showInformationDialog(status: false, title: 'A.S.K Update KYC Selfie', message: "$message");
 
     }
   }
@@ -1498,14 +1602,17 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Error",
+      //     t: "A.S.K Create Help Request: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
+
+      await initializeProfileData();
+
       Utils.showInformationDialog(status: false,
-          title: 'A.S.K Create Help Request: Error',
+          title: 'A.S.K Create Help Request: Attention',
           message: "$message");
     }
   }
@@ -1572,14 +1679,14 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Update Help Request: Error",
+      //     t: "A.S.K Update Help Request: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
-          title: 'A.S.K Update Help Request Image: Error',
+          title: 'A.S.K Update Help Request Image: Attention',
           message: "$message");
     }
   }
@@ -1648,14 +1755,14 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Update Help Request: Error",
+      //     t: "A.S.K Update Help Request: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
-          title: 'A.S.K Update Help Request: Error',
+          title: 'A.S.K Update Help Request: Attention',
           message: "$message");
     }
   }
@@ -1721,14 +1828,14 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Error",
+      //     t: "A.S.K Create Help Request: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
-          title: 'A.S.K Delete Help Request: Error',
+          title: 'A.S.K Delete Help Request: Attention',
           message: "$message");
     }
   }
@@ -1795,14 +1902,14 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Error",
+      //     t: "A.S.K Create Help Request: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
-          title: 'A.S.K Nominate: Error',
+          title: 'A.S.K Nominate: Attention',
           message: "$message");
     }
   }
@@ -2230,7 +2337,7 @@ class HomeController extends GetxController {
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
-          t: "A.S.K incrementDNQ: Error",
+          t: "A.S.K incrementDNQ: Attention",
           m: "$message",
           tc: AppColors.black,
           d: 3,

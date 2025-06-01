@@ -94,13 +94,13 @@ class HomeView extends GetView<HomeController> {
                       width: 26,
                       child:
                       // Icon(Icons.account_circle,
-                      Icon(Icons.add_task,
+                      Icon(Icons.waving_hand,
                       color: controller.navIndex == 3 ? AppColors.white : AppColors.askGray,
                       )
                     ),
                   ),
                   // label: 'Profile',
-                  label: 'Beneficiaries',
+                  label: 'Donate',
                 ),
               ],
             ),

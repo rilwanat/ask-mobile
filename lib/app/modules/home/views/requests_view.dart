@@ -243,182 +243,184 @@ class RequestsView extends GetView<HomeController> {
                               border: Border.all(width: 1, color: AppColors.askGray),
                             ),
                             width: ScreenSize.width(context) * .8,
-                            // height: ScreenSize.height(context),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-              
-                              children: [
-              
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    "You are viewing ${helpRequest.user!.fullname!}'s help request",
-                                    style: const TextStyle(
-                                      fontFamily: "LatoRegular",
-                                      color: AppColors.black,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    // maxLines: 1,
-                                    // overflow: TextOverflow.ellipsis,
+                            height: ScreenSize.height(context) * .6,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                children: [
+
+                                  const SizedBox(
+                                    height: 8,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Container(
-                                  // color: AppColors.red,
-                                  width: ScreenSize.width(context),
-                                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    helpRequest.description!,
-                                    style: const TextStyle(
-                                      fontFamily: "LatoRegular",
-                                      color: AppColors.black,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    // maxLines: 1,
-                                    // overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Center(
-                                  child: SizedBox(
-                                    height: ScreenSize.width(context) * .6,
-                                    width: ScreenSize.width(context) * .6,
-                                    child: Stack(
-                                      children: [
-                                        AspectRatio(
-                                          aspectRatio: 1,
-                                          child: Container(
-                                            // height: ScreenSize.width(context) * .8,
-                                            // width: ScreenSize.width(context) * .8,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.askBlue,
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(10), // Match container's border radius
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                    // "https://askfoundations.org/" +
-                                                    "${helpRequest.requestImage}",
-                                                fit: BoxFit.cover, // Changed from contain to cover
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
-                                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-              
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      controller.formatNominationCount(helpRequest.nominationCount!),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                                    child: Text(
+                                      "You are viewing ${helpRequest.user!.fullname!}'s help request",
                                       style: const TextStyle(
                                         fontFamily: "LatoRegular",
-                                        color: AppColors.askBlue,
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.w800,
+                                        color: AppColors.black,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                       textAlign: TextAlign.center,
+                                      // maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
-                                    const SizedBox(
-                                      width: 8,
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Container(
+                                    // color: AppColors.red,
+                                    width: ScreenSize.width(context),
+                                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                                    child: Text(
+                                      helpRequest.description!,
+                                      style: const TextStyle(
+                                        fontFamily: "LatoRegular",
+                                        color: AppColors.black,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      // maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
-                                    Icon(Icons.favorite)
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AskButton(
-                                      enabled: true,
-                                      text: "Confirm Nomination",
-                                      function: () async {
-
-                                        String email = controller.profileData.value!.emailAddress!;
-                                        String helpToken = helpRequest.helpToken!;
-                                        String? fingerPrint = await Utils.getDeviceId();
-
-                                        controller.handleNominate(
-                                            email: email,
-                                            helpToken: helpToken,
-                                            fingerPrint: fingerPrint!
-                                        );
-              
-                                        // Utils.showTopSnackBar(
-                                        //   t: helpRequest.user!.fullname!,
-                                        //   m: "Request view will open",
-                                        //   tc: AppColors.white,
-                                        //   d: 3,
-                                        //   bc: AppColors.askBlue,
-                                        //   sp: SnackPosition.BOTTOM,
-                                        // );
-              
-                                      },
-                                      backgroundColor: AppColors.askOrange,
-                                      textColor: AppColors.white,
-                                      buttonWidth: ScreenSize.scaleWidth(context, 200),
-                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                      borderCurve: 12,
-                                      border: false,
-                                      textSize: 14,
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Center(
+                                    child: SizedBox(
+                                      height: ScreenSize.width(context) * .6,
+                                      width: ScreenSize.width(context) * .6,
+                                      child: Stack(
+                                        children: [
+                                          AspectRatio(
+                                            aspectRatio: 1,
+                                            child: Container(
+                                              // height: ScreenSize.width(context) * .8,
+                                              // width: ScreenSize.width(context) * .8,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.askBlue,
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(10), // Match container's border radius
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                  "https://playground.askfoundations.org/backend/api/v1/response/" +
+                                                      // "https://askfoundations.org/" +
+                                                      "${helpRequest.requestImage}",
+                                                  fit: BoxFit.cover, // Changed from contain to cover
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AskButton(
-                                      enabled: true,
-                                      text: "Share",
-                                      function: () async {
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
 
-                                        // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
-                                        Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        controller.formatNominationCount(helpRequest.nominationCount!),
+                                        style: const TextStyle(
+                                          fontFamily: "LatoRegular",
+                                          color: AppColors.askBlue,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Icon(Icons.favorite)
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AskButton(
+                                        enabled: true,
+                                        text: "Confirm Nomination",
+                                        function: () async {
 
-                                      },
-                                      backgroundColor: AppColors.askBlue,
-                                      textColor: AppColors.white,
-                                      buttonWidth: ScreenSize.scaleWidth(context, 200),
-                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                      borderCurve: 12,
-                                      border: false,
-                                      textSize: 14,
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                          String email = controller.profileData.value!.emailAddress!;
+                                          String helpToken = helpRequest.helpToken!;
+                                          String? fingerPrint = await Utils.getDeviceId();
+
+                                          controller.handleNominate(
+                                              email: email,
+                                              helpToken: helpToken,
+                                              fingerPrint: fingerPrint!
+                                          );
+
+                                          // Utils.showTopSnackBar(
+                                          //   t: helpRequest.user!.fullname!,
+                                          //   m: "Request view will open",
+                                          //   tc: AppColors.white,
+                                          //   d: 3,
+                                          //   bc: AppColors.askBlue,
+                                          //   sp: SnackPosition.BOTTOM,
+                                          // );
+
+                                        },
+                                        backgroundColor: AppColors.askOrange,
+                                        textColor: AppColors.white,
+                                        buttonWidth: ScreenSize.scaleWidth(context, 200),
+                                        buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                        borderCurve: 12,
+                                        border: false,
+                                        textSize: 14,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AskButton(
+                                        enabled: true,
+                                        text: "Share",
+                                        function: () async {
+
+                                          // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                          Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+
+                                        },
+                                        backgroundColor: AppColors.askBlue,
+                                        textColor: AppColors.white,
+                                        buttonWidth: ScreenSize.scaleWidth(context, 200),
+                                        buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                        borderCurve: 12,
+                                        border: false,
+                                        textSize: 14,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

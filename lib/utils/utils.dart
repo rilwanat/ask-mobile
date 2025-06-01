@@ -248,6 +248,11 @@ class Utils {
                             }
 
 
+                            if (message == "Level 2 Verification (KYC) Successful!") {
+                              Get.find<HomeController>().homeGetUserProfileFromServer();
+                            }
+
+
 
 
                           },
@@ -265,7 +270,10 @@ class Utils {
 
                       (message == "Image and path updated successfully.")
                           ||
-                          (message.contains("Successfully Nominated!".toUpperCase())) ?
+                          (message.contains("Successfully Nominated!".toUpperCase()))
+                          ||
+                          (message == "You can increase your influence in deciding beneficiary by boosting your daily nomination quota through becoming a donor.")
+                          ?
                       Expanded(child: AskButton(
                         enabled: true,
                         text: "Boost",
@@ -352,6 +360,24 @@ class Utils {
       return pluralize(days, 'day');
     }
   }
+
+  static String formatVoterConsistencyDays(final val) {
+    final consistencyValue = val;
+
+    if (consistencyValue == null) {
+      return 'N/A'; // or whatever default you prefer
+    }
+
+    // Handle cases where the value might be a String that can be parsed to int
+    final days = consistencyValue is String
+        ? int.tryParse(consistencyValue) ?? 0
+        : consistencyValue is int
+        ? consistencyValue
+        : 0;
+
+    return '$days ${days == 1 ? 'day' : 'days'}';
+  }
+
 
   //share
   // Future<void> shareFile() async {

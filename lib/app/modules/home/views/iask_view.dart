@@ -557,7 +557,7 @@ class IaskView extends GetView<HomeController> {
                                             //cursorColor: AppColors.blue,
                                             maxLength: 10,
                                             decoration: InputDecoration(
-                                              hintText: "Enter your Phone Number",
+                                              hintText: "Enter your Phone Number: (10 digits)",
                                               // filled: true,
                                               // fillColor: AppColors.white,
                                               counterText: "",
@@ -1231,7 +1231,7 @@ class IaskView extends GetView<HomeController> {
                                         ),
                                         AskButton(
                                             enabled: true,
-                                            text: "Verify KYC",
+                                            text: "Submit", //"""Verify KYC",
                                             function: () async {
 
 
@@ -1248,15 +1248,34 @@ class IaskView extends GetView<HomeController> {
                                               String imagePath = controller.imagePath.value;
 
 
+                                              List<String> missingFields = [];
+                                              if (phoneNumber.isEmpty || phoneNumber.length == 4) {
+                                                missingFields.add("Phone Number");
+                                              }
+                                              if (phoneNumber.length != 14) {
+                                                missingFields.add("10-digit Phone Number ");
+                                              }
+                                              if (accountNumber.isEmpty) {
+                                                missingFields.add("Account Number");
+                                              }
+                                              if (accountNumber.length != 10) {
+                                                missingFields.add("10-digit Account Number ");
+                                              }
+                                              if (bankName.isEmpty) {
+                                                missingFields.add("Bank Name");
+                                              }
+                                              if (gender.isEmpty) {
+                                                missingFields.add("Gender");
+                                              }
+                                              if (stateOfResidence.isEmpty) {
+                                                missingFields.add("State of Residence");
+                                              }
+                                              if (imagePath.isEmpty) {
+                                                missingFields.add("Selfie");
+                                              }
 
-                                              if (
-                                              phoneNumber.isEmpty
-                                                  || accountNumber.isEmpty
-                                                  || bankName.isEmpty
-                                                  || gender.isEmpty
-                                                  || stateOfResidence.isEmpty
-                                                  || imagePath.isEmpty
-                                              ) {
+
+                                              if (missingFields.isNotEmpty) {
                                                 // Utils.showTopSnackBar(
                                                 //     t: "A.S.K Verify KYC",
                                                 //     m: "KYC selfie and text fields cannot be empty",
@@ -1264,7 +1283,12 @@ class IaskView extends GetView<HomeController> {
                                                 //     d: 3,
                                                 //     bc: AppColors.askBlue,
                                                 //     sp: SnackPosition.TOP);
-                                                Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: "KYC selfie and text fields cannot be empty");
+                                                // Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: "KYC selfie and text fields cannot be empty");
+                                                Utils.showInformationDialog(
+                                                  status: false,
+                                                  title: 'A.S.K Update Kyc',
+                                                  message: "The following fields cannot be empty:\n${missingFields.join('\n')}",
+                                                );
                                               } else {
                                                 // Utils.showTopSnackBar(
                                                 //     t: "A.S.K Verify KYC",
@@ -1356,7 +1380,8 @@ class IaskView extends GetView<HomeController> {
                                   // height: 60,
                                   child: Column(
                                     children: [
-                                      Padding(
+                                  (controller.profileData.value!.accountName != "") ?
+                                  Padding(
                                         padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1418,7 +1443,7 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                           ],
                                         ),
-                                      ),
+                                      ) : Container(),
                                     ],
                                   )
                                     ,
@@ -1723,6 +1748,19 @@ class IaskView extends GetView<HomeController> {
                                                 enabled: true,
                                                 text: controller.isLoading ? 'Please wait..' : "Create Request",
                                                 function: () async {
+
+                                                  if (controller.helpRequestImage.value == null ||
+                                                      controller.helpRequestImage.value!.path.isEmpty) {
+                                                    // Handle the case where image is null or path is empty
+
+                                                    Utils.showInformationDialog(
+                                                      status: false,
+                                                      title: 'A.S.K Help Request',
+                                                      message: "Select a Help Request image.",
+                                                    );
+                                                    return;
+                                                  }
+
 
                                                   String email = controller.profileData.value!.emailAddress!;
                                                   String description = controller.helpRequestDescriptionController.text;

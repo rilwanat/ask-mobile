@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/app_bar.dart';
+import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 
@@ -19,19 +20,32 @@ class BeneficiariesView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.scaffoldKey,
-      backgroundColor: AppColors.askBackground,
-      drawer: NavBar(),
-      appBar: CustomAppBar(
-        onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
-        },
-        onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
-        },
-        title: 'A.S.K - Beneficiaries',
-        backgroundColor: AppColors.askBlue,
-      ),
+      // key: controller.scaffoldKey,
+      // backgroundColor: AppColors.askBackground,
+      // drawer: NavBar(),
+      // appBar: CustomAppBar(
+      //   onMenuPressed: () {
+      //     controller.scaffoldKey.currentState?.openDrawer();
+      //   },
+      //   onMorePressed: () {
+      //     // controller.scaffoldKey.currentState?.openDrawer();
+      //   },
+      //   title: 'A.S.K - Beneficiaries',
+      //   backgroundColor: AppColors.askBlue,
+      // ),
+        backgroundColor: AppColors.askBackground,
+        // drawer: NavBar(),
+        appBar: CustomAppBarPage(
+          onMenuPressed: () {
+            // controller.scaffoldKey.currentState?.openDrawer();
+            Get.back();
+          },
+          onMorePressed: () {
+            // controller.scaffoldKey.currentState?.openDrawer();
+          },
+          title: 'A.S.K - Beneficiaries',
+          backgroundColor: AppColors.askBlue,
+        ),
       body: Container(
         // color: AppColors.black,
         // width: ScreenSize.width(context),

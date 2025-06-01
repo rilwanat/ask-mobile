@@ -465,7 +465,7 @@ class DashboardView extends GetView<HomeController> {
                                                     style: const TextStyle(
                                                       fontFamily: "LatoRegular",
                                                       color: Colors.black,
-                                                      fontSize: 14.0,
+                                                      fontSize: 12.0,
                                                       fontWeight: FontWeight.w600,
                                                     ),
                                                     maxLines: 1,
@@ -483,7 +483,7 @@ class DashboardView extends GetView<HomeController> {
                                                       style: const TextStyle(
                                                         fontFamily: "LatoRegular",
                                                         color: AppColors.askBlue,
-                                                        fontSize: 18.0,
+                                                        fontSize: 12.0,
                                                         fontWeight: FontWeight.w800,
                                                       ),
                                                       textAlign: TextAlign.center,
@@ -589,7 +589,9 @@ class DashboardView extends GetView<HomeController> {
                                     // );
                                   },
                                   onTap: () {
-                                    controller.handleNavigation(3);
+                                    Get.to(() => BeneficiariesView());
+
+                                    // controller.handleNavigation(3);
 
                                     // Get.to(() => const BeneficiariesView(),
                                     //     transition: Transition.fadeIn, // Built-in transition type
@@ -675,8 +677,8 @@ class DashboardView extends GetView<HomeController> {
                                                     style: const TextStyle(
                                                       // fontFamily: "LatoRegular",
                                                       color: Colors.black,
-                                                      fontSize: 16.0,
-                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 14.0,
+                                                      fontWeight: FontWeight.w900,
                                                     ),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
@@ -689,7 +691,7 @@ class DashboardView extends GetView<HomeController> {
                                                     style: const TextStyle(
                                                       fontFamily: "LatoRegular",
                                                       color: Colors.black,
-                                                      fontSize: 12.0,
+                                                      fontSize: 10.0,
                                                       fontWeight: FontWeight.w600,
                                                     ),
                                                     maxLines: 1,

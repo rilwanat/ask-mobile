@@ -1,4 +1,5 @@
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
+import 'package:ask_mobile/app/modules/home/views/faq_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -55,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 //   height: logoSize,
                 // ),
                 child: Icon(Icons.menu,
-                  size: 18,//logoSize,
+                  size: 26,//logoSize,
                   color: AppColors.white,
                 ),
               ),
@@ -102,7 +103,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => FaqView());
+                      },
                       child: Icon(
                         // Icons.more_vert_rounded,
                         Icons.help,
