@@ -82,58 +82,83 @@ class ProfileView extends GetView<HomeController> {
                       ],
                     ),
                     SizedBox(width: 10,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              controller.getUserProfile();
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.askBlue,
-                                  border: Border.all(color: AppColors.askBlue, width: 2),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                child: const Text("Refresh", style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "LatoRegular",
-                                  color: AppColors.white,)))),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,//paceBetween,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    controller.getUserProfile();
+                                  },
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.askBlue,
+                                        border: Border.all(color: AppColors.askBlue, width: 2),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      child: const Text("Refresh", style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "LatoRegular",
+                                        color: AppColors.white,)))),
 
-                        const SizedBox(height: 8,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(Utils.capitalizeEachWord(controller.profileData.value!.fullname!), style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "LatoRegular",
-                              color: AppColors.askText,
-                            ),),
-                            Text("Gender: " + controller.profileData.value!.gender!, style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "LatoRegular",
-                              color: AppColors.askText,
-                            )),
-                            Text("Account Age: " + Utils.timeElapsedSince(DateTime.parse(controller.profileData.value!.registrationDate!)), style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "LatoRegular",
-                              color: AppColors.askText,
-                            )),
-                            // Text("KYC 1: " + controller.profileData.value!.gender!, style: const TextStyle(
-                            //   fontSize: 14,
-                            //   fontWeight: FontWeight.w400,
-                            //   fontFamily: "LatoRegular",
-                            //   color: AppColors.askText,
-                            // ))
-
-                          ],
-                        )
-                      ],
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       // Navigator.of(context).pop();
+                              //       controller.logoutUser();
+                              //     },
+                              //     child: Container(
+                              //         decoration: BoxDecoration(
+                              //           color: AppColors.red,
+                              //           border: Border.all(color: AppColors.red, width: 2),
+                              //           borderRadius: BorderRadius.circular(30),
+                              //         ),
+                              //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              //         child: const Text("Log out", style: TextStyle(
+                              //           fontSize: 12,
+                              //           fontWeight: FontWeight.w500,
+                              //           fontFamily: "LatoRegular",
+                              //           color: AppColors.black,)))),
+                            ],
+                          ),
+                      
+                          const SizedBox(height: 8,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(Utils.capitalizeEachWord(controller.profileData.value!.fullname!), style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "LatoRegular",
+                                color: AppColors.askText,
+                              ),),
+                              Text("Gender: " + controller.profileData.value!.gender!, style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "LatoRegular",
+                                color: AppColors.askText,
+                              )),
+                              Text("Account Age: " + Utils.timeElapsedSince(DateTime.parse(controller.profileData.value!.registrationDate!)), style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "LatoRegular",
+                                color: AppColors.askText,
+                              )),
+                              // Text("KYC 1: " + controller.profileData.value!.gender!, style: const TextStyle(
+                              //   fontSize: 14,
+                              //   fontWeight: FontWeight.w400,
+                              //   fontFamily: "LatoRegular",
+                              //   color: AppColors.askText,
+                              // ))
+                      
+                            ],
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
