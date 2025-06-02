@@ -5,10 +5,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
 import '../../../../global/widgets/LoadingScreen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/ask_button.dart';
@@ -48,6 +50,13 @@ class DashboardView extends GetView<HomeController> {
               child: Column(
                 children: [
 
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: SizedBox(
+                      height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                      child: BannerAdExample(),
+                    ),
+                  ),
                   //
                   CarouselSlider(
                     items: [
