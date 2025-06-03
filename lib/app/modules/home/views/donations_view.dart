@@ -64,7 +64,7 @@ class DonationsView extends GetView<HomeController> {
                     child: SingleChildScrollView(
                       child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -268,7 +268,9 @@ class DonationsView extends GetView<HomeController> {
                                           await controller.makePaymentToFundAccount(
                                               context: context,
                                               toPay: toPay,
-                                              currency: 'NGN');
+                                              currency: 'NGN',
+                                              isSubscription: false
+                                          );
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -351,12 +353,45 @@ class DonationsView extends GetView<HomeController> {
                                                   //   plan.planCode,
                                                   // );
 
-                                                  // num toPay = num.parse(plan!.amount!.toString());
+                                                  num toPay = num.parse(plan!.amount!.toString());
+                                                  // Utils.showTopSnackBar(
+                                                  //     t: '${interval[0].toUpperCase()}${interval.substring(1)} Commitments',
+                                                  //     m: toPay.toString(),
+                                                  //     tc: AppColors.white,
+                                                  //     d: 3,
+                                                  //     bc: AppColors.askBlue,
+                                                  //     sp: SnackPosition.TOP);
+
                                                   //
-                                                  // await controller.makePaymentToFundAccount(
+                                                  // required String planName,
+                                                  // required int amount, // in kobo
+                                                  // required String interval, // daily, weekly, monthly, yearly
+                                                  // required String email,
+
+
+                                                  await controller.makePaymentToFundAccount(
+                                                      context: context,
+                                                      toPay: toPay,
+                                                      currency: 'NGN',
+
+                                                        isSubscription: true,
+                                                        planName: plan!.name!,
+                                                        planCode: plan!.planCode!,
+                                                        // toPay: int.parse(toPay.toString()),
+                                                        interval: plan!.interval!,
+                                                        email: controller.profileData.value!.emailAddress!
+                                                  );
+
+                                                  // await controller.makeSubscribePayment(
                                                   //     context: context,
-                                                  //     toPay: toPay,
-                                                  //     currency: 'NGN');
+                                                  //     // toPay: toPay,
+                                                  //     // currency: 'NGN',
+                                                  //     planName: plan!.name!,
+                                                  //     planCode: plan!.planCode!,
+                                                  //     toPay: int.parse(toPay.toString()),
+                                                  //     interval: plan!.interval!,
+                                                  //     email: controller.profileData.value!.emailAddress!
+                                                  // );
 
 
                                                 },
@@ -458,7 +493,9 @@ class DonationsView extends GetView<HomeController> {
                                           await controller.makePaymentToFundAccount(
                                               context: context,
                                               toPay: toPay,
-                                              currency: 'DOL');
+                                              currency: 'DOL',
+                                              isSubscription: false
+                                          );
 
                                         },
                                         child: Container(

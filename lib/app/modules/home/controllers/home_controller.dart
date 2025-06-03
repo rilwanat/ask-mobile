@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
@@ -55,6 +56,8 @@ import '../../../data/models/cryptos/Data.dart' as cd;
 import '../../../data/models/dollar_exchange/Data.dart' as der;
 
 import 'package:pay_with_paystack/pay_with_paystack.dart';
+import 'package:paystack/paystack.dart';
+
 
 class HomeController extends GetxController {
 
@@ -2166,9 +2169,20 @@ class HomeController extends GetxController {
   Future<void> makePaymentToFundAccount({
     required BuildContext context,
     required num toPay,
-    required String currency
+    required String currency,
+
+    required bool isSubscription,
+
+    String? planName,
+    String? planCode,
+    String? interval,
+    String? email,
   }
       ) async {
+
+    String secretKey = 'sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b';
+
+    final client = PaystackClient(secretKey: secretKey);
 
     setLoading(true);
     final uniqueTransRef =  generateTimestampedReference();
@@ -2179,13 +2193,40 @@ class HomeController extends GetxController {
       priceToPay = num.parse(dollarExchangeData.value[0]!.rate!) * toPay;
     }
 
+    bool isAlreadySubscribed = false;
+    if (isSubscription) {
+      try {
+        final response = await client.subscriptions.all(
+            customer: email,
+            plan: planCode
+        );
+
+        if (response.data.length > 0) {
+          // return response.data['data']; // List of subscriptions
+          isAlreadySubscribed = true;
+        } else {
+          throw Exception('Failed to fetch subscriptions: ');
+        }
+      } catch (e) {
+        throw Exception('Error fetching subscriptions: $e');
+      }
+
+    }
+
+
+
+
+
+
+
     // print("#1");
     try {
 
+      if (isAlreadySubscribed == false)
       {
         PayWithPayStack().now(
             context: context,
-            secretKey: "sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b",
+            secretKey: secretKey,
             customerEmail: email,
             reference: uniqueTransRef,
             callbackUrl: "https://google.com",
@@ -2195,10 +2236,10 @@ class HomeController extends GetxController {
             transactionCompleted: (paymentData) async {
               setLoading(false);
 
-              print("Transaction Successful");
+              print("Transaction Successful: " + paymentData.toJson().toString());
               // Get.back();
 
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
 
 
               // showAnimatedTopupDialog(status: "Success", message: "");
@@ -2218,11 +2259,46 @@ class HomeController extends GetxController {
               //   // );
               // });
 
-              if (currency == "NGN") {
-                await incrementDNQ(email: email, price: toPay.toString(), type: "naira", reference: uniqueTransRef);
+              if (isSubscription) {
+                //hit subscribe endpoint with authtoken
+                final authCode = paymentData.authorization!.authorizationCode;
+                if (authCode == null) {
+                  throw Exception('Authorization code not found in payment data');
+                }
+                // 5. Create subscription with the authorization code
+                final subscriptionResponse = await client.subscriptions.create(
+                  email,
+                  planCode!,
+                  authCode,
+                  startDate: DateTime.now().toIso8601String(),
+                );
+
+                if (!subscriptionResponse.data['status']) {
+                  Utils.showInformationDialog(status: false, title: 'THANK YOU FOR YOUR DONATION !',
+                      message: 'Subscription creation failed!: ${subscriptionResponse.data['message']}'
+
+                  );
+                  throw Exception('Subscription creation failed: ${subscriptionResponse.data['message']}');
+                }
+
+                Utils.showInformationDialog(status: true, title: 'THANK YOU FOR YOUR DONATION !',
+                    message: 'Subscription activated successfully!'
+
+                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(content: Text('Subscription activated successfully!')),
+                // );
+
+
               } else {
-                await incrementDNQ(email: email, price: toPay.toString(), type: "dollar", reference: uniqueTransRef);
+
+                if (currency == "NGN") {
+                  await incrementDNQ(email: email, price: toPay.toString(), type: "naira", reference: uniqueTransRef);
+                } else {
+                  await incrementDNQ(email: email, price: toPay.toString(), type: "dollar", reference: uniqueTransRef);
+                }
               }
+
 
 
 
@@ -2231,12 +2307,12 @@ class HomeController extends GetxController {
             },
             transactionNotCompleted: (reason) async {
               setLoading(false);
-              print("Transaction Not Successful!");
+              print("Transaction Not Successful!" + reason.toString());
               // Get.back();
 
 
               // Close the current screen or take user to an error page
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
               // showAnimatedTopupDialog(status: "Failed", message: "");
 
               // setLoading(true);
@@ -2252,6 +2328,11 @@ class HomeController extends GetxController {
               // });
 
             });
+      } else {
+        Utils.showInformationDialog(status: null, title: 'Oops !',
+            message: 'You are already subscribed to this plan.'
+
+        );
       }
 
       // print("#2");
@@ -2273,6 +2354,8 @@ class HomeController extends GetxController {
       );
     }
   }
+
+
 
   incrementDNQ({
     required String email,
