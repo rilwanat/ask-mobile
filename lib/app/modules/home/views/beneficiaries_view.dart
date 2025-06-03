@@ -11,6 +11,9 @@ import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
+
 class BeneficiariesView extends GetView<HomeController> {
   BeneficiariesView({super.key});
 
@@ -54,6 +57,15 @@ class BeneficiariesView extends GetView<HomeController> {
           padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: SizedBox(
+                  height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                  child: BannerAdExample(),
+                ),
+              ),
+              //
+
               // Grid of cards
               Expanded(
                 child: Obx(() {

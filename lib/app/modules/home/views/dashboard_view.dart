@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/BannerAdExample.dart';
+import '../../../../global/widgets/InterstitialAdExample.dart';
 import '../../../../global/widgets/LoadingScreen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/ask_button.dart';
@@ -392,6 +393,8 @@ class DashboardView extends GetView<HomeController> {
                                     // );
                                   },
                                   onTap: () async {
+
+
                                     controller.searchRequestsController.clear();
 
                                     await controller.handleNavigation(1);
@@ -546,6 +549,20 @@ class DashboardView extends GetView<HomeController> {
                       ),
                     ],
                   ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: SizedBox(
+                      height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                      child: BannerAdExample(),
+                    ),
+                  ),
+                  //
 
                   const SizedBox(
                     height: 10,

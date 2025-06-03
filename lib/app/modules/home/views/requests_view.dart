@@ -15,6 +15,9 @@ import '../controllers/home_controller.dart';
 
 import '../../../data/models/requests/Data.dart' as hrd;
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
+
 class RequestsView extends GetView<HomeController> {
   RequestsView({
     super.key
@@ -38,8 +41,18 @@ class RequestsView extends GetView<HomeController> {
       ),
       body: Obx(() => controller.isLoading
           ? const LoadingScreen()
-          :Column(
+          : Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: SizedBox(
+              height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+              child: BannerAdExample(),
+            ),
+          ),
+          //
+
+
           SizedBox(height: 10,),
           // const Text(
           //   "Help Requests",

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
@@ -477,6 +478,50 @@ class AuthController extends GetxController {
           sp: SnackPosition.TOP);
 
       return null;
+    }
+  }
+
+  signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+        clientId: '770133122089-ouu9p49m84sdq7p2taqjv1hhekdctpt1.apps.googleusercontent.com', // Optional for some platforms
+      );
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser != null) {
+        // Get authentication details
+        final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+        // You now have direct access to:
+        // - googleAuth.idToken (JWT containing user info)
+        // - googleAuth.accessToken (for API calls)
+        // - googleUser (contains email, display name, photo, etc.)
+
+        print('User Email: ${googleUser.email}');
+        print('User Name: ${googleUser.displayName}');
+        print('User Photo: ${googleUser.photoUrl}');
+        print('ID Token: ${googleAuth.idToken}');
+        print('Access Token: ${googleAuth.accessToken}');
+
+        // You can use these tokens directly in your app
+        // For example, store them in shared preferences
+        // or use them to make API calls to Google services
+
+        // If you need to verify the ID token on client side only:
+        // You can decode the JWT (but note client-side verification isn't secure)
+        // final jwtParts = googleAuth.idToken!.split('.');
+        // final payload = json.decode(utf8.decode(base64Url.decode(jwtParts[1])));
+
+        // Proceed with your app flow
+        // controller.finalStep();
+        // controller.skipToBegin();
+      }
+    } catch (e) {
+      print('Google Sign-In Error: $e');
+      // Handle error (show snackbar or alert)
     }
   }
 

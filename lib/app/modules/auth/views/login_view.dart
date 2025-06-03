@@ -328,7 +328,7 @@ class LoginView extends GetView<AuthController> {
                                           text: "Sign in with Google",
                                           function: () {
                                             // controller.finalStep();
-                                            // controller.skipToBegin();
+                                            controller.signInWithGoogle();
                                           },
                                           backgroundColor: AppColors.askSoftTheme,
                                           textColor: AppColors.askBlue,

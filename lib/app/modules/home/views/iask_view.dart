@@ -20,6 +20,9 @@ import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 import '../controllers/home_controller.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
+
 class IaskView extends GetView<HomeController> {
   IaskView({super.key});
 
@@ -44,7 +47,7 @@ class IaskView extends GetView<HomeController> {
         width: ScreenSize.width(context),
         child: Obx(() => controller.isLoading
             ? const LoadingScreen()
-            :Stack(
+            : Stack(
           children: [
             Positioned(
                 child: Padding(
@@ -54,8 +57,17 @@ class IaskView extends GetView<HomeController> {
                     child: SingleChildScrollView(
                       child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: SizedBox(
+                                height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                                child: BannerAdExample(),
+                              ),
+                            ),
+                            //
+
                             SizedBox(height: 10,),
 
                             SizedBox(height: 8,),

@@ -10,6 +10,10 @@ class BannerAdExample extends StatefulWidget {
 class _BannerAdExampleState extends State<BannerAdExample> {
   BannerAd? _bannerAd;
 
+  static const String appId = 'ca-app-pub-8713818304641575/8362867834'; //live
+  // static const String appId = 'ca-app-pub-3940256099942544/6300978111'; //demo
+  // static const String interstitialAdUnitId = 'ca-app-pub-8713818304641575/1346575917';
+
   @override
   void initState() {
     super.initState();
@@ -18,7 +22,7 @@ class _BannerAdExampleState extends State<BannerAdExample> {
 
   void _loadBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111',//'ca-app-pub-8713818304641575/8362867834',
+      adUnitId: appId,
       request: AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(

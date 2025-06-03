@@ -17,6 +17,7 @@ import '../app/modules/home/views/donations_view.dart';
 import '../app/modules/home/views/home_view.dart';
 import '../global/app_color.dart';
 import '../global/screen_size.dart';
+import '../global/widgets/InterstitialAdExample.dart';
 import '../global/widgets/ask_button.dart';
 import '../global/widgets/fade_down_animation.dart';
 
@@ -251,6 +252,19 @@ class Utils {
                             if (message == "Level 2 Verification (KYC) Successful!") {
                               Get.find<HomeController>().homeGetUserProfileFromServer();
                             }
+
+
+                            if (message.contains("Increase your influence to decide beneficiary by boosting your DNQ.")) {
+                              //
+                              if (Get.find<HomeController>().profileData.value!.voterConsistency == "1") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => InterstitialAdExample()),
+                                );
+                              }
+
+                            }
+
 
 
 

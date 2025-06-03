@@ -1871,14 +1871,13 @@ class HomeController extends GetxController {
         //     bc: AppColors.gold,
         //     sp: SnackPosition.TOP);
 
+        await initializeProfileData();
 
         Utils.showInformationDialog(status: true,
             title: 'A.S.K Nominate',
             message: "${response!.message!.toUpperCase()}# Increase your influence to decide beneficiary by boosting your DNQ.",
             // meta: response!.id
         );
-
-
 
 
 

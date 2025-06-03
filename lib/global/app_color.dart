@@ -20,6 +20,20 @@ class AppColors {
 
 }
 
+class SocialColors {
+  static const black = Color(0xFF000000);
+  static const whatsapp = Color(0xFF25D366);
+  static const telegram = Color(0xFF26A5E4);
+  static const facebook = Color(0xFF1877F2);
+  static const twitter = Color(0xFF1DA1F2);
+  static const instagramRed = Color(0xFFE4405F);
+  static const instagramBlue = Color(0xFF405DE6);
+  static const tiktok = Color(0xFF000000);
+  static const tiktokRed = Color(0xFFFE2C55);
+  static const tiktokTeal = Color(0xFF25F4EE);
+  static const youtube = Color(0xFFFF0000);
+}
+
 List<BoxShadow> shadowDefault = [
   const BoxShadow(color: Colors.white, blurRadius: 4, offset: Offset(0, 0))
 ];

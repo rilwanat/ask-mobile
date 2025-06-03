@@ -10,6 +10,11 @@ import '../controllers/home_controller.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
+
+import 'package:flutter_svg/flutter_svg.dart';
+
 class FaqView extends GetView<HomeController> {
   const FaqView({super.key});
   @override
@@ -49,8 +54,18 @@ class FaqView extends GetView<HomeController> {
                 children: [
                   Positioned(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: SizedBox(
+                              height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                              child: BannerAdExample(),
+                            ),
+                          ),
+                          //
+
                           SizedBox(height: ScreenSize.scaleHeight(context, 20),),
                           // SizedBox(height: ScreenSize.scaleHeight(context, 40),),
                           // const XippAppBar(
@@ -104,6 +119,7 @@ class FaqView extends GetView<HomeController> {
                                                   fontSize: 14,
                                                   height: 1.5,
                                                   fontFamily: "LatoRegular",
+                                                  decoration: TextDecoration.underline,
                                                 ),
                                               ),
                                             ),
@@ -116,6 +132,7 @@ class FaqView extends GetView<HomeController> {
                                                   fontSize: 14,
                                                   height: 1.5,
                                                   fontFamily: "LatoRegular",
+                                                  decoration: TextDecoration.underline,
                                                 ),
                                               ),
                                             ),
@@ -139,13 +156,20 @@ class FaqView extends GetView<HomeController> {
                                                   );
                                                 }
                                               },
-                                              child: const Text(
-                                                "+234 905 1047 138",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  height: 1.5,
-                                                  fontFamily: "LatoRegular",
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset('assets/images/icons/whatsapp.svg'),
+                                                  const SizedBox(width: 8),
+                                                  const Text(
+                                                    "+234 905 1047 138",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      height: 1.5,
+                                                      fontFamily: "LatoRegular",
+                                                      decoration: TextDecoration.underline,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -174,6 +198,7 @@ class FaqView extends GetView<HomeController> {
                                                     fontFamily: "LatoRegular",
 
                                                   ),
+
                                                 ),
                                               ],
                                             ),
@@ -198,6 +223,7 @@ class FaqView extends GetView<HomeController> {
                                                   fontSize: 14,
                                                   height: 1.5,
                                                   fontFamily: "LatoRegular",
+                                                  decoration: TextDecoration.underline,
                                                 ),
                                               ),
                                             ),
@@ -242,7 +268,98 @@ class FaqView extends GetView<HomeController> {
                                           ],
                                         ),
                                       ),
-                                    )
+                                    ),
+
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 16),
+                                      width: ScreenSize.width(context),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                                "Follow Us:",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: "LatoRegular",
+                                                  color: AppColors.askText,
+                                                  height: 1.0,
+                                                  // letterSpacing: .2,
+                                                )
+                                            ),
+                                            const SizedBox(height: 8,),
+                                            Container(
+                                              color: AppColors.askBlue,
+                                              height: 2,
+                                              width: 64,
+                                            ),
+                                            const SizedBox(height: 8,),
+                                            // const SizedBox(height: 10),
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/whatsapp.svg',
+                                                    url: 'https://whatsapp.com/channel/0029VapJPNX05MUYgWDwWR0m',
+                                                    size: 28,
+                                                      color: SocialColors.whatsapp
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/telegram.svg',
+                                                    url: 'https://t.me/askfoundations',
+                                                      size: 28,
+                                                      color: SocialColors.telegram,
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/facebook.svg',
+                                                    url: 'https://www.facebook.com/askfoundationpage',
+                                                    size: 28,
+                                                      color: SocialColors.facebook
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/x.svg',
+                                                    url: 'https://www.twitter.com/askfoundations',
+                                                    size: 28,
+                                                      color: SocialColors.black,
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/instagram.svg',
+                                                    url: 'https://www.instagram.com/askfoundations',
+                                                    size: 28,
+                                                      color: SocialColors.instagramBlue
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/tiktok.svg',
+                                                    url: 'https://www.tiktok.com/@askfoundations',
+                                                    size: 28,
+                                                      color: SocialColors.tiktok
+                                                  ),
+                                                  // const SizedBox(width: 4),
+                                                  _buildSocialIcon(
+                                                    asset: 'assets/images/icons/youtube.svg',
+                                                    url: 'https://www.youtube.com/@Askfoundations',
+                                                    size: 28,
+                                                    color: SocialColors.youtube
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+
 
 
                                   ],
@@ -313,7 +430,31 @@ class FaqItem extends StatelessWidget {
   }
 }
 
-
+Widget _buildSocialIcon({
+  required String asset,
+  required String url,
+  required double size,
+  required Color color,
+}) {
+  return IconButton(
+    icon: SvgPicture.asset(
+      asset,
+      width: size,
+      height: size,
+      colorFilter: ColorFilter.mode(
+        color, // Your custom color
+        BlendMode.srcIn, // This makes the SVG take the color
+      ),
+    ),
+    iconSize: size + 8, // Makes the tap area larger than the icon
+    padding: EdgeInsets.zero,
+    constraints: BoxConstraints(
+      minWidth: size + 8,
+      minHeight: size + 8,
+    ),
+    onPressed: () => _launchUrl(url),
+  );
+}
 
 Future<void> _launchUrl(String url) async {
   if (await canLaunchUrl(Uri.parse(url))) {

@@ -16,6 +16,9 @@ import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 import '../controllers/home_controller.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../../global/widgets/BannerAdExample.dart';
+
 class DonationsView extends GetView<HomeController> {
   const DonationsView({super.key});
   @override
@@ -63,6 +66,15 @@ class DonationsView extends GetView<HomeController> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: SizedBox(
+                                height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                                child: BannerAdExample(),
+                              ),
+                            ),
+                            //
+
                             // SizedBox(height: ScreenSize.scaleHeight(context, 40),),
                             const SizedBox(height: 30),
                             const Text(
