@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:ask_mobile/app/modules/auth/views/login_view.dart';
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../app/modules/auth/controllers/auth_controller.dart';
 import '../app/modules/home/bindings/home_binding.dart';
 import '../app/modules/home/views/donations_view.dart';
 import '../app/modules/home/views/home_view.dart';
@@ -263,6 +265,11 @@ class Utils {
                                 );
                               }
 
+                            }
+
+                            if (message.contains("Registration failed. Email already exists.")) {
+                              Get.to(() => LoginView());
+                              Get.find<AuthController>().loginEmailController.text = meta!;
                             }
 
 

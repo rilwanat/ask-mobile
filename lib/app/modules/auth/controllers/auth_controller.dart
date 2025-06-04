@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -272,7 +273,7 @@ class AuthController extends GetxController {
   }
 
 
-  Future<LoginResponse?> sendMobileResetPassordCode({
+  Future<LoginResponse?> sendMobileResetPasswordCode({
     required String email
   }) async {
     setLoading(true);
@@ -341,7 +342,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<LoginResponse?> validateMobileResetPassordCode({
+  Future<LoginResponse?> validateMobileResetPasswordCode({
     required String email,
     required String emailCode,
   }) async {
@@ -485,8 +486,20 @@ class AuthController extends GetxController {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email', 'profile'],
-        clientId: '770133122089-ouu9p49m84sdq7p2taqjv1hhekdctpt1.apps.googleusercontent.com', // Optional for some platforms
+        // clientId: '29695971301-m4taf9mpgcicjifuf6fp466ka5f9bjtu.apps.googleusercontent.com', // Optional for some platforms
       );
+
+      // // Check if a user is currently signed in
+      // if (await googleSignIn.isSignedIn()) {
+      //   await googleSignIn.signOut();  // Sign out from Google
+      //   await googleSignIn.disconnect(); // Optional: Revoke permissions (if needed)
+      //
+      //   print("User signed out successfully");
+      //   return;
+      // } else {
+      //   print("No user is currently signed in");
+      //   return;
+      // }
 
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -500,11 +513,11 @@ class AuthController extends GetxController {
         // - googleAuth.accessToken (for API calls)
         // - googleUser (contains email, display name, photo, etc.)
 
-        print('User Email: ${googleUser.email}');
-        print('User Name: ${googleUser.displayName}');
-        print('User Photo: ${googleUser.photoUrl}');
-        print('ID Token: ${googleAuth.idToken}');
-        print('Access Token: ${googleAuth.accessToken}');
+        // print('User Email: ${googleUser.email}');
+        // print('User Name: ${googleUser.displayName}');
+        // print('User Photo: ${googleUser.photoUrl}');
+        // print('ID Token: ${googleAuth.idToken}');
+        // print('Access Token: ${googleAuth.accessToken}');
 
         // You can use these tokens directly in your app
         // For example, store them in shared preferences
@@ -518,13 +531,234 @@ class AuthController extends GetxController {
         // Proceed with your app flow
         // controller.finalStep();
         // controller.skipToBegin();
+
+        await loginUserGoogleDirect(email: googleUser.email);
+
       }
     } catch (e) {
       print('Google Sign-In Error: $e');
-      // Handle error (show snackbar or alert)
+      if (e is PlatformException) {
+        print('Detailed error: ${e.message}');
+        print('Error code: ${e.code}');
+        print('Error details: ${e.details}');
+      }
     }
   }
 
+  registerWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+        // clientId: '29695971301-m4taf9mpgcicjifuf6fp466ka5f9bjtu.apps.googleusercontent.com', // Optional for some platforms
+      );
+
+      // // Check if a user is currently signed in
+      // if (await googleSignIn.isSignedIn()) {
+      //   await googleSignIn.signOut();  // Sign out from Google
+      //   await googleSignIn.disconnect(); // Optional: Revoke permissions (if needed)
+      //
+      //   print("User signed out successfully");
+      //   return;
+      // } else {
+      //   print("No user is currently signed in");
+      //   return;
+      // }
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser != null) {
+        // Get authentication details
+        final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+        // You now have direct access to:
+        // - googleAuth.idToken (JWT containing user info)
+        // - googleAuth.accessToken (for API calls)
+        // - googleUser (contains email, display name, photo, etc.)
+
+        // print('User Email: ${googleUser.email}');
+        // print('User Name: ${googleUser.displayName}');
+        // print('User Photo: ${googleUser.photoUrl}');
+        // print('ID Token: ${googleAuth.idToken}');
+        // print('Access Token: ${googleAuth.accessToken}');
+
+        // You can use these tokens directly in your app
+        // For example, store them in shared preferences
+        // or use them to make API calls to Google services
+
+        // If you need to verify the ID token on client side only:
+        // You can decode the JWT (but note client-side verification isn't secure)
+        // final jwtParts = googleAuth.idToken!.split('.');
+        // final payload = json.decode(utf8.decode(base64Url.decode(jwtParts[1])));
+
+        // Proceed with your app flow
+        // controller.finalStep();
+        // controller.skipToBegin();
+
+        await registerUserGoogleDirect(email: googleUser.email);
+
+      }
+    } catch (e) {
+      print('Google Sign-In Error: $e');
+      if (e is PlatformException) {
+        print('Detailed error: ${e.message}');
+        print('Error code: ${e.code}');
+        print('Error details: ${e.details}');
+      }
+    }
+  }
+
+  loginUserGoogleDirect({
+    required String email,
+    // required String password,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      LoginResponse? response;
+      response =
+      await SecureService().loginUserGoogleDirect(
+          email: email,
+          // password: password
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Login",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        _cachedData.saveAuthToken(response.token!);
+        _cachedData.saveUserType("User");
+
+        await _cachedData.saveProfileData(response.userData!);
+
+
+        Get.to(() => HomeView(),
+            transition: Transition.fadeIn, // Built-in transition type
+            duration: Duration(milliseconds: 500),
+            binding: HomeBinding()
+        );
+
+        resetCodeController.clear();
+
+        loginEmailController.clear();
+        loginPasswordController.clear();
+
+      } else {
+        errorMessage.value = "A.S.K Login: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Login",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Login: Attention",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+  registerUserGoogleDirect({
+    required String email,
+    // required String password,
+  }) async {
+    setLoading(true);
+    //print("loginUser");
+
+    errorMessage.value = "";
+    try {
+      LoginResponse? response;
+      response =
+      await SecureService().registerUserGoogleDirect(
+        email: email,
+        // password: password
+      );
+
+      // print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K Register",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        _cachedData.saveAuthToken(response.token!);
+        _cachedData.saveUserType("User");
+
+        await _cachedData.saveProfileData(response.userData!);
+
+
+        Get.to(() => HomeView(),
+            transition: Transition.fadeIn, // Built-in transition type
+            duration: Duration(milliseconds: 500),
+            binding: HomeBinding()
+        );
+
+        resetCodeController.clear();
+
+        loginEmailController.clear();
+        loginPasswordController.clear();
+
+      } else {
+        errorMessage.value = "A.S.K Register: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Login",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      String message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Register: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+
+      if (message == "Registration failed. Email already exists.") {
+        message += " Please login to proceed.";
+      }
+      Utils.showInformationDialog(status: null, title: 'A.S.K Register', message: "$message", meta: email);
+
+    }
+  }
   //
 }
 

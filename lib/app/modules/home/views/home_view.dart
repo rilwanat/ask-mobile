@@ -71,7 +71,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                   ),
-                  label: 'Requests',
+                  label: 'Nominate',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(

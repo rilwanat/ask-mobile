@@ -335,9 +335,9 @@ class RegisterView extends GetView<AuthController> {
 
                                         AskButton(
                                           text: "Register with Google",
-                                          function: () {
+                                          function: () async {
                                             // controller.finalStep();
-                                            // controller.skipToBegin();
+                                            await controller.registerWithGoogle();
                                           },
                                           backgroundColor: AppColors.askSoftTheme,
                                           textColor: AppColors.askBlue,

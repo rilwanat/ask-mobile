@@ -75,7 +75,8 @@ class SecureService {
     // Convert FormData to a JSON string
     Map<String, dynamic> formDataMap = {
       "email": email,
-      "password": password
+      "password": password,
+      "platform": "mobile",
     };
     String formDataString = json.encode(formDataMap);
 
@@ -907,6 +908,77 @@ class SecureService {
     try {
       final response = await apiClient.post(
         "/response/reset-password.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = LoginResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // LOGIN
+  Future<LoginResponse?> loginUserGoogleDirect({
+    required String email,
+    // required String password
+  }) async {
+    LoginResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "platform": "mobile",
+      // "password": password
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-authenticate-google-apple.php",
+        data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = LoginResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  // LOGIN
+  Future<LoginResponse?> registerUserGoogleDirect({
+    required String email,
+    // required String password
+  }) async {
+    LoginResponse? responseData;
+
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      // "password": password
+    };
+    String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-user-register-google-apple.php",
         data: formDataString,
         options: Options(
           headers: {

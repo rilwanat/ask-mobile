@@ -749,10 +749,13 @@ class HomeController extends GetxController {
     try {
 
       // Force remove the controller
-      Get.delete<AuthController>(force: true);
-      Get.delete<HomeController>(force: true);
+
+      // Get.delete<AuthController>(force: true);
+      // Get.delete<HomeController>(force: true);
+
       // Optional: Force recreate the controller
       // Get.put(AuthController());
+      // Get.put(HomeController());
 
       _cachedData.clearAllSavedDetails(userType: '');
       setLoading(false);

@@ -281,7 +281,7 @@ class LoginView extends GetView<AuthController> {
                                       return;
                                     }
 
-                                    await controller.sendMobileResetPassordCode(email: email).then((response) {
+                                    await controller.sendMobileResetPasswordCode(email: email).then((response) {
                                       // Only show modal if the API call was successful (status == true)
                                       if (response?.status == true) {
                                         // showForgotPasswordModal(context);
@@ -326,9 +326,9 @@ class LoginView extends GetView<AuthController> {
                       
                                         AskButton(
                                           text: "Sign in with Google",
-                                          function: () {
+                                          function: () async {
                                             // controller.finalStep();
-                                            controller.signInWithGoogle();
+                                            await controller.signInWithGoogle();
                                           },
                                           backgroundColor: AppColors.askSoftTheme,
                                           textColor: AppColors.askBlue,
@@ -783,7 +783,7 @@ showEnterFourDigitsCodeModal(context) {
                     // verificationCode
 //validate mobile code
 
-                    await controller.validateMobileResetPassordCode(email: email, emailCode: emailCode).then((response) {
+                    await controller.validateMobileResetPasswordCode(email: email, emailCode: emailCode).then((response) {
                       // Only show modal if the API call was successful (status == true)
                       if (response?.status == true) {
                         Navigator.pop(context);
@@ -874,7 +874,7 @@ showResetPasswordModal(context) {
               const SizedBox(
                 height: 8,
               ),
-              Column(
+              Obx(() => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
@@ -1030,7 +1030,7 @@ showResetPasswordModal(context) {
                     ),
                   ),
                 ],
-              ),
+              ),),
               const SizedBox(height: 16),
               AskButton(
                 enabled: true,

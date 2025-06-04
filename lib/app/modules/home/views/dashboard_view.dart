@@ -58,291 +58,291 @@ class DashboardView extends GetView<HomeController> {
                       child: BannerAdExample(),
                     ),
                   ),
+                  // //
+                  // CarouselSlider(
+                  //   items: [
+                  //     Stack(
+                  //       children: [
+                  //         Container(
+                  //           color: AppColors.black,
+                  //           width: ScreenSize.width(context),
+                  //           height: ScreenSize.width(context) * .5,
+                  //           child: Align(
+                  //             alignment: Alignment.centerRight,
+                  //             child: Image.network(
+                  //               'https://playground.askfoundations.org/images/slider-images/slide1.png',
+                  //               fit: BoxFit.fitHeight,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         // Container(
+                  //         //   //color: AppColors.red,
+                  //         //   decoration: const BoxDecoration(
+                  //         //     //boxShadow: shadowListSmall,
+                  //         //       color: AppColors.askGray,
+                  //         //       //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //       borderRadius: BorderRadius.only(
+                  //         //           topRight: Radius.circular(20),
+                  //         //           bottomRight: Radius.circular(20))),
+                  //         //   width: ScreenSize.width(context) * .5,
+                  //         //   height: ScreenSize.width(context) * .5,
+                  //         //   child: Padding(
+                  //         //     padding: const EdgeInsets.only(left: 20.0),
+                  //         //     // child: Column(
+                  //         //     //   mainAxisAlignment: MainAxisAlignment.center,
+                  //         //     //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //         //     //   children: [
+                  //         //     //     const Text("#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 18,
+                  //         //     //             fontWeight: FontWeight.w900,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 8,
+                  //         //     //     ),
+                  //         //     //     const Text(
+                  //         //     //         "#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 12,
+                  //         //     //             fontWeight: FontWeight.w500,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 16,
+                  //         //     //     ),
+                  //         //     //     GestureDetector(
+                  //         //     //       onTap: () {
+                  //         //     //         Utils.showTopSnackBar(
+                  //         //     //           t: "A.S.K",
+                  //         //     //           m: "A.S.K",
+                  //         //     //           tc: AppColors.black,
+                  //         //     //           d: 3,
+                  //         //     //           bc: AppColors.askBlue,
+                  //         //     //           sp: SnackPosition.BOTTOM,
+                  //         //     //         );
+                  //         //     //       },
+                  //         //     //       child: Container(
+                  //         //     //           padding: const EdgeInsets.symmetric(
+                  //         //     //               horizontal: 20, vertical: 10),
+                  //         //     //           decoration: const BoxDecoration(
+                  //         //     //             //boxShadow: shadowListSmall,
+                  //         //     //               color: AppColors.askGray,
+                  //         //     //               //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //     //               borderRadius: BorderRadius.all(
+                  //         //     //                 Radius.circular(30),
+                  //         //     //               )),
+                  //         //     //           child: const Text(
+                  //         //     //             "Sample",
+                  //         //     //             style: TextStyle(
+                  //         //     //                 fontFamily: "LatoRegular",
+                  //         //     //                 fontSize: 12,
+                  //         //     //                 fontWeight: FontWeight.w500,
+                  //         //     //                 color: AppColors.white),
+                  //         //     //           )),
+                  //         //     //     ),
+                  //         //     //   ],
+                  //         //     // ),
+                  //         //   ),
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //     Stack(
+                  //       children: [
+                  //         Container(
+                  //           color: AppColors.black,
+                  //           width: ScreenSize.width(context),
+                  //           height: ScreenSize.width(context) * .5,
+                  //           child: Align(
+                  //             alignment: Alignment.centerRight,
+                  //             child: Image.network(
+                  //               'https://playground.askfoundations.org/images/slider-images/slide2.png',
+                  //               fit: BoxFit.fitHeight,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         // Container(
+                  //         //   //color: AppColors.red,
+                  //         //   decoration: const BoxDecoration(
+                  //         //     //boxShadow: shadowListSmall,
+                  //         //       color: AppColors.askGray,
+                  //         //       //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //       borderRadius: BorderRadius.only(
+                  //         //           topRight: Radius.circular(20),
+                  //         //           bottomRight: Radius.circular(20))),
+                  //         //   width: ScreenSize.width(context) * .5,
+                  //         //   height: ScreenSize.width(context) * .5,
+                  //         //   child: Padding(
+                  //         //     padding: const EdgeInsets.only(left: 20.0),
+                  //         //     // child: Column(
+                  //         //     //   mainAxisAlignment: MainAxisAlignment.center,
+                  //         //     //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //         //     //   children: [
+                  //         //     //     const Text("#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 18,
+                  //         //     //             fontWeight: FontWeight.w900,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 8,
+                  //         //     //     ),
+                  //         //     //     const Text(
+                  //         //     //         "#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 12,
+                  //         //     //             fontWeight: FontWeight.w500,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 16,
+                  //         //     //     ),
+                  //         //     //     GestureDetector(
+                  //         //     //       onTap: () {
+                  //         //     //         Utils.showTopSnackBar(
+                  //         //     //           t: "A.S.K",
+                  //         //     //           m: "A.S.K",
+                  //         //     //           tc: AppColors.black,
+                  //         //     //           d: 3,
+                  //         //     //           bc: AppColors.askBlue,
+                  //         //     //           sp: SnackPosition.BOTTOM,
+                  //         //     //         );
+                  //         //     //       },
+                  //         //     //       child: Container(
+                  //         //     //           padding: const EdgeInsets.symmetric(
+                  //         //     //               horizontal: 20, vertical: 10),
+                  //         //     //           decoration: const BoxDecoration(
+                  //         //     //             //boxShadow: shadowListSmall,
+                  //         //     //               color: AppColors.askGray,
+                  //         //     //               //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //     //               borderRadius: BorderRadius.all(
+                  //         //     //                 Radius.circular(30),
+                  //         //     //               )),
+                  //         //     //           child: const Text(
+                  //         //     //             "Sample",
+                  //         //     //             style: TextStyle(
+                  //         //     //                 fontFamily: "LatoRegular",
+                  //         //     //                 fontSize: 12,
+                  //         //     //                 fontWeight: FontWeight.w500,
+                  //         //     //                 color: AppColors.white),
+                  //         //     //           )),
+                  //         //     //     ),
+                  //         //     //   ],
+                  //         //     // ),
+                  //         //   ),
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //     Stack(
+                  //       children: [
+                  //         Container(
+                  //           color: AppColors.black,
+                  //           width: ScreenSize.width(context),
+                  //           height: ScreenSize.width(context) * .5,
+                  //           child: Align(
+                  //             alignment: Alignment.centerRight,
+                  //             child: Image.network(
+                  //               'https://playground.askfoundations.org/images/slider-images/slide3.png',
+                  //               fit: BoxFit.fitHeight,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         // Container(
+                  //         //   //color: AppColors.red,
+                  //         //   decoration: const BoxDecoration(
+                  //         //     //boxShadow: shadowListSmall,
+                  //         //       color: AppColors.askGray,
+                  //         //       //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //       borderRadius: BorderRadius.only(
+                  //         //           topRight: Radius.circular(20),
+                  //         //           bottomRight: Radius.circular(20))),
+                  //         //   width: ScreenSize.width(context) * .5,
+                  //         //   height: ScreenSize.width(context) * .5,
+                  //         //   child: Padding(
+                  //         //     padding: const EdgeInsets.only(left: 20.0),
+                  //         //     // child: Column(
+                  //         //     //   mainAxisAlignment: MainAxisAlignment.center,
+                  //         //     //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //         //     //   children: [
+                  //         //     //     const Text("#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 18,
+                  //         //     //             fontWeight: FontWeight.w900,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 8,
+                  //         //     //     ),
+                  //         //     //     const Text(
+                  //         //     //         "#",
+                  //         //     //         style: TextStyle(
+                  //         //     //             fontFamily: "LatoRegular",
+                  //         //     //             fontSize: 12,
+                  //         //     //             fontWeight: FontWeight.w500,
+                  //         //     //             color: AppColors.white)),
+                  //         //     //     const SizedBox(
+                  //         //     //       height: 16,
+                  //         //     //     ),
+                  //         //     //     GestureDetector(
+                  //         //     //       onTap: () {
+                  //         //     //         Utils.showTopSnackBar(
+                  //         //     //           t: "A.S.K",
+                  //         //     //           m: "A.S.K",
+                  //         //     //           tc: AppColors.black,
+                  //         //     //           d: 3,
+                  //         //     //           bc: AppColors.askBlue,
+                  //         //     //           sp: SnackPosition.BOTTOM,
+                  //         //     //         );
+                  //         //     //       },
+                  //         //     //       child: Container(
+                  //         //     //           padding: const EdgeInsets.symmetric(
+                  //         //     //               horizontal: 20, vertical: 10),
+                  //         //     //           decoration: const BoxDecoration(
+                  //         //     //             //boxShadow: shadowListSmall,
+                  //         //     //               color: AppColors.askGray,
+                  //         //     //               //border: Border.all(width: 1, color: AppColors.grey),
+                  //         //     //               borderRadius: BorderRadius.all(
+                  //         //     //                 Radius.circular(30),
+                  //         //     //               )),
+                  //         //     //           child: const Text(
+                  //         //     //             "Sample",
+                  //         //     //             style: TextStyle(
+                  //         //     //                 fontFamily: "LatoRegular",
+                  //         //     //                 fontSize: 12,
+                  //         //     //                 fontWeight: FontWeight.w500,
+                  //         //     //                 color: AppColors.white),
+                  //         //     //           )),
+                  //         //     //     ),
+                  //         //     //   ],
+                  //         //     // ),
+                  //         //   ),
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //   ],
                   //
-                  CarouselSlider(
-                    items: [
-                      Stack(
-                        children: [
-                          Container(
-                            color: AppColors.black,
-                            width: ScreenSize.width(context),
-                            height: ScreenSize.width(context) * .5,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Image.network(
-                                'https://playground.askfoundations.org/images/slider-images/slide1.png',
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                          ),
-                          // Container(
-                          //   //color: AppColors.red,
-                          //   decoration: const BoxDecoration(
-                          //     //boxShadow: shadowListSmall,
-                          //       color: AppColors.askGray,
-                          //       //border: Border.all(width: 1, color: AppColors.grey),
-                          //       borderRadius: BorderRadius.only(
-                          //           topRight: Radius.circular(20),
-                          //           bottomRight: Radius.circular(20))),
-                          //   width: ScreenSize.width(context) * .5,
-                          //   height: ScreenSize.width(context) * .5,
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(left: 20.0),
-                          //     // child: Column(
-                          //     //   mainAxisAlignment: MainAxisAlignment.center,
-                          //     //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //     //   children: [
-                          //     //     const Text("#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 18,
-                          //     //             fontWeight: FontWeight.w900,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 8,
-                          //     //     ),
-                          //     //     const Text(
-                          //     //         "#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 12,
-                          //     //             fontWeight: FontWeight.w500,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 16,
-                          //     //     ),
-                          //     //     GestureDetector(
-                          //     //       onTap: () {
-                          //     //         Utils.showTopSnackBar(
-                          //     //           t: "A.S.K",
-                          //     //           m: "A.S.K",
-                          //     //           tc: AppColors.black,
-                          //     //           d: 3,
-                          //     //           bc: AppColors.askBlue,
-                          //     //           sp: SnackPosition.BOTTOM,
-                          //     //         );
-                          //     //       },
-                          //     //       child: Container(
-                          //     //           padding: const EdgeInsets.symmetric(
-                          //     //               horizontal: 20, vertical: 10),
-                          //     //           decoration: const BoxDecoration(
-                          //     //             //boxShadow: shadowListSmall,
-                          //     //               color: AppColors.askGray,
-                          //     //               //border: Border.all(width: 1, color: AppColors.grey),
-                          //     //               borderRadius: BorderRadius.all(
-                          //     //                 Radius.circular(30),
-                          //     //               )),
-                          //     //           child: const Text(
-                          //     //             "Sample",
-                          //     //             style: TextStyle(
-                          //     //                 fontFamily: "LatoRegular",
-                          //     //                 fontSize: 12,
-                          //     //                 fontWeight: FontWeight.w500,
-                          //     //                 color: AppColors.white),
-                          //     //           )),
-                          //     //     ),
-                          //     //   ],
-                          //     // ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            color: AppColors.black,
-                            width: ScreenSize.width(context),
-                            height: ScreenSize.width(context) * .5,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Image.network(
-                                'https://playground.askfoundations.org/images/slider-images/slide2.png',
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                          ),
-                          // Container(
-                          //   //color: AppColors.red,
-                          //   decoration: const BoxDecoration(
-                          //     //boxShadow: shadowListSmall,
-                          //       color: AppColors.askGray,
-                          //       //border: Border.all(width: 1, color: AppColors.grey),
-                          //       borderRadius: BorderRadius.only(
-                          //           topRight: Radius.circular(20),
-                          //           bottomRight: Radius.circular(20))),
-                          //   width: ScreenSize.width(context) * .5,
-                          //   height: ScreenSize.width(context) * .5,
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(left: 20.0),
-                          //     // child: Column(
-                          //     //   mainAxisAlignment: MainAxisAlignment.center,
-                          //     //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //     //   children: [
-                          //     //     const Text("#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 18,
-                          //     //             fontWeight: FontWeight.w900,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 8,
-                          //     //     ),
-                          //     //     const Text(
-                          //     //         "#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 12,
-                          //     //             fontWeight: FontWeight.w500,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 16,
-                          //     //     ),
-                          //     //     GestureDetector(
-                          //     //       onTap: () {
-                          //     //         Utils.showTopSnackBar(
-                          //     //           t: "A.S.K",
-                          //     //           m: "A.S.K",
-                          //     //           tc: AppColors.black,
-                          //     //           d: 3,
-                          //     //           bc: AppColors.askBlue,
-                          //     //           sp: SnackPosition.BOTTOM,
-                          //     //         );
-                          //     //       },
-                          //     //       child: Container(
-                          //     //           padding: const EdgeInsets.symmetric(
-                          //     //               horizontal: 20, vertical: 10),
-                          //     //           decoration: const BoxDecoration(
-                          //     //             //boxShadow: shadowListSmall,
-                          //     //               color: AppColors.askGray,
-                          //     //               //border: Border.all(width: 1, color: AppColors.grey),
-                          //     //               borderRadius: BorderRadius.all(
-                          //     //                 Radius.circular(30),
-                          //     //               )),
-                          //     //           child: const Text(
-                          //     //             "Sample",
-                          //     //             style: TextStyle(
-                          //     //                 fontFamily: "LatoRegular",
-                          //     //                 fontSize: 12,
-                          //     //                 fontWeight: FontWeight.w500,
-                          //     //                 color: AppColors.white),
-                          //     //           )),
-                          //     //     ),
-                          //     //   ],
-                          //     // ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            color: AppColors.black,
-                            width: ScreenSize.width(context),
-                            height: ScreenSize.width(context) * .5,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Image.network(
-                                'https://playground.askfoundations.org/images/slider-images/slide3.png',
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                          ),
-                          // Container(
-                          //   //color: AppColors.red,
-                          //   decoration: const BoxDecoration(
-                          //     //boxShadow: shadowListSmall,
-                          //       color: AppColors.askGray,
-                          //       //border: Border.all(width: 1, color: AppColors.grey),
-                          //       borderRadius: BorderRadius.only(
-                          //           topRight: Radius.circular(20),
-                          //           bottomRight: Radius.circular(20))),
-                          //   width: ScreenSize.width(context) * .5,
-                          //   height: ScreenSize.width(context) * .5,
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(left: 20.0),
-                          //     // child: Column(
-                          //     //   mainAxisAlignment: MainAxisAlignment.center,
-                          //     //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //     //   children: [
-                          //     //     const Text("#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 18,
-                          //     //             fontWeight: FontWeight.w900,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 8,
-                          //     //     ),
-                          //     //     const Text(
-                          //     //         "#",
-                          //     //         style: TextStyle(
-                          //     //             fontFamily: "LatoRegular",
-                          //     //             fontSize: 12,
-                          //     //             fontWeight: FontWeight.w500,
-                          //     //             color: AppColors.white)),
-                          //     //     const SizedBox(
-                          //     //       height: 16,
-                          //     //     ),
-                          //     //     GestureDetector(
-                          //     //       onTap: () {
-                          //     //         Utils.showTopSnackBar(
-                          //     //           t: "A.S.K",
-                          //     //           m: "A.S.K",
-                          //     //           tc: AppColors.black,
-                          //     //           d: 3,
-                          //     //           bc: AppColors.askBlue,
-                          //     //           sp: SnackPosition.BOTTOM,
-                          //     //         );
-                          //     //       },
-                          //     //       child: Container(
-                          //     //           padding: const EdgeInsets.symmetric(
-                          //     //               horizontal: 20, vertical: 10),
-                          //     //           decoration: const BoxDecoration(
-                          //     //             //boxShadow: shadowListSmall,
-                          //     //               color: AppColors.askGray,
-                          //     //               //border: Border.all(width: 1, color: AppColors.grey),
-                          //     //               borderRadius: BorderRadius.all(
-                          //     //                 Radius.circular(30),
-                          //     //               )),
-                          //     //           child: const Text(
-                          //     //             "Sample",
-                          //     //             style: TextStyle(
-                          //     //                 fontFamily: "LatoRegular",
-                          //     //                 fontSize: 12,
-                          //     //                 fontWeight: FontWeight.w500,
-                          //     //                 color: AppColors.white),
-                          //     //           )),
-                          //     //     ),
-                          //     //   ],
-                          //     // ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ],
-
-                    //Slider Container properties
-                    options: CarouselOptions(
-                        height: ScreenSize.width(context) * 0.5,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        aspectRatio: 16 / 9,
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enableInfiniteScroll: true,
-                        autoPlayAnimationDuration:
-                        const Duration(milliseconds: 2000),
-                        viewportFraction: 1,
-                        onPageChanged:
-                            (int index, CarouselPageChangedReason reason) {
-                          if (reason == CarouselPageChangedReason.manual ||
-                              reason == CarouselPageChangedReason.timed) {
-                            //Get.snackbar("Page Changed", "Current page: $index");
-
-                            controller.setCurrentSlide((index + 1));
-                          }
-                        }),
-                  ),
+                  //   //Slider Container properties
+                  //   options: CarouselOptions(
+                  //       height: ScreenSize.width(context) * 0.5,
+                  //       enlargeCenterPage: true,
+                  //       autoPlay: true,
+                  //       aspectRatio: 16 / 9,
+                  //       autoPlayCurve: Curves.fastOutSlowIn,
+                  //       enableInfiniteScroll: true,
+                  //       autoPlayAnimationDuration:
+                  //       const Duration(milliseconds: 2000),
+                  //       viewportFraction: 1,
+                  //       onPageChanged:
+                  //           (int index, CarouselPageChangedReason reason) {
+                  //         if (reason == CarouselPageChangedReason.manual ||
+                  //             reason == CarouselPageChangedReason.timed) {
+                  //           //Get.snackbar("Page Changed", "Current page: $index");
                   //
+                  //           controller.setCurrentSlide((index + 1));
+                  //         }
+                  //       }),
+                  // ),
+                  // //
 
 
 
