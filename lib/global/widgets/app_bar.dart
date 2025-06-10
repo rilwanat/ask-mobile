@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../app/modules/home/views/notifications_view.dart';
 import '../app_color.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -82,11 +83,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        homeCtrl.initializeProfileData();
+                        // homeCtrl.initializeProfileData();
+                        Get.to(() => const NotificationsView());
                       },
                       child: Icon(
                         // Icons.more_vert_rounded,
-                        Icons.refresh,
+                        // Icons.refresh,
+                        Icons.notifications,
                         color: iconColor,
                       ),
                     ),

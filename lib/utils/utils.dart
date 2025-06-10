@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:ask_mobile/app/modules/auth/views/login_view.dart';
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -80,6 +81,19 @@ class Utils {
     } catch (e) {
       return "Invalid Date";
     }
+  }
+
+
+  static String formatFirestoreDate(Timestamp timestamp) {
+    final dateTime = timestamp.toDate();
+    final format = DateFormat('dd MMM, yy', 'en_US');
+    return format.format(dateTime);
+  }
+  static String formatFirestoreTime(Timestamp timestamp) {
+    final dateTime = timestamp.toDate();
+    // final format = DateFormat('HH:mm:ss', 'en_US');
+    final format = DateFormat('hh:mm a', 'en_US');
+    return format.format(dateTime);
   }
 
 // Function to get ordinal suffix (st, nd, rd, th)

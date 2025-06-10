@@ -73,6 +73,8 @@ class HomeController extends GetxController {
 //     selectedHelpRequest.value = request;
 //   }
 
+  var notificationMessages = <Map<String, dynamic>>[].obs;
+
 
   var showBottomNav = true.obs;
   final _navIndex = 0.obs;
@@ -618,6 +620,55 @@ class HomeController extends GetxController {
   }
 
 
+// Step 1: Fetch all notifications once and populate the list
+  void getAllNotificationMessagesOnce(String fDocument) async {
+    try {
+      final allMessages = await getNotificationMessagesOnce(fDocument);
+      notificationMessages.assignAll(allMessages);
+      update();
+    } catch (e) {
+      print("Error fetching initial notifications: $e");
+    }
+  }
+  Future<List<Map<String, dynamic>>> getNotificationMessagesOnce(String chatId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .get();
+
+    return snapshot.docs.map((doc) => doc.data()).toList();
+  }
+// Step 2: Append new notifications from listener (stream)
+  void listenToNewNotificationMessages(String fDocument) {
+    getNewNotificationStream(fDocument).listen((newMessages) {
+      for (var message in newMessages) {
+        if (!notificationMessages.contains(message)) {
+          notificationMessages.add(message);
+          displayNotification("A.S.K Nomination", message['message']);
+          print("New notification message: ${message['message']}");
+        }
+      }
+      update();
+    });
+  }
+// ✅ Return only new messages from snapshot stream
+  Stream<List<Map<String, dynamic>>> getNewNotificationStream(String fDocument) {
+    return FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(fDocument)
+        .collection('messages')
+        .orderBy('timestamp', descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docChanges
+        .where((change) => change.type == DocumentChangeType.added)
+        .map((change) => change.doc.data()!)
+        .toList());
+  }
+
+
+
 
   @override
   void onInit() {
@@ -631,12 +682,11 @@ class HomeController extends GetxController {
     debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
 
 
-    getNewNotificationMessages("adm-rilwan.at@gmail.com").listen((newMessages) {
-      for (var message in newMessages) {
-        displayNotification("A.S.K Nomination", message['message']);
-        print("New notification message: ${message['message']}");
-      }
-    });
+    String fDocument = "adm-${profileData.value!.emailAddress!}";
+    // Step 1: Get all existing notifications once
+    getAllNotificationMessagesOnce(fDocument);
+    // Step 2: Listen to new incoming notifications (assume a stream)
+    listenToNewNotificationMessages(fDocument);
 
     super.onInit();
   }
