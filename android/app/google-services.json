@@ -1,1 +1,30 @@
-{"installed":{"client_id":"29695971301-m4taf9mpgcicjifuf6fp466ka5f9bjtu.apps.googleusercontent.com","project_id":"deep-way-461916-a0","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}}
+{
+  "project_info": {
+    "project_number": "44577210347",
+    "project_id": "ask-platform-63830",
+    "storage_bucket": "ask-platform-63830.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44577210347:android:b684429883d28e980663ae",
+        "android_client_info": {
+          "package_name": "app.rbapps.ask_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyyWG44q4NTaVnoH-JcW5VMQig2E96d-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-8713818304641575~7663420873"
+    }
+  ],
+  "configuration_version": "1"
+}

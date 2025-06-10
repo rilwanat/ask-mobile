@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:ask_mobile/app/data/models/create_help_request/CreateHelpRequestResponse.dart';
 import 'package:ask_mobile/global/screen_size.dart';
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -629,6 +630,14 @@ class HomeController extends GetxController {
     // startAutoScroll();
     debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
 
+
+    getNewNotificationMessages("adm-rilwan.at@gmail.com").listen((newMessages) {
+      for (var message in newMessages) {
+        displayNotification("A.S.K Nomination", message['message']);
+        print("New notification message: ${message['message']}");
+      }
+    });
+
     super.onInit();
   }
 
@@ -638,7 +647,7 @@ class HomeController extends GetxController {
     // await requestExactAlarmPermission();
     await requestNotificationPermission();
     await initNotifications();
-    await testImmediateNotification();
+    // await testImmediateNotification();
   }
   // Future<void> requestExactAlarmPermission() async {
   //   if (await Permission.scheduleExactAlarm.request().isDenied) {
@@ -654,7 +663,7 @@ class HomeController extends GetxController {
   }
   Future<void> initNotifications() async {
     const AndroidInitializationSettings androidSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings('@mipmap/launcher_icon');
 
     // const AndroidInitializationSettings androidSettings =
     // AndroidInitializationSettings('custom_icon');
@@ -680,6 +689,20 @@ class HomeController extends GetxController {
       0,
       'A.S.K Notification',
       'This is a test notification.',
+      generalNotificationDetails,
+    );
+  }
+  Future<void> displayNotification(String title, String message) async {
+    const AndroidNotificationDetails androidDetails =
+    AndroidNotificationDetails('test_channel', 'Test Notifications');
+
+    const NotificationDetails generalNotificationDetails =
+    NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      message,
       generalNotificationDetails,
     );
   }
@@ -2433,5 +2456,262 @@ class HomeController extends GetxController {
 
     }
   }
+
+
+
+  // from my view:
+  // if (controller.isMessageLoading) {} else
+  // {
+  // print("chatId: " + chatId);
+  // // Generate random messages from a list of predefined messages.
+  // // final List<String> randomMessages = [
+  // //   "Hello there!",
+  // //   "How are you?",
+  // //   "What's up?",
+  // //   "Let's catch up!",
+  // //   "Random message just for you.",
+  // //   "Did you receive my last message?",
+  // //   "Hope you are doing well!",
+  // // ];
+  // // String message = (randomMessages..shuffle()).first;
+  // await controller.sendMessage(
+  // chatId: chatId,
+  // message: controller.messageController.text,
+  // senderId: myChatProfile.patient!.id!,
+  // senderName: myChatProfile.patient!.fullname!,
+  // senderImage: myChatProfile.patient!.profileImage!,
+  // receiverId: peerChatProfileId,
+  // receiverName: peerChatProfileName,
+  // firebaseCollection: "chats",
+  // );
+  //
+  // // await controller.sendMessage(chatId, controller.messageController.text, myChatProfile.patient!.id!, peerChatProfileId);
+  // }
+
+  // void updateFirestoreIncrementPeerMessageCount(String? remotePeerId, String? senderName) async {
+  //   if (remotePeerId == null || senderName == null) {
+  //     print("Error: remotePeerId or senderName is null");
+  //     return;
+  //   }
+  //
+  //   try {
+  //     // Creating the new notification
+  //     Map<String, dynamic> newNotification = {
+  //       'title': 'New Message',
+  //       'body': 'You have a new message from $senderName.',
+  //       'timestamp': FieldValue.serverTimestamp(),
+  //       'type': 'message',  // Notification type
+  //     };
+  //
+  //     // Creating the new state to update (increment newMessages)
+  //     Map<String, dynamic> newState = {
+  //       "newMessages": FieldValue.increment(1), // Increment the newMessages count by 1
+  //     };
+  //
+  //     // Update user state and add notification
+  //     // await userStateController.updateUserStateForNotification(remotePeerId, newState, newNotification);
+  //
+  //     print("Message count incremented and notification added for peer: $remotePeerId");
+  //   } catch (e) {
+  //     print("Error updating Firestore: $e");
+  //   }
+  // }
+  //
+  // // Stream<List<Map<String, dynamic>>> getNotifications(String userId) {
+  // //   // return userStateController.getNotifications(userId);
+  // // }
+
+  // // Send a message in a one-to-one chat
+  // Future<void> sendMessage({
+  //   required String chatId,
+  //   required String message,
+  //   required String senderId,
+  //   required String senderName,
+  //   required String senderImage,
+  //   required String receiverId,
+  //   required String receiverName,
+  //   required String firebaseCollection,
+  // }) async {
+  //   if (message.isEmpty) {
+  //     print("Message is empty, not sending.");
+  //     return;
+  //   }
+  //
+  //
+  //   setMessageLoading(true);
+  //
+  //   print("Sending message...");
+  //   print("Chat ID: $chatId");
+  //   print("Message: $message");
+  //   print("Sender ID: $senderId");
+  //   print("Sender Name: $senderName");
+  //   print("sender Image: $senderImage");
+  //   print("Receiver ID: $receiverId");
+  //   print("receiver Name: $receiverName");
+  //
+  //   String lastMessageSenderId = data.value!.patient!.id!;
+  //   String lastMessageSenderName = data.value!.patient!.fullname!;
+  //   String lastMessageSenderImage = data.value!.patient!.profileImage!;
+  //
+  //   try {
+  //     // Add the message to the messages sub-collection
+  //     await FirebaseFirestore.instance
+  //         .collection(firebaseCollection)
+  //         .doc(chatId)
+  //         .collection('messages')
+  //         .add({
+  //       'message': message,
+  //       'senderId': senderId,
+  //       'senderImage': senderImage,
+  //       'senderName': senderName,
+  //       'receiverId': receiverId,
+  //       'receiverName': receiverName,
+  //       'timestamp': FieldValue.serverTimestamp(),
+  //       'userId': senderId, // Pass user ID for validation in Firestore rules
+  //     });
+  //
+  //     // Update the last message in the chat document and add participants
+  //     await FirebaseFirestore.instance
+  //         .collection(firebaseCollection)
+  //         .doc(chatId)
+  //         .set({
+  //       'lastMessage': message,
+  //       'lastMessageSenderId': lastMessageSenderId,
+  //       'lastMessageSenderName': lastMessageSenderName,
+  //       'lastMessageSenderImage': lastMessageSenderImage,
+  //       'lastMessageReceiverName': receiverName,
+  //       'lastMessageTimestamp': FieldValue.serverTimestamp(),
+  //       'participants': [senderId, receiverId], // Add participants field
+  //     }, SetOptions(merge: true)); // Use merge to update existing fields
+  //
+  //     setMessageLoading(false);
+  //     print("Message sent successfully!");
+  //
+  //     updateFirestoreIncrementPeerMessageCount(receiverId, senderName);
+  //
+  //     messageController.clear();
+  //   } catch (error) {
+  //     setMessageLoading(false);
+  //     print("Failed to send message: $error");
+  //     // showQuickInfo("Messaging", "Failed to send message: $error");
+  //     // Handle the error, if needed.
+  //   }
+  // }
+  //
+  // // Retrieve messages for a specific chat
+  // Stream<QuerySnapshot> getMessages(String chatId, String firebaseCollection) {
+  //   print("Fetching messages for chat ID: $chatId");
+  //   return FirebaseFirestore.instance
+  //       .collection(firebaseCollection)
+  //       .doc(chatId)
+  //       .collection('messages')
+  //       .orderBy('timestamp')
+  //       .snapshots()
+  //       .handleError((error) {
+  //     print("Error fetching messages: $error");
+  //     // Handle the permission denied error here
+  //   });
+  // }
+  //
+  // // Get all chats with the last message for a specific user
+  // Stream<List<Map<String, dynamic>>> getAllChatsWithLastMessage(String userId) async* {
+  //   try {
+  //     print("Fetching all chats for user ID: $userId");
+  //
+  //     // Use snapshots for real-time updates
+  //     yield* FirebaseFirestore.instance.collection('chats').snapshots().asyncMap((querySnapshot) async {
+  //       // Debugging: print the number of chat documents retrieved
+  //       print("Number of chats retrieved: ${querySnapshot.docs.length}");
+  //
+  //       List<Map<String, dynamic>> allChatsWithLastMessage = [];
+  //
+  //       // Loop through each chat document
+  //       for (var chatDoc in querySnapshot.docs) {
+  //         final chatId = chatDoc.id;
+  //         // print("Checking chat ID: $chatId"); // Debugging: print current chat ID
+  //
+  //         // Check if the chat ID contains the user ID
+  //         if (chatDoc['participants'].contains(userId)) {
+  //           // print("User ID found in chat ID: $chatId"); // Debugging
+  //
+  //           // Fetch the last message for this chat
+  //           final messagesSnapshot = await FirebaseFirestore.instance
+  //               .collection('chats')
+  //               .doc(chatId)
+  //               .collection('messages')
+  //               .orderBy('timestamp', descending: true)
+  //               .limit(1)
+  //               .get();
+  //
+  //           // Debugging: Check if messages were retrieved
+  //           print("Number of messages retrieved for $chatId: ${messagesSnapshot.docs.length}");
+  //
+  //           if (messagesSnapshot.docs.isNotEmpty) {
+  //             final lastMessageData = messagesSnapshot.docs.first.data();
+  //             print("Last message data for $chatId: $lastMessageData"); // Debugging
+  //
+  //             allChatsWithLastMessage.add({
+  //               'chatId': chatId,
+  //               'lastMessage': lastMessageData['message'],
+  //               'lastMessageSenderId': chatDoc['lastMessageSenderId'],
+  //               'lastMessageSenderName': chatDoc['lastMessageSenderName'],
+  //               'lastMessageSenderImage': chatDoc['lastMessageSenderImage'],
+  //               'lastMessageReceiverName': chatDoc['lastMessageReceiverName'],
+  //               'timestamp': lastMessageData['timestamp'],
+  //               'receiverId': lastMessageData['receiverId'],
+  //               'senderId': lastMessageData['senderId'],
+  //             });
+  //           } else {
+  //             print("No messages found for chat ID: $chatId"); // Debugging
+  //             // showQuickInfo("Messaging", "No messages found for chat ID: $chatId");
+  //           }
+  //         } else {
+  //           print("User ID not found in chat ID: $chatId"); // Debugging
+  //           // showQuickInfo("Messaging", "User ID not found in chat ID: $chatId");
+  //
+  //         }
+  //       }
+  //
+  //       // print(allChatsWithLastMessage.toString());
+  //
+  //       // Yield the list of chats with the last message
+  //       return allChatsWithLastMessage;
+  //     });
+  //   } catch (e) {
+  //     print("Error fetching chats: $e");
+  //     // showQuickInfo("Messaging", "Error fetching chats: $e");
+  //     yield [];
+  //   }
+  // }
+
+
+  // Stream<QuerySnapshot<Map<String, dynamic>>> getNotificationMessages(String chatId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('notifications')
+  //       .doc(chatId)
+  //       .collection('messages')
+  //       .orderBy('timestamp', descending: true) // Optional: latest first
+  //       .snapshots();
+  // }
+
+  Stream<List<Map<String, dynamic>>> getNewNotificationMessages(String chatId) {
+    return FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: false) // oldest to newest
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docChanges
+          .where((change) => change.type == DocumentChangeType.added)
+          .map((change) => change.doc.data()!)
+          .toList();
+    });
+  }
+
+
+
+
+
 
 }

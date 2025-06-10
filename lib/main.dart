@@ -6,6 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'app/data/storage/cached_data.dart';
 import 'app/routes/app_pages.dart';
 
+import 'package:firebase_core/firebase_core.dart';
 
 final CachedData _cachedData = CachedData();
 String? userType;
@@ -16,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
 
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
   userType = await _cachedData.getUserType();
 

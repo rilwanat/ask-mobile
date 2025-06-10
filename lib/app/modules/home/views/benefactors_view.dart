@@ -141,7 +141,7 @@ class BenefactorsView extends GetView<HomeController> {
 
               // Pagination controls
               Obx(() {
-                final totalPages = (controller.beneficiariesData.length / itemsPerPage).ceil();
+                final totalPages = (controller.sponsorsData.length / itemsPerPage).ceil();
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
@@ -150,13 +150,14 @@ class BenefactorsView extends GetView<HomeController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+
                         GestureDetector(
                             onTap: currentPage.value > 0
                                 ? () => currentPage.value--
                                 : null,
                             child: Container(
-                                height: 28,
-                                width: 28,
+                                height: 32,
+                                width: 32,
                                 child: const Icon(Icons.arrow_back_ios, size: 14,))),
 
                         const SizedBox(width: 16,),
@@ -172,8 +173,8 @@ class BenefactorsView extends GetView<HomeController> {
                                 ? () => currentPage.value++
                                 : null,
                             child: Container(
-                                height: 28,
-                                width: 28,
+                                height: 32,
+                                width: 32,
                                 child: const Icon(Icons.arrow_forward_ios, size: 14,))),
 
                       ],
@@ -181,6 +182,8 @@ class BenefactorsView extends GetView<HomeController> {
                   ),
                 );
               }),
+
+              SizedBox(height: 20,)
             ],
           ),
         ),
