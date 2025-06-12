@@ -272,7 +272,7 @@ class Utils {
 
                             if (message.contains("Increase your influence to decide beneficiary by boosting your DNQ.")) {
                               //
-                              if (Get.find<HomeController>().profileData.value!.voterConsistency == "1") {
+                              if (Get.find<HomeController>().profileData.value!.voteWeight == "1") {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => InterstitialAdExample()),

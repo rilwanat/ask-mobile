@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -628,8 +629,10 @@ class HomeController extends GetxController {
       update();
     } catch (e) {
       print("Error fetching initial notifications: $e");
+      Get.snackbar('Error', 'Failed to load notifications');
     }
   }
+
   Future<List<Map<String, dynamic>>> getNotificationMessagesOnce(String chatId) async {
     final snapshot = await FirebaseFirestore.instance
         .collection('notifications')
@@ -638,22 +641,29 @@ class HomeController extends GetxController {
         .orderBy('timestamp', descending: true)
         .get();
 
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    return snapshot.docs.map((doc) => {
+      ...doc.data(),
+      'documentId': doc.id, // Add document ID to the data
+    }).toList();
   }
+
 // Step 2: Append new notifications from listener (stream)
   void listenToNewNotificationMessages(String fDocument) {
     getNewNotificationStream(fDocument).listen((newMessages) {
       for (var message in newMessages) {
-        if (!notificationMessages.contains(message)) {
+        // More reliable check using documentId
+        if (!notificationMessages.any((item) =>
+        item['documentId'] == message['documentId'])) {
           notificationMessages.add(message);
           displayNotification("A.S.K Nomination", message['message']);
-          print("New notification message: ${message['message']}");
+          print("New notification: ${message['message']} (ID: ${message['documentId']})");
         }
       }
       update();
     });
   }
-// ✅ Return only new messages from snapshot stream
+
+// Return only new messages from snapshot stream with document IDs
   Stream<List<Map<String, dynamic>>> getNewNotificationStream(String fDocument) {
     return FirebaseFirestore.instance
         .collection('notifications')
@@ -663,8 +673,72 @@ class HomeController extends GetxController {
         .snapshots()
         .map((snapshot) => snapshot.docChanges
         .where((change) => change.type == DocumentChangeType.added)
-        .map((change) => change.doc.data()!)
+        .map((change) => {
+      ...change.doc.data()!,
+      'documentId': change.doc.id,
+    })
         .toList());
+  }
+
+// Enhanced delete method with error handling
+  Future<void> deleteNotification(String parentDocId, Map<String, dynamic> notification) async {
+    try {
+      final docId = notification['documentId'];
+      if (docId == null) {
+        print('Cannot delete - missing documentId');
+        return;
+      }
+
+      print('Deleting notification ID: $docId');
+
+      // Delete from Firestore
+      await FirebaseFirestore.instance
+          .collection('notifications')
+          .doc(parentDocId)
+          .collection('messages')
+          .doc(docId)
+          .delete();
+
+      // Remove from local list
+      final initialCount = notificationMessages.length;
+      notificationMessages.removeWhere((item) => item['documentId'] == docId);
+
+      if (notificationMessages.length == initialCount) {
+        print('Warning: Notification not found in local list');
+      }
+
+      update();
+      print('Successfully deleted notification');
+      Utils.showTopSnackBar(
+          t: "A.S.K Delete Notification",
+          m: 'Success',
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.askGreen,
+          sp: SnackPosition.TOP);
+      // Get.snackbar(
+      //   'Success',
+      //   'Notification deleted',
+      //   backgroundColor: Colors.green,
+      //   colorText: Colors.white,
+      // );
+
+    } catch (e) {
+      print('Error deleting notification: $e');
+      Utils.showTopSnackBar(
+          t: "A.S.K Delete Notification",
+          m: 'Failed to delete notification',
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to delete notification',
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
+    }
   }
 
 
@@ -834,11 +908,17 @@ class HomeController extends GetxController {
       setLoading(false);
 
 
-      Get.to(() => LoginView(),
+      Get.offAll(() => LoginView(),
           transition: Transition.fadeIn, // Built-in transition type
           duration: Duration(milliseconds: 500),
           binding: AuthBinding()
       );
+
+
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+      await googleSignIn.disconnect();
 
 
 
@@ -2744,20 +2824,20 @@ class HomeController extends GetxController {
   //       .snapshots();
   // }
 
-  Stream<List<Map<String, dynamic>>> getNewNotificationMessages(String chatId) {
-    return FirebaseFirestore.instance
-        .collection('notifications')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('timestamp', descending: false) // oldest to newest
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docChanges
-          .where((change) => change.type == DocumentChangeType.added)
-          .map((change) => change.doc.data()!)
-          .toList();
-    });
-  }
+  // Stream<List<Map<String, dynamic>>> getNewNotificationMessages(String chatId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('notifications')
+  //       .doc(chatId)
+  //       .collection('messages')
+  //       .orderBy('timestamp', descending: false) // oldest to newest
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     return snapshot.docChanges
+  //         .where((change) => change.type == DocumentChangeType.added)
+  //         .map((change) => change.doc.data()!)
+  //         .toList();
+  //   });
+  // }
 
 
 

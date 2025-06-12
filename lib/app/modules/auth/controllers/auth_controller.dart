@@ -669,6 +669,10 @@ class AuthController extends GetxController {
     } on DioException catch (e) {
       setLoading(false);
       //print(e.toString());
+
+
+
+
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -678,6 +682,10 @@ class AuthController extends GetxController {
           d: 3,
           bc: AppColors.red,
           sp: SnackPosition.TOP);
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+      await googleSignIn.disconnect();
     }
   }
 

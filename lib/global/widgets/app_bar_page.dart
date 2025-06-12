@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
+import '../../app/modules/home/views/faq_view.dart';
 import '../app_color.dart';
 
 class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
@@ -67,7 +70,9 @@ class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => FaqView());
+                  },
                   child: Icon(
                     // Icons.more_vert_rounded,
                     Icons.help,
