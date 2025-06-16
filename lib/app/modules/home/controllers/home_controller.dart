@@ -14,7 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../utils/utils.dart';
@@ -84,6 +84,7 @@ class HomeController extends GetxController {
     update([_navIndex.value = value]);
     if (value == 2) {
       //go and get myrequests
+      await getCheckIfUserCanAsk(email: profileData.value!.emailAddress!);
     await getMyHelpRequests(email: profileData.value!.emailAddress!);
   }
     // print(value);
@@ -799,6 +800,9 @@ class HomeController extends GetxController {
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         print("Notification clicked: ${response.payload}");
+
+
+        handleNavigation(2);
       },
     );
   }
@@ -2069,6 +2073,74 @@ class HomeController extends GetxController {
       //     sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Nominate: Attention',
+          message: "$message");
+    }
+  }
+
+  getCheckIfUserCanAsk({
+    required String email,
+  }) async {
+    setLoading(true);
+    //print("getCheckIfUserCanAsk");
+
+    errorMessage.value = "";
+    try {
+      NominateResponse? response;
+      response =
+      await SecureService().getCheckIfUserCanAsk(
+          email: email,
+      );
+
+      print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+
+        Utils.showInformationDialog(status: true,
+          title: 'A.S.K',
+          message: "${response!.message!}",
+          // meta: response!.id
+        );
+
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Create Help Request: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K: Attention',
           message: "$message");
     }
   }

@@ -47,19 +47,11 @@ class DashboardView extends GetView<HomeController> {
           height: ScreenSize.height(context),
           width: ScreenSize.width(context),
           child: Obx(() => controller.isLoading
-              ? const LoadingScreen() : SingleChildScrollView(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque, // Ensures empty space registers touches
-                onVerticalDragUpdate: (DragUpdateDetails details) {
-                  // Update position based on drag movement
-                  // store the position in a variable
-                  // print("Dragging vertically: ${details.delta.dy}");
-                },
-                onVerticalDragEnd: (DragEndDetails details) async {
-                  // Called when drag ends (finger is lifted)
-                  print("Drag ended");
-                  await controller.initializeProfileData();
-                },
+              ? const LoadingScreen() : RefreshIndicator(
+            onRefresh: () async {
+              await controller.initializeProfileData();
+            },
+            child: SingleChildScrollView(
                 child: Column(
                   children: [
 
@@ -570,8 +562,11 @@ class DashboardView extends GetView<HomeController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: SizedBox(
-                        height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
-                        child: BannerAdExample(),
+                          height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                          child:
+                          // IgnorePointer(child:
+                          BannerAdExample()
+                        // ),
                       ),
                     ),
                     //
@@ -831,8 +826,8 @@ class DashboardView extends GetView<HomeController> {
                       height: 30,
                     ),
                   ],
-                ),
-              )
+                )
+            ),
           ),)
       ),
     );
