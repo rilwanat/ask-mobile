@@ -302,33 +302,33 @@ class FaqView extends GetView<HomeController> {
 
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     _buildSocialIcon(
                                                         asset: 'assets/images/icons/whatsapp.svg',
                                                         url: 'https://whatsapp.com/channel/0029VapJPNX05MUYgWDwWR0m',
-                                                        size: 28,
+                                                        size: 36,
                                                         color: SocialColors.whatsapp
                                                     ),
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                       asset: 'assets/images/icons/telegram.svg',
                                                       url: 'https://t.me/askfoundations',
-                                                      size: 28,
+                                                      size: 36,
                                                       color: SocialColors.telegram,
                                                     ),
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                         asset: 'assets/images/icons/facebook.svg',
                                                         url: 'https://www.facebook.com/askfoundationpage',
-                                                        size: 28,
+                                                        size: 36,
                                                         color: SocialColors.facebook
                                                     ),
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                       asset: 'assets/images/icons/x.svg',
                                                       url: 'https://www.twitter.com/askfoundations',
-                                                      size: 28,
+                                                      size: 36,
                                                       color: SocialColors.black,
                                                     ),
                                                     // const SizedBox(width: 4),
@@ -336,28 +336,28 @@ class FaqView extends GetView<HomeController> {
                                                   ],
                                                 ),
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
 
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                         asset: 'assets/images/icons/instagram.svg',
                                                         url: 'https://www.instagram.com/askfoundations',
-                                                        size: 28,
+                                                        size: 36,
                                                         color: SocialColors.instagramBlue
                                                     ),
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                         asset: 'assets/images/icons/tiktok.svg',
                                                         url: 'https://www.tiktok.com/@askfoundations',
-                                                        size: 28,
+                                                        size: 36,
                                                         color: SocialColors.tiktok
                                                     ),
                                                     // const SizedBox(width: 4),
                                                     _buildSocialIcon(
                                                         asset: 'assets/images/icons/youtube.svg',
                                                         url: 'https://www.youtube.com/@Askfoundations',
-                                                        size: 28,
+                                                        size: 36,
                                                         color: SocialColors.youtube
                                                     ),
                                                   ],

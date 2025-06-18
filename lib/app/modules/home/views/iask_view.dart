@@ -1617,6 +1617,7 @@ class IaskView extends GetView<HomeController> {
                                               delayMilliSeconds: 400,
                                               duration: 700,
                                               child: TextFormField(
+                                                //readOnly: controller.canUserAsk.value,
                                                 controller: controller.helpRequestDescriptionController,
                                                 // focusNode: controller.loginEmailFocusNode,
                                                 //cursorColor: AppColors.blue,
@@ -1697,6 +1698,16 @@ class IaskView extends GetView<HomeController> {
                                               // ),
                                                 GestureDetector(
                                                     onTap: () async {
+                                                      if (!controller.canUserAsk.value) {
+                                                        Utils.showInformationDialog(
+                                                          status: false,
+                                                          title: 'A.S.K Help Request',
+                                                          message: "You have already been a beneficiary. Kindly commit to nominating others for now.",
+                                                        );
+                                                        return;
+                                                      }
+
+
                                                               final ImagePicker picker = ImagePicker();
                                                               {
                                                                 final pickedFile =
@@ -1760,6 +1771,15 @@ class IaskView extends GetView<HomeController> {
                                                 enabled: true,
                                                 text: controller.isLoading ? 'Please wait..' : "Create Request",
                                                 function: () async {
+
+                                                  if (!controller.canUserAsk.value) {
+                                                    Utils.showInformationDialog(
+                                                      status: false,
+                                                      title: 'A.S.K Help Request',
+                                                      message: "You have already been a beneficiary. Kindly commit to nominating others for now.",
+                                                    );
+                                                    return;
+                                                  }
 
                                                   if (controller.helpRequestImage.value == null ||
                                                       controller.helpRequestImage.value!.path.isEmpty) {

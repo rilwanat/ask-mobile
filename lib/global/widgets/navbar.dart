@@ -256,9 +256,10 @@ class NavBar extends GetView<HomeController> {
                         // await controller.getCategoryProductsData(category: "women").then((value) {
                         //   //
                         // });
-                        await controller.getCheckIfUserCanAsk(email: controller.profileData.value!.emailAddress!);
+
 
                         controller.handleNavigation(2);
+                        
 
                         // Get.to(() => IaskView());
                       },

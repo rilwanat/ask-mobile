@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -85,8 +86,8 @@ class HomeController extends GetxController {
     if (value == 2) {
       //go and get myrequests
       await getCheckIfUserCanAsk(email: profileData.value!.emailAddress!);
-    await getMyHelpRequests(email: profileData.value!.emailAddress!);
-  }
+      await getMyHelpRequests(email: profileData.value!.emailAddress!);
+    }
     // print(value);
   }
   final screens = <Widget>[
@@ -108,7 +109,7 @@ class HomeController extends GetxController {
 
   Rx<UserData?> profileData = Rx<UserData?>(null);
 
-
+  RxBool canUserAsk = true.obs;
 
   Rx<mhrd.RequestData?> myHelpRequestsData = Rx<mhrd.RequestData?>(null);
 
@@ -122,34 +123,34 @@ class HomeController extends GetxController {
   Timer? beneficiariesAutoScrollTimer;
   int beneficiariesCurrentIndex = 0;
   final bd.Data defaultBeneficiaries = bd.Data.fromJson({
-  "id": "1",
-  "emailAddress": "ask@askfoundations.org",
-  "date": "2025-04-15 12:32:00",
-  "amount": "50000",
-  "status": "approved",
-  "dateResolved": "2025-04-15 12:32:00",
-  "nominationCount": "0",
-  "remark": "Financial Support",
-  "user": {
-  "id": "1",
-  "fullname": "Ashabi Shobande Kokumo",
-  "emailAddress": "ask@askfoundations.org",
-  "phone": "08000000001",
-  "kycStatus": "verified",
-  "accountNumber": "0987654321",
-  "accountName": "Ask Shobande",
-  "bankName": "A.S.K Bank",
-  "gender": "Female",
-  "state": "Lagos",
-  "profilePicture": "../../../../images/help-requests-images/ask-logox.png",
-  "emailVerified": "true",
-  "registrationDate": "2025-04-15 12:32:00",
-  "userType": "user",
-  "eligibility": "true",
-  "isCheat": "false",
-  "openedWelcomeMsg": "false"
-  }
-});
+    "id": "1",
+    "emailAddress": "ask@askfoundations.org",
+    "date": "2025-04-15 12:32:00",
+    "amount": "50000",
+    "status": "approved",
+    "dateResolved": "2025-04-15 12:32:00",
+    "nominationCount": "0",
+    "remark": "Financial Support",
+    "user": {
+      "id": "1",
+      "fullname": "Ashabi Shobande Kokumo",
+      "emailAddress": "ask@askfoundations.org",
+      "phone": "08000000001",
+      "kycStatus": "verified",
+      "accountNumber": "0987654321",
+      "accountName": "Ask Shobande",
+      "bankName": "A.S.K Bank",
+      "gender": "Female",
+      "state": "Lagos",
+      "profilePicture": "../../../../images/help-requests-images/ask-logox.png",
+      "emailVerified": "true",
+      "registrationDate": "2025-04-15 12:32:00",
+      "userType": "user",
+      "eligibility": "true",
+      "isCheat": "false",
+      "openedWelcomeMsg": "false"
+    }
+  });
 
   RxList<sd.Data?> sponsorsData = RxList<sd.Data?>([]);
   final ScrollController sponsorsScrollController = ScrollController();
@@ -284,7 +285,7 @@ class HomeController extends GetxController {
     {"label": "Edo", "value": "Edo"},
     {"label": "Ekiti", "value": "Ekiti"},
     {"label": "Enugu", "value": "Enugu"},
-    {"label": "FCT", "value": "Federal Capital Territory"},
+    {"label": "FCT", "value": "FCT"},
     {"label": "Gombe", "value": "Gombe"},
     {"label": "Imo", "value": "Imo"},
     {"label": "Jigawa", "value": "Jigawa"},
@@ -656,7 +657,7 @@ class HomeController extends GetxController {
         if (!notificationMessages.any((item) =>
         item['documentId'] == message['documentId'])) {
           notificationMessages.add(message);
-          displayNotification("A.S.K Nomination", message['message']);
+          displayNotification("A.S.K Nomination", message['message'], message['meta']);
           print("New notification: ${message['message']} (ID: ${message['documentId']})");
         }
       }
@@ -798,40 +799,54 @@ class HomeController extends GetxController {
 
     await flutterLocalNotificationsPlugin.initialize(
       initSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print("Notification clicked: ${response.payload}");
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
 
+        final data = jsonDecode(response.payload!);
+        final meta = data['meta'] ?? '';
 
-        handleNavigation(2);
+        // print("Notification clicked: ${response.payload}");
+        print("Notification clicked: ${meta}");
+
+        if (meta != '') {
+          handleNavigation(1);
+          await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+
+        }
       },
     );
   }
-  Future<void> testImmediateNotification() async {
+  // Future<void> testImmediateNotification() async {
+  //   const AndroidNotificationDetails androidDetails =
+  //   AndroidNotificationDetails('test_channel', 'Test Notifications');
+  //
+  //   const NotificationDetails generalNotificationDetails =
+  //   NotificationDetails(android: androidDetails);
+  //
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     'A.S.K Notification',
+  //     'This is a test notification.',
+  //     generalNotificationDetails,
+  //   );
+  // }
+  Future<void> displayNotification(String title, String message, String meta) async {
     const AndroidNotificationDetails androidDetails =
     AndroidNotificationDetails('test_channel', 'Test Notifications');
 
     const NotificationDetails generalNotificationDetails =
     NotificationDetails(android: androidDetails);
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'A.S.K Notification',
-      'This is a test notification.',
-      generalNotificationDetails,
-    );
-  }
-  Future<void> displayNotification(String title, String message) async {
-    const AndroidNotificationDetails androidDetails =
-    AndroidNotificationDetails('test_channel', 'Test Notifications');
-
-    const NotificationDetails generalNotificationDetails =
-    NotificationDetails(android: androidDetails);
+    // Construct payload JSON string
+    final payload = jsonEncode({
+      'meta': meta,
+    });
 
     await flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      message,
-      generalNotificationDetails,
+        0,
+        title,
+        message,
+        generalNotificationDetails,
+        payload: payload
     );
   }
   //
@@ -1813,9 +1828,9 @@ class HomeController extends GetxController {
         // helpRequestImage.value = null;
 
         Utils.showInformationDialog(status: true,
-            title: 'A.S.K Update Help Request Image',
-            message: "${response!.message}",
-            // meta: response!.id
+          title: 'A.S.K Update Help Request Image',
+          message: "${response!.message}",
+          // meta: response!.id
         );
 
 
@@ -2037,9 +2052,9 @@ class HomeController extends GetxController {
         await initializeProfileData();
 
         Utils.showInformationDialog(status: true,
-            title: 'A.S.K Nominate',
-            message: "${response!.message!.toUpperCase()}# Increase your influence to decide beneficiary by boosting your DNQ.",
-            // meta: response!.id
+          title: 'A.S.K Nominate',
+          message: "${response!.message!.toUpperCase()}# Increase your influence to decide beneficiary by boosting your DNQ.",
+          // meta: response!.id
         );
 
 
@@ -2088,7 +2103,7 @@ class HomeController extends GetxController {
       NominateResponse? response;
       response =
       await SecureService().getCheckIfUserCanAsk(
-          email: email,
+        email: email,
       );
 
       print(response!.toJson().toString());
@@ -2103,6 +2118,8 @@ class HomeController extends GetxController {
         //     bc: AppColors.gold,
         //     sp: SnackPosition.TOP);
 
+        canUserAsk.value = true;
+        update();
 
         Utils.showInformationDialog(status: true,
           title: 'A.S.K',
@@ -2116,6 +2133,11 @@ class HomeController extends GetxController {
 
       } else {
         errorMessage.value = "A.S.K: Something wrong happened. Try again";//response.message!;
+
+
+        canUserAsk.value = false;
+        update();
+
 
         Utils.showTopSnackBar(
             t: "A.S.K",
@@ -2661,255 +2683,255 @@ class HomeController extends GetxController {
 
 
 
-  // from my view:
-  // if (controller.isMessageLoading) {} else
-  // {
-  // print("chatId: " + chatId);
-  // // Generate random messages from a list of predefined messages.
-  // // final List<String> randomMessages = [
-  // //   "Hello there!",
-  // //   "How are you?",
-  // //   "What's up?",
-  // //   "Let's catch up!",
-  // //   "Random message just for you.",
-  // //   "Did you receive my last message?",
-  // //   "Hope you are doing well!",
-  // // ];
-  // // String message = (randomMessages..shuffle()).first;
-  // await controller.sendMessage(
-  // chatId: chatId,
-  // message: controller.messageController.text,
-  // senderId: myChatProfile.patient!.id!,
-  // senderName: myChatProfile.patient!.fullname!,
-  // senderImage: myChatProfile.patient!.profileImage!,
-  // receiverId: peerChatProfileId,
-  // receiverName: peerChatProfileName,
-  // firebaseCollection: "chats",
-  // );
-  //
-  // // await controller.sendMessage(chatId, controller.messageController.text, myChatProfile.patient!.id!, peerChatProfileId);
-  // }
+// from my view:
+// if (controller.isMessageLoading) {} else
+// {
+// print("chatId: " + chatId);
+// // Generate random messages from a list of predefined messages.
+// // final List<String> randomMessages = [
+// //   "Hello there!",
+// //   "How are you?",
+// //   "What's up?",
+// //   "Let's catch up!",
+// //   "Random message just for you.",
+// //   "Did you receive my last message?",
+// //   "Hope you are doing well!",
+// // ];
+// // String message = (randomMessages..shuffle()).first;
+// await controller.sendMessage(
+// chatId: chatId,
+// message: controller.messageController.text,
+// senderId: myChatProfile.patient!.id!,
+// senderName: myChatProfile.patient!.fullname!,
+// senderImage: myChatProfile.patient!.profileImage!,
+// receiverId: peerChatProfileId,
+// receiverName: peerChatProfileName,
+// firebaseCollection: "chats",
+// );
+//
+// // await controller.sendMessage(chatId, controller.messageController.text, myChatProfile.patient!.id!, peerChatProfileId);
+// }
 
-  // void updateFirestoreIncrementPeerMessageCount(String? remotePeerId, String? senderName) async {
-  //   if (remotePeerId == null || senderName == null) {
-  //     print("Error: remotePeerId or senderName is null");
-  //     return;
-  //   }
-  //
-  //   try {
-  //     // Creating the new notification
-  //     Map<String, dynamic> newNotification = {
-  //       'title': 'New Message',
-  //       'body': 'You have a new message from $senderName.',
-  //       'timestamp': FieldValue.serverTimestamp(),
-  //       'type': 'message',  // Notification type
-  //     };
-  //
-  //     // Creating the new state to update (increment newMessages)
-  //     Map<String, dynamic> newState = {
-  //       "newMessages": FieldValue.increment(1), // Increment the newMessages count by 1
-  //     };
-  //
-  //     // Update user state and add notification
-  //     // await userStateController.updateUserStateForNotification(remotePeerId, newState, newNotification);
-  //
-  //     print("Message count incremented and notification added for peer: $remotePeerId");
-  //   } catch (e) {
-  //     print("Error updating Firestore: $e");
-  //   }
-  // }
-  //
-  // // Stream<List<Map<String, dynamic>>> getNotifications(String userId) {
-  // //   // return userStateController.getNotifications(userId);
-  // // }
+// void updateFirestoreIncrementPeerMessageCount(String? remotePeerId, String? senderName) async {
+//   if (remotePeerId == null || senderName == null) {
+//     print("Error: remotePeerId or senderName is null");
+//     return;
+//   }
+//
+//   try {
+//     // Creating the new notification
+//     Map<String, dynamic> newNotification = {
+//       'title': 'New Message',
+//       'body': 'You have a new message from $senderName.',
+//       'timestamp': FieldValue.serverTimestamp(),
+//       'type': 'message',  // Notification type
+//     };
+//
+//     // Creating the new state to update (increment newMessages)
+//     Map<String, dynamic> newState = {
+//       "newMessages": FieldValue.increment(1), // Increment the newMessages count by 1
+//     };
+//
+//     // Update user state and add notification
+//     // await userStateController.updateUserStateForNotification(remotePeerId, newState, newNotification);
+//
+//     print("Message count incremented and notification added for peer: $remotePeerId");
+//   } catch (e) {
+//     print("Error updating Firestore: $e");
+//   }
+// }
+//
+// // Stream<List<Map<String, dynamic>>> getNotifications(String userId) {
+// //   // return userStateController.getNotifications(userId);
+// // }
 
-  // // Send a message in a one-to-one chat
-  // Future<void> sendMessage({
-  //   required String chatId,
-  //   required String message,
-  //   required String senderId,
-  //   required String senderName,
-  //   required String senderImage,
-  //   required String receiverId,
-  //   required String receiverName,
-  //   required String firebaseCollection,
-  // }) async {
-  //   if (message.isEmpty) {
-  //     print("Message is empty, not sending.");
-  //     return;
-  //   }
-  //
-  //
-  //   setMessageLoading(true);
-  //
-  //   print("Sending message...");
-  //   print("Chat ID: $chatId");
-  //   print("Message: $message");
-  //   print("Sender ID: $senderId");
-  //   print("Sender Name: $senderName");
-  //   print("sender Image: $senderImage");
-  //   print("Receiver ID: $receiverId");
-  //   print("receiver Name: $receiverName");
-  //
-  //   String lastMessageSenderId = data.value!.patient!.id!;
-  //   String lastMessageSenderName = data.value!.patient!.fullname!;
-  //   String lastMessageSenderImage = data.value!.patient!.profileImage!;
-  //
-  //   try {
-  //     // Add the message to the messages sub-collection
-  //     await FirebaseFirestore.instance
-  //         .collection(firebaseCollection)
-  //         .doc(chatId)
-  //         .collection('messages')
-  //         .add({
-  //       'message': message,
-  //       'senderId': senderId,
-  //       'senderImage': senderImage,
-  //       'senderName': senderName,
-  //       'receiverId': receiverId,
-  //       'receiverName': receiverName,
-  //       'timestamp': FieldValue.serverTimestamp(),
-  //       'userId': senderId, // Pass user ID for validation in Firestore rules
-  //     });
-  //
-  //     // Update the last message in the chat document and add participants
-  //     await FirebaseFirestore.instance
-  //         .collection(firebaseCollection)
-  //         .doc(chatId)
-  //         .set({
-  //       'lastMessage': message,
-  //       'lastMessageSenderId': lastMessageSenderId,
-  //       'lastMessageSenderName': lastMessageSenderName,
-  //       'lastMessageSenderImage': lastMessageSenderImage,
-  //       'lastMessageReceiverName': receiverName,
-  //       'lastMessageTimestamp': FieldValue.serverTimestamp(),
-  //       'participants': [senderId, receiverId], // Add participants field
-  //     }, SetOptions(merge: true)); // Use merge to update existing fields
-  //
-  //     setMessageLoading(false);
-  //     print("Message sent successfully!");
-  //
-  //     updateFirestoreIncrementPeerMessageCount(receiverId, senderName);
-  //
-  //     messageController.clear();
-  //   } catch (error) {
-  //     setMessageLoading(false);
-  //     print("Failed to send message: $error");
-  //     // showQuickInfo("Messaging", "Failed to send message: $error");
-  //     // Handle the error, if needed.
-  //   }
-  // }
-  //
-  // // Retrieve messages for a specific chat
-  // Stream<QuerySnapshot> getMessages(String chatId, String firebaseCollection) {
-  //   print("Fetching messages for chat ID: $chatId");
-  //   return FirebaseFirestore.instance
-  //       .collection(firebaseCollection)
-  //       .doc(chatId)
-  //       .collection('messages')
-  //       .orderBy('timestamp')
-  //       .snapshots()
-  //       .handleError((error) {
-  //     print("Error fetching messages: $error");
-  //     // Handle the permission denied error here
-  //   });
-  // }
-  //
-  // // Get all chats with the last message for a specific user
-  // Stream<List<Map<String, dynamic>>> getAllChatsWithLastMessage(String userId) async* {
-  //   try {
-  //     print("Fetching all chats for user ID: $userId");
-  //
-  //     // Use snapshots for real-time updates
-  //     yield* FirebaseFirestore.instance.collection('chats').snapshots().asyncMap((querySnapshot) async {
-  //       // Debugging: print the number of chat documents retrieved
-  //       print("Number of chats retrieved: ${querySnapshot.docs.length}");
-  //
-  //       List<Map<String, dynamic>> allChatsWithLastMessage = [];
-  //
-  //       // Loop through each chat document
-  //       for (var chatDoc in querySnapshot.docs) {
-  //         final chatId = chatDoc.id;
-  //         // print("Checking chat ID: $chatId"); // Debugging: print current chat ID
-  //
-  //         // Check if the chat ID contains the user ID
-  //         if (chatDoc['participants'].contains(userId)) {
-  //           // print("User ID found in chat ID: $chatId"); // Debugging
-  //
-  //           // Fetch the last message for this chat
-  //           final messagesSnapshot = await FirebaseFirestore.instance
-  //               .collection('chats')
-  //               .doc(chatId)
-  //               .collection('messages')
-  //               .orderBy('timestamp', descending: true)
-  //               .limit(1)
-  //               .get();
-  //
-  //           // Debugging: Check if messages were retrieved
-  //           print("Number of messages retrieved for $chatId: ${messagesSnapshot.docs.length}");
-  //
-  //           if (messagesSnapshot.docs.isNotEmpty) {
-  //             final lastMessageData = messagesSnapshot.docs.first.data();
-  //             print("Last message data for $chatId: $lastMessageData"); // Debugging
-  //
-  //             allChatsWithLastMessage.add({
-  //               'chatId': chatId,
-  //               'lastMessage': lastMessageData['message'],
-  //               'lastMessageSenderId': chatDoc['lastMessageSenderId'],
-  //               'lastMessageSenderName': chatDoc['lastMessageSenderName'],
-  //               'lastMessageSenderImage': chatDoc['lastMessageSenderImage'],
-  //               'lastMessageReceiverName': chatDoc['lastMessageReceiverName'],
-  //               'timestamp': lastMessageData['timestamp'],
-  //               'receiverId': lastMessageData['receiverId'],
-  //               'senderId': lastMessageData['senderId'],
-  //             });
-  //           } else {
-  //             print("No messages found for chat ID: $chatId"); // Debugging
-  //             // showQuickInfo("Messaging", "No messages found for chat ID: $chatId");
-  //           }
-  //         } else {
-  //           print("User ID not found in chat ID: $chatId"); // Debugging
-  //           // showQuickInfo("Messaging", "User ID not found in chat ID: $chatId");
-  //
-  //         }
-  //       }
-  //
-  //       // print(allChatsWithLastMessage.toString());
-  //
-  //       // Yield the list of chats with the last message
-  //       return allChatsWithLastMessage;
-  //     });
-  //   } catch (e) {
-  //     print("Error fetching chats: $e");
-  //     // showQuickInfo("Messaging", "Error fetching chats: $e");
-  //     yield [];
-  //   }
-  // }
+// // Send a message in a one-to-one chat
+// Future<void> sendMessage({
+//   required String chatId,
+//   required String message,
+//   required String senderId,
+//   required String senderName,
+//   required String senderImage,
+//   required String receiverId,
+//   required String receiverName,
+//   required String firebaseCollection,
+// }) async {
+//   if (message.isEmpty) {
+//     print("Message is empty, not sending.");
+//     return;
+//   }
+//
+//
+//   setMessageLoading(true);
+//
+//   print("Sending message...");
+//   print("Chat ID: $chatId");
+//   print("Message: $message");
+//   print("Sender ID: $senderId");
+//   print("Sender Name: $senderName");
+//   print("sender Image: $senderImage");
+//   print("Receiver ID: $receiverId");
+//   print("receiver Name: $receiverName");
+//
+//   String lastMessageSenderId = data.value!.patient!.id!;
+//   String lastMessageSenderName = data.value!.patient!.fullname!;
+//   String lastMessageSenderImage = data.value!.patient!.profileImage!;
+//
+//   try {
+//     // Add the message to the messages sub-collection
+//     await FirebaseFirestore.instance
+//         .collection(firebaseCollection)
+//         .doc(chatId)
+//         .collection('messages')
+//         .add({
+//       'message': message,
+//       'senderId': senderId,
+//       'senderImage': senderImage,
+//       'senderName': senderName,
+//       'receiverId': receiverId,
+//       'receiverName': receiverName,
+//       'timestamp': FieldValue.serverTimestamp(),
+//       'userId': senderId, // Pass user ID for validation in Firestore rules
+//     });
+//
+//     // Update the last message in the chat document and add participants
+//     await FirebaseFirestore.instance
+//         .collection(firebaseCollection)
+//         .doc(chatId)
+//         .set({
+//       'lastMessage': message,
+//       'lastMessageSenderId': lastMessageSenderId,
+//       'lastMessageSenderName': lastMessageSenderName,
+//       'lastMessageSenderImage': lastMessageSenderImage,
+//       'lastMessageReceiverName': receiverName,
+//       'lastMessageTimestamp': FieldValue.serverTimestamp(),
+//       'participants': [senderId, receiverId], // Add participants field
+//     }, SetOptions(merge: true)); // Use merge to update existing fields
+//
+//     setMessageLoading(false);
+//     print("Message sent successfully!");
+//
+//     updateFirestoreIncrementPeerMessageCount(receiverId, senderName);
+//
+//     messageController.clear();
+//   } catch (error) {
+//     setMessageLoading(false);
+//     print("Failed to send message: $error");
+//     // showQuickInfo("Messaging", "Failed to send message: $error");
+//     // Handle the error, if needed.
+//   }
+// }
+//
+// // Retrieve messages for a specific chat
+// Stream<QuerySnapshot> getMessages(String chatId, String firebaseCollection) {
+//   print("Fetching messages for chat ID: $chatId");
+//   return FirebaseFirestore.instance
+//       .collection(firebaseCollection)
+//       .doc(chatId)
+//       .collection('messages')
+//       .orderBy('timestamp')
+//       .snapshots()
+//       .handleError((error) {
+//     print("Error fetching messages: $error");
+//     // Handle the permission denied error here
+//   });
+// }
+//
+// // Get all chats with the last message for a specific user
+// Stream<List<Map<String, dynamic>>> getAllChatsWithLastMessage(String userId) async* {
+//   try {
+//     print("Fetching all chats for user ID: $userId");
+//
+//     // Use snapshots for real-time updates
+//     yield* FirebaseFirestore.instance.collection('chats').snapshots().asyncMap((querySnapshot) async {
+//       // Debugging: print the number of chat documents retrieved
+//       print("Number of chats retrieved: ${querySnapshot.docs.length}");
+//
+//       List<Map<String, dynamic>> allChatsWithLastMessage = [];
+//
+//       // Loop through each chat document
+//       for (var chatDoc in querySnapshot.docs) {
+//         final chatId = chatDoc.id;
+//         // print("Checking chat ID: $chatId"); // Debugging: print current chat ID
+//
+//         // Check if the chat ID contains the user ID
+//         if (chatDoc['participants'].contains(userId)) {
+//           // print("User ID found in chat ID: $chatId"); // Debugging
+//
+//           // Fetch the last message for this chat
+//           final messagesSnapshot = await FirebaseFirestore.instance
+//               .collection('chats')
+//               .doc(chatId)
+//               .collection('messages')
+//               .orderBy('timestamp', descending: true)
+//               .limit(1)
+//               .get();
+//
+//           // Debugging: Check if messages were retrieved
+//           print("Number of messages retrieved for $chatId: ${messagesSnapshot.docs.length}");
+//
+//           if (messagesSnapshot.docs.isNotEmpty) {
+//             final lastMessageData = messagesSnapshot.docs.first.data();
+//             print("Last message data for $chatId: $lastMessageData"); // Debugging
+//
+//             allChatsWithLastMessage.add({
+//               'chatId': chatId,
+//               'lastMessage': lastMessageData['message'],
+//               'lastMessageSenderId': chatDoc['lastMessageSenderId'],
+//               'lastMessageSenderName': chatDoc['lastMessageSenderName'],
+//               'lastMessageSenderImage': chatDoc['lastMessageSenderImage'],
+//               'lastMessageReceiverName': chatDoc['lastMessageReceiverName'],
+//               'timestamp': lastMessageData['timestamp'],
+//               'receiverId': lastMessageData['receiverId'],
+//               'senderId': lastMessageData['senderId'],
+//             });
+//           } else {
+//             print("No messages found for chat ID: $chatId"); // Debugging
+//             // showQuickInfo("Messaging", "No messages found for chat ID: $chatId");
+//           }
+//         } else {
+//           print("User ID not found in chat ID: $chatId"); // Debugging
+//           // showQuickInfo("Messaging", "User ID not found in chat ID: $chatId");
+//
+//         }
+//       }
+//
+//       // print(allChatsWithLastMessage.toString());
+//
+//       // Yield the list of chats with the last message
+//       return allChatsWithLastMessage;
+//     });
+//   } catch (e) {
+//     print("Error fetching chats: $e");
+//     // showQuickInfo("Messaging", "Error fetching chats: $e");
+//     yield [];
+//   }
+// }
 
 
-  // Stream<QuerySnapshot<Map<String, dynamic>>> getNotificationMessages(String chatId) {
-  //   return FirebaseFirestore.instance
-  //       .collection('notifications')
-  //       .doc(chatId)
-  //       .collection('messages')
-  //       .orderBy('timestamp', descending: true) // Optional: latest first
-  //       .snapshots();
-  // }
+// Stream<QuerySnapshot<Map<String, dynamic>>> getNotificationMessages(String chatId) {
+//   return FirebaseFirestore.instance
+//       .collection('notifications')
+//       .doc(chatId)
+//       .collection('messages')
+//       .orderBy('timestamp', descending: true) // Optional: latest first
+//       .snapshots();
+// }
 
-  // Stream<List<Map<String, dynamic>>> getNewNotificationMessages(String chatId) {
-  //   return FirebaseFirestore.instance
-  //       .collection('notifications')
-  //       .doc(chatId)
-  //       .collection('messages')
-  //       .orderBy('timestamp', descending: false) // oldest to newest
-  //       .snapshots()
-  //       .map((snapshot) {
-  //     return snapshot.docChanges
-  //         .where((change) => change.type == DocumentChangeType.added)
-  //         .map((change) => change.doc.data()!)
-  //         .toList();
-  //   });
-  // }
+// Stream<List<Map<String, dynamic>>> getNewNotificationMessages(String chatId) {
+//   return FirebaseFirestore.instance
+//       .collection('notifications')
+//       .doc(chatId)
+//       .collection('messages')
+//       .orderBy('timestamp', descending: false) // oldest to newest
+//       .snapshots()
+//       .map((snapshot) {
+//     return snapshot.docChanges
+//         .where((change) => change.type == DocumentChangeType.added)
+//         .map((change) => change.doc.data()!)
+//         .toList();
+//   });
+// }
 
 
 
