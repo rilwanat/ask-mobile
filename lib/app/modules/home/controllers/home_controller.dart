@@ -585,8 +585,11 @@ class HomeController extends GetxController {
       final double screenWidth = Get.context!.size!.width * .8 + 8;
       final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
 
+      currentRequestIndex.value = index;
+      update();
+
       if (index != -1) {
-        await Future.delayed(Duration(milliseconds: 300));
+        await Future.delayed(Duration(milliseconds: 100));
 
         if (!singleRequestScrollController.hasClients) return;
 
@@ -2161,7 +2164,7 @@ class HomeController extends GetxController {
       //     d: 3,
       //     bc: AppColors.red,
       //     sp: SnackPosition.TOP);
-      Utils.showInformationDialog(status: false,
+      Utils.showInformationDialog(status: null,
           title: 'A.S.K: Attention',
           message: "$message");
     }

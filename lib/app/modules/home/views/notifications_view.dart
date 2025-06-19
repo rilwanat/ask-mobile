@@ -7,7 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/BannerAdExample.dart';
-import '../../../../global/widgets/LoadingScreen.dart';
+import '../../../../global/widgets/loading_screen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/ask_button.dart';
@@ -87,10 +87,24 @@ class NotificationsView extends GetView<HomeController> {
                                     final askNotification = controller.notificationMessages[index];
 
                                     return GestureDetector(
-                                      onTap: () {
-                                        // print("##");
+                                      onTap: () async {
+                                        // print(askNotification);
+                                        // return;
+
                                         Get.back();
-                                        controller.handleNavigation(1);
+                                        // controller.handleNavigation(1);
+
+                                        // final data = jsonDecode(response.payload!);
+                                        final meta = askNotification['meta'] ?? '';
+
+                                        // print("Notification clicked: ${response.payload}");
+                                        print("Notification clicked: ${meta}");
+
+                                        if (meta != '') {
+                                          controller.handleNavigation(1);
+                                          await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+
+                                        }
                                       },
                                       child: Dismissible(
                                         key: Key(askNotification['id'].toString()), // Unique key for each item

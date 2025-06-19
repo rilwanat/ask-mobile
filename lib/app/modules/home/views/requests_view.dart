@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
-import '../../../../global/widgets/LoadingScreen.dart';
+import '../../../../global/widgets/loading_screen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/ask_button.dart';
 import '../../../../global/widgets/fade_down_animation.dart';

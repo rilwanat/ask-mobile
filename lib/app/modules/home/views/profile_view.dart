@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../global/app_color.dart';
-import '../../../../global/widgets/LoadingScreen.dart';
+import '../../../../global/widgets/loading_screen.dart';
 import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/navbar.dart';

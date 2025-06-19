@@ -133,6 +133,10 @@ class Utils {
 
     List<String> parts = message.split('#');
 
+    if (message.contains("your request was granted")) {
+      message = "As a recent beneficiary, you must have daily consistency of at least 30days to qualify to ASK again";
+    }
+
     showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -148,7 +152,7 @@ class Utils {
           ),
           elevation: 8,
           content: Container(
-            height: ScreenSize.height(context) * 0.6,
+            height: ScreenSize.height(context) * 0.65,
             width: double.maxFinite,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -159,7 +163,7 @@ class Utils {
                   child: Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 26,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: AppColors.askText,
                       fontFamily: "LatoRegular",
@@ -173,9 +177,9 @@ class Utils {
                     delayMilliSeconds: 400,
                     duration: 700,
                     child:
-                    status == null ? const Icon(Icons.info, size: 70, color: AppColors.askBlue) :
-                    status == false ? const Icon(Icons.error, size: 70, color: AppColors.red) :
-                    const Icon(Icons.check, size: 70, color: AppColors.askGreen),
+                    status == null ? const Icon(Icons.info, size: 64, color: AppColors.askBlue) :
+                    status == false ? const Icon(Icons.error, size: 64, color: AppColors.red) :
+                    const Icon(Icons.check, size: 64, color: AppColors.askGreen),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -193,7 +197,7 @@ class Utils {
                           child: Text(
                             parts[index],
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: AppColors.askText,
                               fontFamily: "LatoRegular",
