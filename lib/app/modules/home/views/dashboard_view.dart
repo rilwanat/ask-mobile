@@ -12,6 +12,7 @@ import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/BannerAdExample.dart';
 import '../../../../global/widgets/InterstitialAdExample.dart';
+import '../../../../global/widgets/ask_mini_button.dart';
 import '../../../../global/widgets/loading_screen.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/ask_button.dart';
@@ -55,13 +56,18 @@ class DashboardView extends GetView<HomeController> {
                 child: Column(
                   children: [
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: SizedBox(
-                        height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
-                        child: BannerAdExample(),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    //   child: SizedBox(
+                    //     height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                    //     child: BannerAdExample(),
+                    //   ),
+                    // ),
+
+
+
+
+
                     // //
                     // CarouselSlider(
                     //   items: [
@@ -509,7 +515,7 @@ class DashboardView extends GetView<HomeController> {
                                                   const SizedBox(
                                                     height: 4,
                                                   ),
-                                                  AskButton(
+                                                  AskMiniButton(
                                                     enabled: true,
                                                     text: "Nominate",
                                                     function: () async {
@@ -754,7 +760,7 @@ class DashboardView extends GetView<HomeController> {
                                                   ),
                                                   Row(children: [
                                                     Expanded(
-                                                      child: AskButton(
+                                                      child: AskMiniButton(
                                                         enabled: true,
                                                         text: beneficiary.remark!,
                                                         function: () async {
@@ -782,7 +788,7 @@ class DashboardView extends GetView<HomeController> {
                                                   const SizedBox(
                                                     height: 4,
                                                   ),
-                                                  AskButton(
+                                                  AskMiniButton(
                                                     enabled: true,
                                                     text: beneficiary.status![0].toUpperCase() + beneficiary.status!.substring(1),
                                                     function: () async {

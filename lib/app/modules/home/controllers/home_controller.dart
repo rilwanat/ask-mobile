@@ -407,9 +407,18 @@ class HomeController extends GetxController {
 
     setLoading(true);
     try {
+
+      // First get the user profile alone
+      await getUserProfile();
+
+      // Only proceed if we have email address
+      if (profileData.value?.emailAddress == null) {
+        throw Exception("User profile data is incomplete");
+      }
+
+      // Then get other data in parallel
       // Run all independent requests in parallel
       await Future.wait<void>([
-        getUserProfile(),
         getRequests(),
         getBeneficiaries(),
         // getMyHelpRequests(email: profileData.value!.emailAddress!),
@@ -661,7 +670,7 @@ class HomeController extends GetxController {
         item['documentId'] == message['documentId'])) {
           notificationMessages.add(message);
           displayNotification("A.S.K Nomination", message['message'], message['meta']);
-          print("New notification: ${message['message']} (ID: ${message['documentId']})");
+          // print("New notification: ${message['message']} (ID: ${message['documentId']})");
         }
       }
       update();
@@ -753,19 +762,24 @@ class HomeController extends GetxController {
   void onInit() {
 
     _initializeControllers();
-    initializeProfileData();
-
-    _initializeNotifications();
-
-    // startAutoScroll();
-    debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
+    initializeProfileData().then((_) {
+      _initializeNotifications();
 
 
-    String fDocument = "adm-${profileData.value!.emailAddress!}";
-    // Step 1: Get all existing notifications once
-    getAllNotificationMessagesOnce(fDocument);
-    // Step 2: Listen to new incoming notifications (assume a stream)
-    listenToNewNotificationMessages(fDocument);
+      String fDocument = "adm-${profileData.value!.emailAddress!}";
+      // Step 1: Get all existing notifications once
+      getAllNotificationMessagesOnce(fDocument);
+      // Step 2: Listen to new incoming notifications (assume a stream)
+      listenToNewNotificationMessages(fDocument);
+
+
+
+      // startAutoScroll();
+      debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
+
+    });
+
+
 
     super.onInit();
   }

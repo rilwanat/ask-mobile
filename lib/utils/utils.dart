@@ -133,8 +133,13 @@ class Utils {
 
     List<String> parts = message.split('#');
 
-    if (message.contains("your request was granted")) {
-      message = "As a recent beneficiary, you must have daily consistency of at least 30days to qualify to ASK again";
+
+    // List<String> parts = message.split('. You can request again in %d month(s) and %d day(s)');
+    List<String> retryIn = parts[0].split('. ');
+
+    if (parts[0].contains("Your request was granted")) {
+      parts[0] = "As a recent beneficiary, you must have daily consistency of at least 30days to qualify to ASK again";
+      parts[1] = retryIn[1];
     }
 
     showDialog(
