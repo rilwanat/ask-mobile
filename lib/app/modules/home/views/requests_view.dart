@@ -200,246 +200,244 @@ class RequestsView extends GetView<HomeController> {
           ),
           const SizedBox(height: 8,),
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
-              
-                child: Container(
-                  // color: AppColors.white,
-                  // padding: const EdgeInsets.symmetric(vertical: 4),
-                    height: ScreenSize.height(context) * .7,
-                    child: Obx(() => ListView.builder(
-                      controller: controller.singleRequestScrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.filteredRequestsData.length,
-                      itemBuilder: (context, index) {
-              
-                        hrd.Data helpRequest = controller.filteredRequestsData[index]!;
-              
-                        return GestureDetector(
-                          onLongPress: () {
-                            // controller.showTopSnackBar(
-                            //   t: "#",
-                            //   m: "long pressed...",
-                            //   tc: AppColors.black,
-                            //   d: 3,
-                            //   bc: AppColors.green,
-                            //   sp: SnackPosition.BOTTOM,
-                            // );
-                          },
-                          onTap: () {
-                            // controller.handleNavigation(1);
-              
-                            // //open product details view
-                            // Get.to(() => ProductDetailsView(
-                            //   product: product,
-                            //   productImage:
-                            //   "https://es.shopafricana.co/product-images/detailed-900x1125/" + "${product.productImages![0]}",
-                            // ));
-              
-                            // Utils.showTopSnackBar(
-                            //   t: helpRequest.user!.fullname!,
-                            //   m: "Request view will open",
-                            //   tc: AppColors.white,
-                            //   d: 3,
-                            //   bc: AppColors.askBlue,
-                            //   sp: SnackPosition.BOTTOM,
-                            // );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.only(right: 8),
-                            // color: Colors.redAccent,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
-                              border: Border.all(width: 1, color: AppColors.askGray),
-                            ),
-                            width: ScreenSize.width(context) * .8,
-                            height: ScreenSize.height(context) * .6,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
 
-                                children: [
+              child: Container(
+                // color: AppColors.white,
+                // padding: const EdgeInsets.symmetric(vertical: 4),
+                  height: ScreenSize.height(context) * .7,
+                  child: Obx(() => ListView.builder(
+                    controller: controller.singleRequestScrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.filteredRequestsData.length,
+                    itemBuilder: (context, index) {
 
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                                    child: Text(
-                                      "You are viewing ${helpRequest.user!.fullname!}'s help request",
-                                      style: const TextStyle(
-                                        fontFamily: "LatoRegular",
-                                        color: AppColors.black,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      // maxLines: 1,
-                                      // overflow: TextOverflow.ellipsis,
+                      hrd.Data helpRequest = controller.filteredRequestsData[index]!;
+
+                      return GestureDetector(
+                        onLongPress: () {
+                          // controller.showTopSnackBar(
+                          //   t: "#",
+                          //   m: "long pressed...",
+                          //   tc: AppColors.black,
+                          //   d: 3,
+                          //   bc: AppColors.green,
+                          //   sp: SnackPosition.BOTTOM,
+                          // );
+                        },
+                        onTap: () {
+                          // controller.handleNavigation(1);
+
+                          // //open product details view
+                          // Get.to(() => ProductDetailsView(
+                          //   product: product,
+                          //   productImage:
+                          //   "https://es.shopafricana.co/product-images/detailed-900x1125/" + "${product.productImages![0]}",
+                          // ));
+
+                          // Utils.showTopSnackBar(
+                          //   t: helpRequest.user!.fullname!,
+                          //   m: "Request view will open",
+                          //   tc: AppColors.white,
+                          //   d: 3,
+                          //   bc: AppColors.askBlue,
+                          //   sp: SnackPosition.BOTTOM,
+                          // );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          margin: const EdgeInsets.only(right: 8),
+                          // color: Colors.redAccent,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                            border: Border.all(width: 1, color: AppColors.askGray),
+                          ),
+                          width: ScreenSize.width(context) * .8,
+                          height: ScreenSize.height(context) * .6,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    "You are viewing ${helpRequest.user!.fullname!}'s help request",
+                                    style: const TextStyle(
+                                      fontFamily: "LatoRegular",
+                                      color: AppColors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
                                     ),
+                                    textAlign: TextAlign.center,
+                                    // maxLines: 1,
+                                    // overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    // color: AppColors.red,
-                                    width: ScreenSize.width(context),
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                                    child: Text(
-                                      helpRequest.description!,
-                                      style: const TextStyle(
-                                        fontFamily: "LatoRegular",
-                                        color: AppColors.black,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      // maxLines: 1,
-                                      // overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  // color: AppColors.red,
+                                  width: ScreenSize.width(context),
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    helpRequest.description!,
+                                    style: const TextStyle(
+                                      fontFamily: "LatoRegular",
+                                      color: AppColors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500,
                                     ),
+                                    textAlign: TextAlign.center,
+                                    // maxLines: 1,
+                                    // overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Center(
-                                    child: SizedBox(
-                                      height: ScreenSize.width(context) * .6,
-                                      width: ScreenSize.width(context) * .6,
-                                      child: Stack(
-                                        children: [
-                                          AspectRatio(
-                                            aspectRatio: 1,
-                                            child: Container(
-                                              // height: ScreenSize.width(context) * .8,
-                                              // width: ScreenSize.width(context) * .8,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.askBlue,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(10), // Match container's border radius
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                  "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                      // "https://askfoundations.org/" +
-                                                      "${helpRequest.requestImage}",
-                                                  fit: BoxFit.cover, // Changed from contain to cover
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
-                                                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                ),
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Center(
+                                  child: SizedBox(
+                                    height: ScreenSize.width(context) * .6,
+                                    width: ScreenSize.width(context) * .6,
+                                    child: Stack(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Container(
+                                            // height: ScreenSize.width(context) * .8,
+                                            // width: ScreenSize.width(context) * .8,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.askBlue,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10), // Match container's border radius
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                "https://playground.askfoundations.org/backend/api/v1/response/" +
+                                                    // "https://askfoundations.org/" +
+                                                    "${helpRequest.requestImage}",
+                                                fit: BoxFit.cover, // Changed from contain to cover
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                                                errorWidget: (context, url, error) => const Icon(Icons.error),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        controller.formatNominationCount(helpRequest.nominationCount!),
-                                        style: const TextStyle(
-                                          fontFamily: "LatoRegular",
-                                          color: AppColors.askBlue,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      controller.formatNominationCount(helpRequest.nominationCount!),
+                                      style: const TextStyle(
+                                        fontFamily: "LatoRegular",
+                                        color: AppColors.askBlue,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w800,
                                       ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Icon(Icons.favorite)
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AskButton(
-                                        enabled: true,
-                                        text: "Confirm Nomination",
-                                        function: () async {
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Icon(Icons.favorite)
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AskButton(
+                                      enabled: true,
+                                      text: "Confirm Nomination",
+                                      function: () async {
 
-                                          String email = controller.profileData.value!.emailAddress!;
-                                          String helpToken = helpRequest.helpToken!;
-                                          String? fingerPrint = await Utils.getDeviceId();
+                                        String email = controller.profileData.value!.emailAddress!;
+                                        String helpToken = helpRequest.helpToken!;
+                                        String? fingerPrint = await Utils.getDeviceId();
 
-                                          controller.handleNominate(
-                                              email: email,
-                                              helpToken: helpToken,
-                                              fingerPrint: fingerPrint!
-                                          );
+                                        controller.handleNominate(
+                                            email: email,
+                                            helpToken: helpToken,
+                                            fingerPrint: fingerPrint!
+                                        );
 
-                                          // Utils.showTopSnackBar(
-                                          //   t: helpRequest.user!.fullname!,
-                                          //   m: "Request view will open",
-                                          //   tc: AppColors.white,
-                                          //   d: 3,
-                                          //   bc: AppColors.askBlue,
-                                          //   sp: SnackPosition.BOTTOM,
-                                          // );
+                                        // Utils.showTopSnackBar(
+                                        //   t: helpRequest.user!.fullname!,
+                                        //   m: "Request view will open",
+                                        //   tc: AppColors.white,
+                                        //   d: 3,
+                                        //   bc: AppColors.askBlue,
+                                        //   sp: SnackPosition.BOTTOM,
+                                        // );
 
-                                        },
-                                        backgroundColor: AppColors.askOrange,
-                                        textColor: AppColors.white,
-                                        buttonWidth: ScreenSize.scaleWidth(context, 200),
-                                        buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                        borderCurve: 12,
-                                        border: false,
-                                        textSize: 14,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AskButton(
-                                        enabled: true,
-                                        text: "Share",
-                                        function: () async {
+                                      },
+                                      backgroundColor: AppColors.askOrange,
+                                      textColor: AppColors.white,
+                                      buttonWidth: ScreenSize.scaleWidth(context, 200),
+                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                      borderCurve: 12,
+                                      border: false,
+                                      textSize: 14,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AskButton(
+                                      enabled: true,
+                                      text: "Share",
+                                      function: () async {
 
-                                          // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
-                                          Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
 
-                                        },
-                                        backgroundColor: AppColors.askBlue,
-                                        textColor: AppColors.white,
-                                        buttonWidth: ScreenSize.scaleWidth(context, 200),
-                                        buttonHeight: ScreenSize.scaleHeight(context, 50),
-                                        borderCurve: 12,
-                                        border: false,
-                                        textSize: 14,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      },
+                                      backgroundColor: AppColors.askBlue,
+                                      textColor: AppColors.white,
+                                      buttonWidth: ScreenSize.scaleWidth(context, 200),
+                                      buttonHeight: ScreenSize.scaleHeight(context, 50),
+                                      borderCurve: 12,
+                                      border: false,
+                                      textSize: 14,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                    ))),
-              ),
+                        ),
+                      );
+                    },
+                  ))),
             ),
           ),
         ],

@@ -592,7 +592,11 @@ class HomeController extends GetxController {
       if (Get.context == null) return;
 
       final double screenWidth = Get.context!.size!.width * .8 + 8;
+      // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
       final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
+
+      print("index of " + requestId.toString() + " is " + index.toString());
+      // index of 18 is 2
 
       currentRequestIndex.value = index;
       update();
@@ -670,7 +674,8 @@ class HomeController extends GetxController {
         item['documentId'] == message['documentId'])) {
           notificationMessages.add(message);
           displayNotification("A.S.K Nomination", message['message'], message['meta']);
-          // print("New notification: ${message['message']} (ID: ${message['documentId']})");
+          // print("New notification: ${message['message']} (ID: ${message['documentId']}) "
+          //     "(meta: ${message['meta']})");
         }
       }
       update();
@@ -847,6 +852,16 @@ class HomeController extends GetxController {
   //   );
   // }
   Future<void> displayNotification(String title, String message, String meta) async {
+
+
+    // // If meta is the same as last time, don't show again
+    // final String? lastNotification = await _cachedData.getLastNotification();
+    // if (lastNotification == meta) {
+    //   return;
+    // }
+
+
+
     const AndroidNotificationDetails androidDetails =
     AndroidNotificationDetails('test_channel', 'Test Notifications');
 
@@ -865,6 +880,12 @@ class HomeController extends GetxController {
         generalNotificationDetails,
         payload: payload
     );
+
+
+
+
+    // // Store this notification's meta to prevent duplicate shows
+    // await _cachedData.saveLastNotification(meta);
   }
   //
 
@@ -1054,7 +1075,7 @@ class HomeController extends GetxController {
 
         myHelpRequestsData.value = response!.requestData;
 
-        helpRequestDescriptionController.text = response!.requestData!.description!;
+        helpRequestDescriptionController.text = response.requestData?.description ?? "";
         helpRequestImage.value = null;
 
 
@@ -1752,7 +1773,7 @@ class HomeController extends GetxController {
           image: image
       );
 
-      // print(response!.toJson().toString());
+      print(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {

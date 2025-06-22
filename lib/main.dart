@@ -18,7 +18,7 @@ String? userType;
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
 
   await Firebase.initializeApp();
 

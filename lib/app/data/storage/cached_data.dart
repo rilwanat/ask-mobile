@@ -88,7 +88,7 @@ class CachedData {
   // UserType
 
 
-// patientProfileData
+// userProfileData
   Future<UserData?> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString("profileData");
@@ -108,5 +108,28 @@ class CachedData {
     await prefs.setString("profileData", jsonString);
     // print("saved: " + jsonString);
   }
-// patientProfileData
+// userProfileData
+
+
+
+  Future<String?> getLastNotification() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("last_notification");
+  }
+
+  Future<void> saveLastNotification(String notification) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("last_notification", notification);
+  }
+  Future<void> clearNotificationTracking() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('last_notification');
+    // Or to remove all notification tracking:
+    // final keys = prefs.getKeys().where((k) => k.startsWith('last_notification_'));
+    // for (final key in keys) {
+    //   await prefs.remove(key);
+    // }
+  }
+
+
 }

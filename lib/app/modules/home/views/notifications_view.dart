@@ -77,7 +77,11 @@ class NotificationsView extends GetView<HomeController> {
                             alignment: Alignment.topCenter,
                             child: Container(
                               // color: AppColors.background,
-                              child: Obx(() => ListView.builder(
+                              child: Obx(() =>
+
+                              controller.notificationMessages.isNotEmpty ?
+
+                                  ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true, // Prevents unnecessary scrolling inside Expanded
                                   physics: BouncingScrollPhysics(), // Optional for smooth scrolling
@@ -361,7 +365,38 @@ class NotificationsView extends GetView<HomeController> {
                                         ),
                                       ),
                                     );
-                                  })),
+                                  })
+
+                                  :
+
+                                  const Center(child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,//center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'No notifications',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "LatoRegular",
+                                          // letterSpacing: .2,
+                                          color: AppColors.askBlue,
+                                        ),
+                                      ),
+                                      // SizedBox(height: 4),
+                                      // Text(
+                                      //   "Pay 100 to get ",
+                                      //   style: TextStyle(
+                                      //     fontSize: 12,
+                                      //     fontWeight: FontWeight.w400,
+                                      //     fontFamily: "LatoRegular",
+                                      //     letterSpacing: .2,
+                                      //     color: AppColors.white,
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ))
+                              ),
                             ),
                           )
 

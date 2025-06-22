@@ -246,20 +246,21 @@ class Utils {
                               Get.find<HomeController>().homeGetUserProfileFromServer();
                             }
 
-                            if (message == "Help Request created successfully."
-                            ||
-                                message == "A.S.K Request Deleted Successfully."
-                            ) {
+                            if (message == "Help Request created successfully.") {
                               await Get.find<HomeController>().getRequests();
                               Get.find<HomeController>().handleNavigation(1);
                               await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
 
-                              await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
+                              // await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
                             }
 
-                            // if (message.contains("Successfully Nominated!")) {
-                            //
-                            // }
+                            if (message == "A.S.K Request Deleted Successfully.") {
+                              await Get.find<HomeController>().getRequests();
+                              Get.find<HomeController>().handleNavigation(1);
+                              // await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+
+                              await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
+                            }
 
                             if (
                             message == "Help Request updated successfully."

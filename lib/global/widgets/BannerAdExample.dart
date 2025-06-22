@@ -10,9 +10,13 @@ class BannerAdExample extends StatefulWidget {
 class _BannerAdExampleState extends State<BannerAdExample> {
   BannerAd? _bannerAd;
 
+
+  int _retryAttempt = 0;
+  final int _maxRetryAttempts = 1;
+
+
   static const String appId = 'ca-app-pub-8713818304641575/8362867834'; //live
   // static const String appId = 'ca-app-pub-3940256099942544/6300978111'; //demo
-  // static const String interstitialAdUnitId = 'ca-app-pub-8713818304641575/1346575917';
 
   @override
   void initState() {
@@ -28,10 +32,21 @@ class _BannerAdExampleState extends State<BannerAdExample> {
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           print('$BannerAd loaded.');
+          setState(() {
+            // _isLoading = false;
+            // _loadFailed = false;
+            _retryAttempt = 0;
+          });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           print('$BannerAd failedToLoad: $error');
           ad.dispose();
+
+          if (_retryAttempt < _maxRetryAttempts) {
+            _retryAttempt++;
+            debugPrint('Retrying ad load ($_retryAttempt/$_maxRetryAttempts)...');
+            Future.delayed(const Duration(seconds: 5), _loadBannerAd);
+          }
         },
       ),
     )..load();
