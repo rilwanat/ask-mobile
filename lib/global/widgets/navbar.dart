@@ -216,38 +216,6 @@ class NavBar extends GetView<HomeController> {
 
                     ListTile(
                       tileColor: AppColors.white,
-                      leading: const Icon(Icons.person, size: 28, color: AppColors.askBlue,),
-                      title: const Text('Profile', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
-                      onTap: () async {
-                        Navigator.of(context).pop();
-                        // controller.setSelectedCategory("women");
-                        // await controller.getCategoryProductsData(category: "women").then((value) {
-                        //   //
-                        // });
-                        // controller.handleNavigation(1);
-
-                        Get.to(() => ProfileView());
-                      },
-                    ),
-
-                    ListTile(
-                      tileColor: AppColors.white,
-                      leading: const Icon(Icons.request_page, size: 28, color: AppColors.askBlue,),
-                      title: const Text('Request', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
-                      onTap: () async {
-                        Navigator.of(context).pop();
-                        // controller.setSelectedCategory("women");
-                        // await controller.getCategoryProductsData(category: "women").then((value) {
-                        //   //
-                        // });
-                        controller.handleNavigation(1);
-
-                        // Get.to(() => RequestsView());
-                      },
-                    ),
-
-                    ListTile(
-                      tileColor: AppColors.white,
                       leading: const Icon(Icons.question_answer, size: 28, color: AppColors.askBlue,),
                       title: const Text('iAsk', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
                       onTap: () async {
@@ -259,7 +227,7 @@ class NavBar extends GetView<HomeController> {
 
 
                         controller.handleNavigation(2);
-                        
+
 
                         // Get.to(() => IaskView());
                       },
@@ -267,20 +235,8 @@ class NavBar extends GetView<HomeController> {
 
                     ListTile(
                       tileColor: AppColors.white,
-                      leading: const Icon(Icons.star, size: 28, color: AppColors.askBlue,),
-                      title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        // Get.toNamed(Routes.PRODUCTS);
-
-                        Get.to(() => BenefactorsView());
-                      },
-                    ),
-
-                    ListTile(
-                      tileColor: AppColors.white,
                       leading: const Icon(Icons.waving_hand, size: 28, color: AppColors.askBlue,),
-                      title: const Text('Donations', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      title: const Text('DONATE', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
                       onTap: () async {
                         Navigator.of(context).pop();
                         // controller.setSelectedCategory("essentials");
@@ -293,6 +249,22 @@ class NavBar extends GetView<HomeController> {
 
 
                         controller.handleNavigation(3);
+                      },
+                    ),
+
+                    ListTile(
+                      tileColor: AppColors.white,
+                      leading: const Icon(Icons.request_page, size: 28, color: AppColors.askBlue,),
+                      title: const Text('REQUESTS', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        // controller.setSelectedCategory("women");
+                        // await controller.getCategoryProductsData(category: "women").then((value) {
+                        //   //
+                        // });
+                        controller.handleNavigation(1);
+
+                        // Get.to(() => RequestsView());
                       },
                     ),
 
@@ -312,6 +284,44 @@ class NavBar extends GetView<HomeController> {
                         // controller.handleNavigation(3);
                       },
                     ),
+
+                    ListTile(
+                      tileColor: AppColors.white,
+                      leading: const Icon(Icons.star, size: 28, color: AppColors.askBlue,),
+                      title: const Text('Benefactors', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        // Get.toNamed(Routes.PRODUCTS);
+
+                        Get.to(() => BenefactorsView());
+                      },
+                    ),
+
+
+                    ListTile(
+                      tileColor: AppColors.white,
+                      leading: const Icon(Icons.person, size: 28, color: AppColors.askBlue,),
+                      title: const Text('Profile', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        // controller.setSelectedCategory("women");
+                        // await controller.getCategoryProductsData(category: "women").then((value) {
+                        //   //
+                        // });
+                        // controller.handleNavigation(1);
+
+                        Get.to(() => ProfileView());
+                      },
+                    ),
+
+
+
+
+
+
+
+
+
 
                     // ListTile(
                     //   tileColor: Colors.white,

@@ -292,10 +292,20 @@ class Utils {
                             }
 
                             if (message.contains("Registration failed. Email already exists.")) {
-                              Get.to(() => LoginView());
+                              Get.to(() => const LoginView());
                               Get.find<AuthController>().loginEmailController.text = meta!;
                             }
 
+                            print(message);
+                            if (
+                            message.contains("As a recent beneficiary, you must have")
+                            ||
+                                message.contains("SUCCESSFULLY NOMINATED!")
+                            ) {
+
+                              // Get.to(() => const HomeView());
+                              Get.find<HomeController>().handleNavigation(0);
+                            }
 
 
 

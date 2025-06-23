@@ -139,9 +139,9 @@ class NotificationsView extends GetView<HomeController> {
                                                         const SizedBox(height: 20),
                                                         Padding(
                                                           padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
-                                                          child: Text(
+                                                          child: const Text(
                                                             "Confirm Delete",
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize: 26,
                                                               fontWeight: FontWeight.w500,
                                                               color: AppColors.askText,
@@ -151,12 +151,12 @@ class NotificationsView extends GetView<HomeController> {
                                                           ),
                                                         ),
                                                         const SizedBox(height: 20),
-                                                        Center(
+                                                        const Center(
                                                           child: FadeDownAnimation(
                                                               delayMilliSeconds: 400,
                                                               duration: 700,
                                                               child:
-                                                              const Icon(Icons.info, size: 70, color: AppColors.askBlue)
+                                                              Icon(Icons.info, size: 70, color: AppColors.askBlue)
                                                           ),
                                                         ),
                                                         const SizedBox(height: 20),
@@ -169,9 +169,9 @@ class NotificationsView extends GetView<HomeController> {
                                                             duration: 700,
                                                             child: Container(
                                                               margin: const EdgeInsets.only(bottom: 12),
-                                                              child: Text(
+                                                              child: const Text(
                                                                 "Are you sure you want to delete this notification?",
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                   fontSize: 16,
                                                                   fontWeight: FontWeight.w500,
                                                                   color: AppColors.askText,
@@ -337,7 +337,7 @@ class NotificationsView extends GetView<HomeController> {
                                                   Text(
                                                     Utils.formatFirestoreDate(askNotification['timestamp']),
                                                     style: const TextStyle(
-                                                      fontSize: 12,
+                                                      fontSize: 10,
                                                       fontWeight: FontWeight.w400,
                                                       fontFamily: "LatoRegular",
                                                       // letterSpacing: .2,
@@ -351,7 +351,7 @@ class NotificationsView extends GetView<HomeController> {
                                                   Text(
                                                     Utils.formatFirestoreTime(askNotification['timestamp']),
                                                     style: const TextStyle(
-                                                      fontSize: 12,
+                                                      fontSize: 10,
                                                       fontWeight: FontWeight.w400,
                                                       fontFamily: "LatoRegular",
                                                       // letterSpacing: .2,
