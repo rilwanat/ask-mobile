@@ -95,19 +95,43 @@ class NotificationsView extends GetView<HomeController> {
                                         // print(askNotification);
                                         // return;
 
-                                        Get.back();
+
                                         // controller.handleNavigation(1);
-
                                         // final data = jsonDecode(response.payload!);
-                                        final meta = askNotification['meta'] ?? '';
-
                                         // print("Notification clicked: ${response.payload}");
+
+
+                                        final meta = askNotification['meta'] ?? '';
                                         print("Notification clicked: ${meta}");
+                                        // return;//
 
-                                        if (meta != '') {
-                                          controller.handleNavigation(1);
-                                          await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
 
+                                        if (meta != 'X') {
+
+                                          final index = controller.filteredRequestsData.indexWhere((e) => e?.id == meta.toString());
+                                          Utils.showTopSnackBar(
+                                              t: "Notification",
+                                              m: "Request not available",
+                                              tc: AppColors.white,
+                                              d: 3,
+                                              bc: AppColors.askBlue,
+                                              sp: SnackPosition.TOP
+                                          );
+
+                                          if (index > -1) {
+                                            Get.back();
+                                            controller.handleNavigation(1);
+                                            await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+                                          } else {
+
+                                          }
+
+                                        } else {
+                                          Utils.showInformationDialog(
+                                              status: null,
+                                              title: "Notification",
+                                              message: askNotification['message']
+                                          );
                                         }
                                       },
                                       child: Dismissible(
@@ -314,6 +338,7 @@ class NotificationsView extends GetView<HomeController> {
                                                         // letterSpacing: .2,
                                                         color: AppColors.white,
                                                       ),
+                                                      maxLines: 2,
                                                     ),
                                                     // SizedBox(height: 4),
                                                     // Text(

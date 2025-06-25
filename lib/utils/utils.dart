@@ -300,7 +300,7 @@ class Utils {
                             if (
                             message.contains("As a recent beneficiary, you must have")
                             ||
-                                message.contains("SUCCESSFULLY NOMINATED!")
+                                (message.contains("Successfully Nominated!".toUpperCase()))
                             ) {
 
                               // Get.to(() => const HomeView());

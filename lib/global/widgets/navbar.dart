@@ -236,7 +236,7 @@ class NavBar extends GetView<HomeController> {
                     ListTile(
                       tileColor: AppColors.white,
                       leading: const Icon(Icons.waving_hand, size: 28, color: AppColors.askBlue,),
-                      title: const Text('DONATE', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      title: const Text('Donate', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
                       onTap: () async {
                         Navigator.of(context).pop();
                         // controller.setSelectedCategory("essentials");
@@ -255,7 +255,7 @@ class NavBar extends GetView<HomeController> {
                     ListTile(
                       tileColor: AppColors.white,
                       leading: const Icon(Icons.request_page, size: 28, color: AppColors.askBlue,),
-                      title: const Text('REQUESTS', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      title: const Text('Requests', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
                       onTap: () async {
                         Navigator.of(context).pop();
                         // controller.setSelectedCategory("women");
