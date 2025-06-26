@@ -226,7 +226,7 @@ class Utils {
                           function: () async {
                             Navigator.pop(context);
 
-
+                            print(message);
 
                             // if (message == "Account with phone number already exists.") {
                             //   Get.to(() => const LoginView(),
@@ -296,9 +296,10 @@ class Utils {
                               Get.find<AuthController>().loginEmailController.text = meta!;
                             }
 
-                            print(message);
+
                             if (
-                            message.contains("As a recent beneficiary, you must have")
+                            // message.contains("As a recent beneficiary, you must have")
+                            message.contains("Your request was granted")
                             ||
                                 (message.contains("Successfully Nominated!".toUpperCase()))
                             ) {
@@ -494,5 +495,12 @@ class Utils {
     // return null;
     return true;
   }
+
+  static String stripBrTags(String input) {
+    return input.replaceAll(RegExp(r'<br\s*/?>'), '');
+  }
+
+
+
 
 }

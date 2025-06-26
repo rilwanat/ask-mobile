@@ -673,8 +673,13 @@ class HomeController extends GetxController {
         // More reliable check using documentId
         if (!notificationMessages.any((item) =>
         item['documentId'] == message['documentId'])) {
-          notificationMessages.add(message);
-          displayNotification("A.S.K Nomination", message['message'], message['meta']);
+
+          String formattedMessage = Utils.stripBrTags(message['message']);
+          message['message'] = formattedMessage;
+
+          // notificationMessages.add(message);
+          notificationMessages.insert(0, message); // insert at top
+          displayNotification("A.S.K Nomination", formattedMessage, message['meta']);
           // print("New notification: ${message['message']} (ID: ${message['documentId']}) "
           //     "(meta: ${message['meta']})");
         }

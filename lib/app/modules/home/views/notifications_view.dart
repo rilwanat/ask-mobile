@@ -1,3 +1,4 @@
+import 'package:ask_mobile/app/modules/home/views/home_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ import '../../../../global/widgets/fade_down_animation.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 import '../../../data/models/banks/Data.dart';
+import '../bindings/home_binding.dart';
 import '../controllers/home_controller.dart';
 import 'beneficiaries_view.dart';
 
@@ -84,6 +86,7 @@ class NotificationsView extends GetView<HomeController> {
                                   ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true, // Prevents unnecessary scrolling inside Expanded
+                                      // reverse: true,
                                   physics: BouncingScrollPhysics(), // Optional for smooth scrolling
                                   itemCount: controller.notificationMessages.length,
                                   itemBuilder: (context, index) {
@@ -109,20 +112,27 @@ class NotificationsView extends GetView<HomeController> {
                                         if (meta != 'X') {
 
                                           final index = controller.filteredRequestsData.indexWhere((e) => e?.id == meta.toString());
-                                          Utils.showTopSnackBar(
-                                              t: "Notification",
-                                              m: "Request not available",
-                                              tc: AppColors.white,
-                                              d: 3,
-                                              bc: AppColors.askBlue,
-                                              sp: SnackPosition.TOP
-                                          );
 
                                           if (index > -1) {
+                                            // print("here");
                                             Get.back();
+
+                                            // Get.to(() => HomeView(),
+                                            //     // transition: Transition.fadeIn, // Built-in transition type
+                                            //     // duration: Duration(milliseconds: 500),
+                                            //     // binding: HomeBinding()
+                                            // );
                                             controller.handleNavigation(1);
-                                            await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+                                            await controller.scrollToNewRequest(int.parse(meta!));
                                           } else {
+                                            Utils.showTopSnackBar(
+                                                t: "Notification",
+                                                m: "Request not available",
+                                                tc: AppColors.white,
+                                                d: 3,
+                                                bc: AppColors.askBlue,
+                                                sp: SnackPosition.TOP
+                                            );
 
                                           }
 
@@ -130,7 +140,7 @@ class NotificationsView extends GetView<HomeController> {
                                           Utils.showInformationDialog(
                                               status: null,
                                               title: "Notification",
-                                              message: askNotification['message']
+                                              message: Utils.stripBrTags(askNotification['message'])
                                           );
                                         }
                                       },
@@ -330,7 +340,7 @@ class NotificationsView extends GetView<HomeController> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      askNotification['message'],
+                                                      Utils.stripBrTags(askNotification['message']),
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.w500,
