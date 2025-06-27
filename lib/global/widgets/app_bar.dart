@@ -107,7 +107,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => FaqView());
+                        Get.to(() => const FaqView());
                       },
                       child: Icon(
                         // Icons.more_vert_rounded,

@@ -10,7 +10,9 @@ import 'package:get/get.dart';
 
 import '../../app/modules/home/controllers/home_controller.dart';
 import '../../app/modules/home/views/beneficiaries_view.dart';
+import '../../app/modules/home/views/faq_view.dart';
 import '../../app/modules/home/views/iask_view.dart';
+import '../../app/modules/home/views/notifications_view.dart';
 import '../../utils/utils.dart';
 import '../app_color.dart';
 import '../screen_size.dart';
@@ -297,6 +299,37 @@ class NavBar extends GetView<HomeController> {
                       },
                     ),
 
+
+                    ListTile(
+                      tileColor: AppColors.white,
+                      leading: const Icon(Icons.notifications, size: 28, color: AppColors.askBlue,),
+                      title: const Text('Notification', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        // controller.setSelectedCategory("women");
+                        // await controller.getCategoryProductsData(category: "women").then((value) {
+                        //   //
+                        // });
+                        // controller.handleNavigation(1);
+
+                        Get.to(() => const NotificationsView());
+                      },
+                    ),
+                    ListTile(
+                      tileColor: AppColors.white,
+                      leading: const Icon(Icons.help, size: 28, color: AppColors.askBlue,),
+                      title: const Text('Contact', style: TextStyle(color: AppColors.askBlue, fontFamily: "LatoRegular", fontSize: 12),),
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        // controller.setSelectedCategory("women");
+                        // await controller.getCategoryProductsData(category: "women").then((value) {
+                        //   //
+                        // });
+                        // controller.handleNavigation(1);
+
+                        Get.to(() => FaqView());
+                      },
+                    ),
 
                     ListTile(
                       tileColor: AppColors.white,
