@@ -803,7 +803,7 @@ class DashboardView extends GetView<HomeController> {
                                                       // );
 
                                                     },
-                                                    backgroundColor: AppColors.askOrange,
+                                                    backgroundColor: beneficiary.status! == "approved" ? AppColors.askGreen : AppColors.askOrange,
                                                     textColor: AppColors.white,
                                                     buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
                                                     buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
