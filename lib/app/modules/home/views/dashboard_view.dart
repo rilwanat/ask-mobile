@@ -781,7 +781,7 @@ class DashboardView extends GetView<HomeController> {
                                                         buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
                                                         borderCurve: 4,
                                                         border: false,
-                                                        textSize: 12,
+                                                        textSize: 10,
                                                       ),
                                                     ),
                                                   ],),

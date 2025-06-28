@@ -482,8 +482,16 @@ class HomeController extends GetxController {
 
   String formatNominationCount(String count) {
     final int value = int.tryParse(count) ?? 0;
-    return value >= 1000 ? '${(value / 1000).toStringAsFixed(1)}K' : value.toString();
+
+    if (value >= 1000000) {
+      return '${(value / 1000000).toStringAsFixed(1)}M';
+    } else if (value >= 1000) {
+      return '${(value / 1000).toStringAsFixed(1)}K';
+    } else {
+      return value.toString();
+    }
   }
+
 
   homeGetUserProfileFromServer() async {
     setLoading(true);

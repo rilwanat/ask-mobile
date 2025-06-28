@@ -131,7 +131,7 @@ class _FlashButtonState extends State<AskMiniButton>
                     //   width: 8,
                     // ),
                     SizedBox(
-                      width: 80, // Explicit width
+                      width: 90, // Explicit width
                       height: 50,  // Explicit height
                       child: Center(
                         child: Text(
