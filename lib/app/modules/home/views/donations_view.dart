@@ -362,6 +362,9 @@ class DonationsView extends GetView<HomeController> {
                                                   //     bc: AppColors.askBlue,
                                                   //     sp: SnackPosition.TOP);
 
+                                                  // print(plan!.planCode!.toString());
+                                                  // return;
+
                                                   //
                                                   // required String planName,
                                                   // required int amount, // in kobo

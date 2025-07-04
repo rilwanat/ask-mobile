@@ -83,11 +83,19 @@ class HomeController extends GetxController {
   final _navIndex = 0.obs;
   int get navIndex => _navIndex.value;
   Future<void> handleNavigation(int value) async {
+    // print(value);
+
     update([_navIndex.value = value]);
+
+    //myrequests
     if (value == 2) {
-      //go and get myrequests
       await getCheckIfUserCanAsk(email: profileData.value!.emailAddress!);
       await getMyHelpRequests(email: profileData.value!.emailAddress!);
+    }
+
+    //donation
+    if (value == 3) {
+      selectOption('onetime');
     }
     // print(value);
   }
@@ -596,7 +604,7 @@ class HomeController extends GetxController {
   //     );
   //   }
   // }
-  Future<void> scrollToNewRequest(int requestId) async {
+  Future<void> scrollToNewRequestViaId(int requestId) async {
     try {
       if (Get.context == null) return;
 
@@ -605,6 +613,39 @@ class HomeController extends GetxController {
       final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
 
       print("index of " + requestId.toString() + " is " + index.toString());
+      // index of 18 is 2
+
+      currentRequestIndex.value = index;
+      update();
+
+      if (index != -1) {
+        await Future.delayed(Duration(milliseconds: 100));
+
+        if (!singleRequestScrollController.hasClients) return;
+
+        final targetPosition = index * screenWidth;
+        final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
+
+        await singleRequestScrollController.animateTo(
+          targetPosition.clamp(0.0, maxScrollExtent),
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    } catch (e) {
+      // Optional: Add error handling if needed
+    }
+  }
+
+  Future<void> scrollToNewRequestViaHelptoken(String helptoken) async {
+    try {
+      if (Get.context == null) return;
+
+      final double screenWidth = Get.context!.size!.width * .8 + 8;
+      // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
+      final index = filteredRequestsData.indexWhere((e) => e?.helpToken == helptoken);
+
+      print("index of " + helptoken.toString() + " is " + index.toString());
       // index of 18 is 2
 
       currentRequestIndex.value = index;
@@ -2496,24 +2537,64 @@ class HomeController extends GetxController {
       priceToPay = num.parse(dollarExchangeData.value[0]!.rate!) * toPay;
     }
 
+    // bool isAlreadySubscribed = false;
+    // if (isSubscription) {
+    //   try {
+    //     final response = await client.subscriptions.all(
+    //         customer: email,
+    //         plan: planCode
+    //     );
+    //     print(response.runtimeType);
+    //     print(response.toString());
+    //
+    //     if (response.data['data'].isNotEmpty) {
+    //       // return response.data['data']; // List of subscriptions
+    //       isAlreadySubscribed = true;
+    //     } else {
+    //       isAlreadySubscribed = false;
+    //       throw Exception('Failed to fetch subscriptions: ');
+    //     }
+    //   } catch (e) {
+    //     isAlreadySubscribed = false;
+    //     throw Exception('Error fetching subscriptions: $e');
+    //   }
+    //
+    // }
+
     bool isAlreadySubscribed = false;
     if (isSubscription) {
       try {
         final response = await client.subscriptions.all(
-            customer: email,
-            plan: planCode
+          customer: email,
+          plan: planCode,
         );
 
-        if (response.data.length > 0) {
-          // return response.data['data']; // List of subscriptions
-          isAlreadySubscribed = true;
-        } else {
-          throw Exception('Failed to fetch subscriptions: ');
+        // print(response.runtimeType); // Debug: Verify response type
+        // print(response.toString());  // Debug: Verify raw response
+
+        // Check if the API returned successfully (status: true)
+        if (response.data['status'] == true) {
+          // No subscriptions found (valid case)
+          if (response.data['data'].isEmpty) {
+            isAlreadySubscribed = false;
+            // print('No active subscriptions found for $email on plan $planCode.');
+            print('No active subscriptions found for $email on plan.');
+          }
+          // Subscriptions found
+          else {
+            isAlreadySubscribed = true;
+            print('Subscriptions found: ${response.data['data']}');
+          }
+        }
+        // API returned an error (status: false)
+        else {
+          isAlreadySubscribed = false;
+          throw Exception('API Error: ${response.data['message']}');
         }
       } catch (e) {
-        throw Exception('Error fetching subscriptions: $e');
+        isAlreadySubscribed = false;
+        throw Exception('Network/Request Error: $e');
       }
-
     }
 
 
@@ -2562,29 +2643,46 @@ class HomeController extends GetxController {
               //   // );
               // });
 
+
+String customerCode = paymentData.customer!.customerCode!;
+
+
               if (isSubscription) {
                 //hit subscribe endpoint with authtoken
                 final authCode = paymentData.authorization!.authorizationCode;
+
+
+                print(
+                    customerCode + "\n" +
+                        planCode! + "\n" +
+                        authCode! + "\n" +
+                        DateTime.now().toIso8601String()
+                );
+
+
+
                 if (authCode == null) {
                   throw Exception('Authorization code not found in payment data');
                 }
                 // 5. Create subscription with the authorization code
                 final subscriptionResponse = await client.subscriptions.create(
-                  email,
+                  customerCode,
                   planCode!,
-                  authCode,
+                  authCode!,
                   startDate: DateTime.now().toIso8601String(),
                 );
 
+                print(subscriptionResponse.toString());
+
                 if (!subscriptionResponse.data['status']) {
-                  Utils.showInformationDialog(status: false, title: 'THANK YOU FOR YOUR DONATION !',
-                      message: 'Subscription creation failed!: ${subscriptionResponse.data['message']}'
+                  Utils.showInformationDialog(status: false, title: 'THANK YOU FOR YOUR DONATION!',
+                      message: 'Subscription activation failed!: ${subscriptionResponse.data['message']}'
 
                   );
-                  throw Exception('Subscription creation failed: ${subscriptionResponse.data['message']}');
+                  throw Exception('Subscription activation failed: ${subscriptionResponse.data['message']}');
                 }
 
-                Utils.showInformationDialog(status: true, title: 'THANK YOU FOR YOUR DONATION !',
+                Utils.showInformationDialog(status: true, title: 'THANK YOU FOR YOUR DONATION!',
                     message: 'Subscription activated successfully!'
 
                 );

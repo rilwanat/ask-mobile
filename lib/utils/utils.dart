@@ -249,7 +249,7 @@ class Utils {
                             if (message == "Help Request created successfully.") {
                               await Get.find<HomeController>().getRequests();
                               Get.find<HomeController>().handleNavigation(1);
-                              await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
+                              await Get.find<HomeController>().scrollToNewRequestViaId(int.parse(meta!));
 
                               // await Get.find<HomeController>().getMyHelpRequests(email: Get.find<HomeController>().profileData.value!.emailAddress!);
                             }
@@ -338,6 +338,9 @@ class Utils {
                         function: () {
                           Navigator.pop(context);
                           //goto donate page
+
+                          Get.find<HomeController>().selectOption('onetime');
+
                           Get.to(() => const DonationsView(),
                               transition: Transition.fadeIn, // Built-in transition type
                               duration: const Duration(milliseconds: 500),

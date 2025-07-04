@@ -6,6 +6,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:app_links/app_links.dart';
 import 'app/data/storage/cached_data.dart';
 import 'app/modules/home/bindings/home_binding.dart';
+import 'app/modules/home/controllers/home_controller.dart';
+import 'app/modules/home/views/home_view.dart';
 import 'app/routes/app_pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -55,21 +57,39 @@ void initDeepLinking() {
   });
 }
 
-void _handleDeepLink(Uri uri) {
+void _handleDeepLink(Uri uri) async {
   debugPrint('Handling deep link: $uri');
 
   if (uri.pathSegments.length >= 2 &&
       uri.pathSegments.first == 'help-request') {
+
     final requestId = uri.pathSegments[1];
     debugPrint('Navigating to request: $requestId');
 
-    Get.to(
-          () => RequestsView(),
-      transition: Transition.fadeIn,
-      duration: const Duration(milliseconds: 500),
-      binding: HomeBinding(),
-      arguments: {'requestId': requestId},
-    );
+    // Get.to(() => HomeView(),
+    //     transition: Transition.fadeIn, // Built-in transition type
+    //     duration: Duration(milliseconds: 500),
+    //     binding: HomeBinding()
+    // );
+    Get.find<HomeController>().handleNavigation(1);
+    await Get.find<HomeController>().scrollToNewRequestViaHelptoken(requestId);
+
+    //
+    //
+    // // First navigate to the RequestsView (index 1 in your bottom nav)
+    // Get.until((route) => Get.currentRoute == AppPages.HOME);
+    //
+    // Get.find<HomeController>().handleNavigation(1);
+    // // Then push the specific request with arguments
+    // Get.to(
+    //       () => RequestsView(),
+    //   transition: Transition.fadeIn,
+    //   duration: const Duration(milliseconds: 500),
+    //   arguments: {'requestId': requestId},
+    // );
+
+
+
   } else {
     debugPrint('Unhandled deep link path: ${uri.path}');
   }

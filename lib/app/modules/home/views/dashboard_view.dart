@@ -408,7 +408,7 @@ class DashboardView extends GetView<HomeController> {
                                       controller.searchRequestsController.clear();
 
                                       await controller.handleNavigation(1);
-                                      await controller.scrollToNewRequest(int.parse(helpRequest.id!));
+                                      await controller.scrollToNewRequestViaId(int.parse(helpRequest.id!));
 
                                       // //open product details view
                                       // Get.to(() => ProductDetailsView(
@@ -522,7 +522,7 @@ class DashboardView extends GetView<HomeController> {
                                                       controller.searchRequestsController.clear();
 
                                                       await controller.handleNavigation(1);
-                                                      await controller.scrollToNewRequest(int.parse(helpRequest.id!));
+                                                      await controller.scrollToNewRequestViaId(int.parse(helpRequest.id!));
 
 
                                                       // Utils.showTopSnackBar(

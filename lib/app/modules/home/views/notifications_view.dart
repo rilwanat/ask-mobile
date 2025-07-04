@@ -123,7 +123,7 @@ class NotificationsView extends GetView<HomeController> {
                                             //     // binding: HomeBinding()
                                             // );
                                             controller.handleNavigation(1);
-                                            await controller.scrollToNewRequest(int.parse(meta!));
+                                            await controller.scrollToNewRequestViaId(int.parse(meta!));
                                           } else {
                                             Utils.showTopSnackBar(
                                                 t: "Notification",
