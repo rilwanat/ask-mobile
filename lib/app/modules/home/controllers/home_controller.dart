@@ -95,7 +95,7 @@ class HomeController extends GetxController {
 
     //donation
     if (value == 3) {
-      selectOption('onetime');
+      selectOption('recurring');
     }
     // print(value);
   }
@@ -264,7 +264,7 @@ class HomeController extends GetxController {
     _donationType.value = s;
     update();
   }
-  var selectedOption = 'onetime'.obs;
+  var selectedOption = 'recurring'.obs;
   void selectOption(String value) {
     selectedOption.value = value;
   }
