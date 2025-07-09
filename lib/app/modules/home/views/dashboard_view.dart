@@ -27,19 +27,21 @@ class DashboardView extends GetView<HomeController> {
 
   final NumberFormat currencyFormat = NumberFormat.currency(locale: 'en_US', symbol: '₦', decimalDigits: 0);
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.scaffoldKey,
+      // key: controller.scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(
         onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
+          // controller.scaffoldKey.currentState?.openDrawer();
+          _scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K - Home',
         backgroundColor: AppColors.askBlue,
@@ -454,8 +456,8 @@ class DashboardView extends GetView<HomeController> {
                                                     borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                     child: CachedNetworkImage(
                                                       imageUrl:
-                                                      "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                          // "https://askfoundations.org/" +
+                                                      // "https://playground.askfoundations.org/backend/api/v1/response/" +
+                                                          "https://askfoundations.org/" +
                                                           "${helpRequest.requestImage}",
                                                       fit: BoxFit.cover, // Changed from contain to cover
                                                       width: double.infinity,
@@ -567,7 +569,8 @@ class DashboardView extends GetView<HomeController> {
                     //
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: SizedBox(
+                      child: Container(
+                        color: AppColors.askBlue,
                           height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
                           child:
                           // IgnorePointer(child:
@@ -683,8 +686,8 @@ class DashboardView extends GetView<HomeController> {
                                                     borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                     child: CachedNetworkImage(
                                                       imageUrl:
-                                                      "https://playground.askfoundations.org/backend/api/v1/" +
-                                                          // "https://askfoundations.org/" + "" +
+                                                      // "https://playground.askfoundations.org/backend/api/v1/" +
+                                                          "https://askfoundations.org/" + "" +
                                                           "${beneficiary.user!.profilePicture}",
                                                       fit: BoxFit.cover, // Changed from contain to cover
                                                       width: double.infinity,
@@ -726,7 +729,7 @@ class DashboardView extends GetView<HomeController> {
                                                   Container(
                                                     padding: EdgeInsets.symmetric(horizontal: 4),
                                                     child: Text(
-                                                      beneficiary.date!,
+                                                      Utils.formatDateWithDay(beneficiary.date!),
                                                       style: const TextStyle(
                                                         fontFamily: "LatoRegular",
                                                         color: Colors.black,
@@ -781,7 +784,7 @@ class DashboardView extends GetView<HomeController> {
                                                         buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
                                                         borderCurve: 4,
                                                         border: false,
-                                                        textSize: 10,
+                                                        textSize: 9,
                                                       ),
                                                     ),
                                                   ],),

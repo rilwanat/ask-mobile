@@ -23,18 +23,21 @@ class RequestsView extends GetView<HomeController> {
     super.key
   });
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.scaffoldKey,
+      // key: controller.scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(
         onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
+          // controller.scaffoldKey.currentState?.openDrawer();
+          _scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K - Requests',
         backgroundColor: AppColors.askBlue,
@@ -325,8 +328,8 @@ class RequestsView extends GetView<HomeController> {
                                               borderRadius: BorderRadius.circular(10), // Match container's border radius
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                    // "https://askfoundations.org/" +
+                                                // "https://playground.askfoundations.org/backend/api/v1/response/" +
+                                                    "https://askfoundations.org/" +
                                                     "${helpRequest.requestImage}",
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,
@@ -417,8 +420,8 @@ class RequestsView extends GetView<HomeController> {
                                       text: "Share",
                                       function: () async {
 
-                                        // Utils.shareLink("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
-                                        Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        // Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        Utils.shareText("https://askfoundations.org/help-request/${helpRequest.helpToken}");
 
                                       },
                                       backgroundColor: AppColors.askBlue,

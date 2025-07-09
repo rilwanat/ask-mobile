@@ -21,11 +21,7 @@ class FaqView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.askBackground,
-      // appBar: AppBar(
-      //   title: const Text('FAQs'),
-      //   centerTitle: true,
-      // ),
-      // key: controller.scaffoldKey,
+
 
       // drawer: NavBar(),
       appBar: AppBar(

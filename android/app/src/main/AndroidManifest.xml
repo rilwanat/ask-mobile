@@ -42,14 +42,14 @@
             </intent-filter>
 
             <!-- For Dynamic link -->
-            <intent-filter >
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:scheme="https"
-                    android:host="playground.askfoundations.org"
+                    android:host="askfoundations.org"
                     android:pathPrefix="/help-request" />
             </intent-filter>
 

@@ -32,11 +32,9 @@ class NotificationsView extends GetView<HomeController> {
       // drawer: NavBar(),
       appBar: CustomAppBarPage(
         onMenuPressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
           Get.back();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K - Notifications',
         backgroundColor: AppColors.askBlue,

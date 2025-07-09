@@ -56,9 +56,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 //   width: logoSize,
                 //   height: logoSize,
                 // ),
-                child: Icon(Icons.menu,
-                  size: 26,//logoSize,
-                  color: AppColors.white,
+                child: const SizedBox(
+                  width: 32,  // Larger tap area
+                  height: 48,
+                  child: Icon(Icons.menu,
+                    size: 26,//logoSize,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
               const SizedBox(width: 20),

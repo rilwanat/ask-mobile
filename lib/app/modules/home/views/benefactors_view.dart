@@ -25,11 +25,9 @@ class BenefactorsView extends GetView<HomeController> {
         backgroundColor: AppColors.askBackground,
         appBar: CustomAppBarPage(
           onMenuPressed: () {
-            // controller.scaffoldKey.currentState?.openDrawer();
             Get.back();
           },
           onMorePressed: () {
-            // controller.scaffoldKey.currentState?.openDrawer();
           },
           title: 'A.S.K - Benefactors',
           backgroundColor: AppColors.askBlue,
@@ -120,8 +118,8 @@ class BenefactorsView extends GetView<HomeController> {
                                               borderRadius: BorderRadius.circular(10), // Match container's border radius
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                "https://playground.askfoundations.org/backend/api/v1/" +
-                                                    // "https://askfoundations.org/" + "" +
+                                                // "https://playground.askfoundations.org/backend/api/v1/" +
+                                                    "https://askfoundations.org/" + "" +
                                                     "${data?.image}",
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,

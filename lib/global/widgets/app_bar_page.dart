@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../app/modules/home/views/faq_view.dart';
+import '../../app/modules/home/views/home_view.dart';
 import '../app_color.dart';
 
 class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
@@ -45,10 +46,16 @@ class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: [
               GestureDetector(
-                onTap: onMenuPressed,
-                child: Icon(Icons.arrow_back_ios_new,
-                    size: 18,//logoSize,
-                  color: AppColors.white,
+                onTap:
+                // () { print("x"); Get.to(() => HomeView()); },
+                onMenuPressed,
+                child: const SizedBox(
+                  width: 32,  // Larger tap area
+                  height: 48,
+                  child: Icon(Icons.arrow_back_ios_new,
+                      size: 18,//logoSize,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
               const SizedBox(width: 20),

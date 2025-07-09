@@ -26,18 +26,21 @@ import '../../../../global/widgets/BannerAdExample.dart';
 class IaskView extends GetView<HomeController> {
   IaskView({super.key});
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.scaffoldKey,
+      // key: controller.scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(
         onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
+          // controller.scaffoldKey.currentState?.openDrawer();
+          _scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K',
         backgroundColor: AppColors.askBlue,
@@ -2122,8 +2125,8 @@ class IaskView extends GetView<HomeController> {
                                                           borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                           child: CachedNetworkImage(
                                                             imageUrl:
-                                                            "https://playground.askfoundations.org/backend/api/v1/" +
-                                                                // "https://askfoundations.org/" + "" +
+                                                            // "https://playground.askfoundations.org/backend/api/v1/" +
+                                                                "https://askfoundations.org/" + "" +
                                                                 "${controller.myHelpRequestsData.value!.requestImage!}",
                                                             fit: BoxFit.cover, // Changed from contain to cover
                                                             width: 250,//double.infinity,

@@ -23,11 +23,7 @@ void main() async {
 
   userType = await _cachedData.getUserType();
 
-  // Initialize AppLinks instance
-  _appLinks = AppLinks();
 
-  // Initialize deep linking
-  initDeepLinking();
 
   runApp(
     GetMaterialApp(
@@ -37,6 +33,12 @@ void main() async {
       getPages: AppPages.routes,
     ),
   );
+
+
+  _appLinks = AppLinks(); // Initialize AppLinks instance
+  initDeepLinking(); // Initialize deep linking
+
+
 }
 
 void initDeepLinking() {

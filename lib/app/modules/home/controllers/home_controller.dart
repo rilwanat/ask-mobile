@@ -67,14 +67,8 @@ class HomeController extends GetxController {
 
   final CachedData _cachedData = CachedData();
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-//   // Make it observable and nullable since it might not be set immediately
-//   final selectedHelpRequestId = Rxn<hrd.Data>();
-// // Call this when you have the data
-//   void setSelectedHelpRequest(hrd.Data request) {
-//     selectedHelpRequest.value = request;
-//   }
 
   var notificationMessages = <Map<String, dynamic>>[].obs;
 
@@ -100,10 +94,10 @@ class HomeController extends GetxController {
     // print(value);
   }
   final screens = <Widget>[
-    DashboardView(),
-    RequestsView(),
-    IaskView(),
-    DonationsView(),
+    DashboardView(key: UniqueKey()),
+    RequestsView(key: UniqueKey()),
+    IaskView(key: UniqueKey()),
+    DonationsView(key: UniqueKey()),
 
   ];
 
@@ -841,6 +835,9 @@ class HomeController extends GetxController {
 
 
 
+    startAutoScrollHelpRequests();
+    startAutoScrollBeneficiaries();
+
     super.onInit();
   }
 
@@ -959,6 +956,9 @@ class HomeController extends GetxController {
     isCameraInitialized.value = false;
     imagePath.value = '';
 
+    helpScrollController.dispose();
+    beneficiariesScrollController.dispose();
+
     super.onClose();
   }
 
@@ -975,7 +975,7 @@ class HomeController extends GetxController {
     super.dispose();
   }
 
-  void startAutoScroll() {
+  void startAutoScrollHelpRequests() {
     helpAutoScrollTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
       if (helpCurrentIndex < helpRequestsData.length - 1) {
         helpCurrentIndex++;
@@ -986,6 +986,23 @@ class HomeController extends GetxController {
       // Animate to the next item
       helpScrollController.animateTo(
         helpCurrentIndex * 160.0, // 144 width + 8 margin on each side
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  void startAutoScrollBeneficiaries() {
+    beneficiariesAutoScrollTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
+      if (beneficiariesCurrentIndex < beneficiariesData.length - 1) {
+        beneficiariesCurrentIndex++;
+      } else {
+        beneficiariesCurrentIndex = 0; // Loop back to first item
+      }
+
+      // Animate to the next item
+      beneficiariesScrollController.animateTo(
+        beneficiariesCurrentIndex * 160.0, // 144 width + 8 margin on each side
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );

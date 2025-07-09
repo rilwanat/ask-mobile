@@ -20,31 +20,23 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../../global/widgets/BannerAdExample.dart';
 
 class DonationsView extends GetView<HomeController> {
-  const DonationsView({super.key});
+  DonationsView({super.key});
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.askBackground,
-      // appBar: CustomAppBarPage(
-      //   onMenuPressed: () {
-      //     // controller.scaffoldKey.currentState?.openDrawer();
-      //     Get.back();
-      //   },
-      //   onMorePressed: () {
-      //     // controller.scaffoldKey.currentState?.openDrawer();
-      //   },
-      //   title: 'A.S.K - Donate',
-      //   backgroundColor: AppColors.askBlue,
-      // ),
-      key: controller.scaffoldKey,
+      // key: controller.scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(
         onMenuPressed: () {
-          controller.scaffoldKey.currentState?.openDrawer();
+          // controller.scaffoldKey.currentState?.openDrawer();
+          _scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K- Donate',
         backgroundColor: AppColors.askBlue,
@@ -693,8 +685,8 @@ class DonationsView extends GetView<HomeController> {
                                                     // )
                                                     CachedNetworkImage(
                                                       imageUrl:
-                                                      "https://playground.askfoundations.org/" +
-                                                          // "https://askfoundations.org/" +
+                                                      // "https://playground.askfoundations.org/" +
+                                                          "https://askfoundations.org/" +
                                                           "/${selected.image}",
                                                       fit: BoxFit.contain,//cover, // Changed from contain to cover
                                                       width: double.infinity,

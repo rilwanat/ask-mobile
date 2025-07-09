@@ -341,7 +341,7 @@ class Utils {
 
                           Get.find<HomeController>().selectOption('onetime');
 
-                          Get.to(() => const DonationsView(),
+                          Get.to(() => DonationsView(),
                               transition: Transition.fadeIn, // Built-in transition type
                               duration: const Duration(milliseconds: 500),
                               binding: HomeBinding()

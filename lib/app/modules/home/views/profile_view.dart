@@ -25,11 +25,9 @@ class ProfileView extends GetView<HomeController> {
       // drawer: NavBar(),
       appBar: CustomAppBarPage(
         onMenuPressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
           Get.back();
         },
         onMorePressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
         },
         title: 'A.S.K - Profile',
         backgroundColor: AppColors.askBlue,
@@ -81,8 +79,8 @@ class ProfileView extends GetView<HomeController> {
                                       borderRadius: BorderRadius.circular(300), // Match container's border radius
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                        "https://playground.askfoundations.org/" +
-                                            // "https://askfoundations.org/" +
+                                        // "https://playground.askfoundations.org/" +
+                                            "https://askfoundations.org/" +
                                             "${controller.profileData.value!.profilePicture!}",
                                         fit: BoxFit.cover, // Changed from contain to cover
                                         width: ScreenSize.width(context) * 0.2,

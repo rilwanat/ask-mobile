@@ -8,6 +8,7 @@ import '../../../../global/app_color.dart';
 import '../../../../global/screen_size.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/app_bar_page.dart';
+import '../../../../global/widgets/ask_mini_button.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
 
@@ -23,28 +24,15 @@ class BeneficiariesView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: controller.scaffoldKey,
-      // backgroundColor: AppColors.askBackground,
-      // drawer: NavBar(),
-      // appBar: CustomAppBar(
-      //   onMenuPressed: () {
-      //     controller.scaffoldKey.currentState?.openDrawer();
-      //   },
-      //   onMorePressed: () {
-      //     // controller.scaffoldKey.currentState?.openDrawer();
-      //   },
-      //   title: 'A.S.K - Beneficiaries',
-      //   backgroundColor: AppColors.askBlue,
-      // ),
+
         backgroundColor: AppColors.askBackground,
         // drawer: NavBar(),
         appBar: CustomAppBarPage(
           onMenuPressed: () {
-            // controller.scaffoldKey.currentState?.openDrawer();
             Get.back();
           },
           onMorePressed: () {
-            // controller.scaffoldKey.currentState?.openDrawer();
+
           },
           title: 'A.S.K - Beneficiaries',
           backgroundColor: AppColors.askBlue,
@@ -104,7 +92,7 @@ class BeneficiariesView extends GetView<HomeController> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 4,
                               crossAxisSpacing: 4,
-                              childAspectRatio: .64,
+                              childAspectRatio: .56,
                             ),
                             itemCount: currentItems.length,
                             itemBuilder: (context, index) {
@@ -138,8 +126,8 @@ class BeneficiariesView extends GetView<HomeController> {
                                               borderRadius: BorderRadius.circular(10), // Match container's border radius
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                "https://playground.askfoundations.org/backend/api/v1/" +
-                                                    // "https://askfoundations.org/" + "" +
+                                                // "https://playground.askfoundations.org/backend/api/v1/" +
+                                                    "https://askfoundations.org/" + "" +
                                                     "${data?.user!.profilePicture}",
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,
@@ -168,13 +156,44 @@ class BeneficiariesView extends GetView<HomeController> {
                                       fontWeight: FontWeight.w700,
                                     ),),
                                     const SizedBox(height: 2,),
-                                    Text(data?.date ?? '', style: const TextStyle(
+                                    Text(
+                                      Utils.formatDateWithDay(data!.date!)
+                                      // data?.date  ?? ''
+                                      , style: const TextStyle(
                                       fontFamily: "LatoRegular",
                                       color: AppColors.black,
                                       fontSize: 12.0,
                                       fontWeight: FontWeight.w400,
                                     ),),
-                                    // Text('Status: ${data?.status ?? ''}'),
+                                    const SizedBox(height: 2,),
+                                    // Text('${data!.status}'),
+                                    Row(children: [
+                                      Expanded(
+                                        child: AskMiniButton(
+                                          enabled: true,
+                                          text: data!.remark!,
+                                          function: () async {
+
+                                            // Utils.showTopSnackBar(
+                                            //   t: helpRequest.user!.fullname!,
+                                            //   m: "Request view will open",
+                                            //   tc: AppColors.white,
+                                            //   d: 3,
+                                            //   bc: AppColors.askBlue,
+                                            //   sp: SnackPosition.BOTTOM,
+                                            // );
+
+                                          },
+                                          backgroundColor: AppColors.askSoftTheme,
+                                          textColor: AppColors.askText,
+                                          buttonWidth: 100, //ScreenSize.scaleWidth(context, 80),
+                                          buttonHeight: 28, //ScreenSize.scaleHeight(context, 20),
+                                          borderCurve: 4,
+                                          border: false,
+                                          textSize: 9,
+                                        ),
+                                      ),
+                                    ],),
                                   ],
                                 ),
                               );

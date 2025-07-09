@@ -136,8 +136,8 @@ class NavBar extends GetView<HomeController> {
                           borderRadius: BorderRadius.circular(30), // Match container's border radius
                           child: CachedNetworkImage(
                             imageUrl:
-                            "https://playground.askfoundations.org/" +
-                                // "https://askfoundations.org/" +
+                            // "https://playground.askfoundations.org/" +
+                                "https://askfoundations.org/" +
                                 "${controller.profileData.value!.profilePicture!}",
                             fit: BoxFit.cover, // Changed from contain to cover
                             width: ScreenSize.width(context) * 0.2,
