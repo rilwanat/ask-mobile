@@ -64,7 +64,8 @@ class IaskView extends GetView<HomeController> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: SizedBox(
+                              child: Container(
+                                // color: AppColors.askBlue,
                                 height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
                                 child: BannerAdExample(),
                               ),

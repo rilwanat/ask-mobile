@@ -12,6 +12,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -606,7 +607,7 @@ class HomeController extends GetxController {
       // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
       final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
 
-      print("index of " + requestId.toString() + " is " + index.toString());
+      // print("index of " + requestId.toString() + " is " + index.toString());
       // index of 18 is 2
 
       currentRequestIndex.value = index;
@@ -639,7 +640,7 @@ class HomeController extends GetxController {
       // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
       final index = filteredRequestsData.indexWhere((e) => e?.helpToken == helptoken);
 
-      print("index of " + helptoken.toString() + " is " + index.toString());
+      // print("index of " + helptoken.toString() + " is " + index.toString());
       // index of 18 is 2
 
       currentRequestIndex.value = index;
@@ -690,7 +691,7 @@ class HomeController extends GetxController {
       notificationMessages.assignAll(allMessages);
       update();
     } catch (e) {
-      print("Error fetching initial notifications: $e");
+      // print("Error fetching initial notifications: $e");
       Get.snackbar('Error', 'Failed to load notifications');
     }
   }
@@ -2570,7 +2571,7 @@ class HomeController extends GetxController {
   }
       ) async {
 
-    String secretKey = 'sk_test_0e36f2a36881d8953d673c3e41b465569b105f0b';
+    final secretKey = dotenv.get('PAYSTACK_API_KEY');
 
     final client = PaystackClient(secretKey: secretKey);
 

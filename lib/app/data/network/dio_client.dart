@@ -4,12 +4,17 @@ import '../../routes/app_pages.dart';
 import '../storage/cached_data.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 Dio client() {
   final CachedData cachedData = CachedData();
   final Dio dio = Dio();
 
-  // dio.options.baseUrl = "https://playground.askfoundations.org/backend/api/v1";
-  dio.options.baseUrl = "https://askfoundations.org/backend/api/v1";
+
+  final isLive = dotenv.getBool('DEBUG_MODE');
+  final apiUrl = dotenv.get(isLive ? 'LIVE_API_BASE_URL' : 'DEMO_API_BASE_URL');
+
+  dio.options.baseUrl = apiUrl;
   dio.options.connectTimeout = const Duration(seconds: 30);
   dio.options.receiveTimeout = const Duration(seconds: 30);
 
@@ -21,13 +26,13 @@ Dio client() {
       final String? accessTokenResponse = await cachedData.getAuthToken();
       final String? token = accessTokenResponse;
 
-      print("DIO token: $token");
+      // print("DIO token: $token");
 
       if (token != null && token.isNotEmpty) {
         options.headers["Authorization"] = "Bearer $token";
 
         if (JwtDecoder.isExpired(token)) {
-          print("Token expired. Logging out...");
+          // print("Token expired. Logging out...");
           await cachedData.clearAllSavedDetails(userType: "");
           // // authController.logout(); // Trigger logout
           // getx.Get.offAllNamed(Routes.LOGIN);
@@ -53,8 +58,8 @@ Dio client() {
               ? DateTime.fromMillisecondsSinceEpoch(expiry * 1000)
               : null;
 
-          print('Token Issued At: $issuedAtTime');
-          print('Token Expiry At: $expiryTime');
+          // print('Token Issued At: $issuedAtTime');
+          // print('Token Expiry At: $expiryTime');
         } catch (e) {
           print('Error decoding token: $e');
         }
@@ -67,9 +72,9 @@ Dio client() {
         print(formData.fields);
       }
 
-      print('Request URI: ${options.uri}');
+      // print('Request URI: ${options.uri}');
       // print('Request Headers: ${options.headers}');
-      print('Request Data: ${options.data}');
+      // print('Request Data: ${options.data}');
       return handler.next(options); // continue
     },
     onError: (DioException e, handler) {

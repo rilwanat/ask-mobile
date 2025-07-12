@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:ask_mobile/app/modules/onboarding/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:app_links/app_links.dart';
@@ -19,6 +20,8 @@ StreamSubscription<Uri>? _linkSubscription;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp();
   await MobileAds.instance.initialize();
@@ -111,14 +114,18 @@ Future<void> _safeDeepLinkNavigation(String requestId) async {
 
 
     int retries = 0;
-    const maxRetries = 20;
+    const maxRetries = 10;
 
     controller.setLoading(true);
     while (controller.filteredRequestsData.isEmpty && retries < maxRetries) {
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 2000));
       retries++;
       // debugPrint('Waiting for filteredRequestsData... retry $retries');
-      Get.snackbar("Loading", 'Waiting for filteredRequestsData... retry $retries');
+
+      Get.snackbar("Fetching", 'Waiting for Requests... retry $retries',
+          snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.white
+      );
     }
 
 

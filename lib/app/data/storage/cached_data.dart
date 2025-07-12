@@ -92,7 +92,7 @@ class CachedData {
   Future<UserData?> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString("profileData");
-    print("getting: " + jsonString!);
+    // print("getting: " + jsonString!);
     if (jsonString != null) {
       Map<String, dynamic> json = jsonDecode(jsonString);
       return UserData.fromJson(json);

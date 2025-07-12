@@ -570,11 +570,9 @@ class DashboardView extends GetView<HomeController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Container(
-                        color: AppColors.askBlue,
+                        // color: AppColors.askBlue,
                           height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
-                          child:
-                          // IgnorePointer(child:
-                          BannerAdExample()
+                          child: BannerAdExample()
                         // ),
                       ),
                     ),

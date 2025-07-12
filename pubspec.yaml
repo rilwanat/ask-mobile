@@ -47,6 +47,7 @@ dependencies:
   cloud_firestore: ^5.6.8
   firebase_core: ^3.13.1
   app_links: ^6.4.0
+  flutter_dotenv: ^5.2.1
 #  firebase_dynamic_links: ^6.1.7
 #  uni_links: ^0.5.1
 
@@ -86,6 +87,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/images/
     - assets/images/icons/
 

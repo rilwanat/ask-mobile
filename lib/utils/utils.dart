@@ -226,7 +226,7 @@ class Utils {
                           function: () async {
                             Navigator.pop(context);
 
-                            print(message);
+                            // print(message);
 
                             // if (message == "Account with phone number already exists.") {
                             //   Get.to(() => const LoginView(),
