@@ -90,7 +90,10 @@ Future<void> _safeDeepLinkNavigation(String requestId) async {
 
     // await Get.offAll(() => const HomeView());
 
-    final controller = Get.find<HomeController>();
+    // final controller = Get.find<HomeController>();
+    final controller = Get.isRegistered<HomeController>()
+        ? Get.find<HomeController>()
+        : Get.put(HomeController());
 
     // // Wait for HomeView and filteredRequestsData to be ready
     // int retries = 0;
@@ -106,8 +109,26 @@ Future<void> _safeDeepLinkNavigation(String requestId) async {
     controller.handleNavigation(1);
     await Future.delayed(const Duration(milliseconds: 300));
 
-    // Scroll to the request
-    await controller.scrollToNewRequestViaHelptoken(requestId);
+
+    int retries = 0;
+    const maxRetries = 20;
+
+    controller.setLoading(true);
+    while (controller.filteredRequestsData.isEmpty && retries < maxRetries) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      retries++;
+      // debugPrint('Waiting for filteredRequestsData... retry $retries');
+      Get.snackbar("Loading", 'Waiting for filteredRequestsData... retry $retries');
+    }
+
+
+    if (controller.filteredRequestsData.isNotEmpty) {
+// Scroll to the request
+      await controller.scrollToNewRequestViaHelptoken(requestId);
+    }
+
+    controller.setLoading(false);
+
     debugPrint('### Deep link finished');
   } catch (e, stack) {
     debugPrint('Deep link error: $e\n$stack');
