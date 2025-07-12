@@ -88,19 +88,19 @@ Future<void> _safeDeepLinkNavigation(String requestId) async {
       HomeBinding().dependencies();
     }
 
-    await Get.offAll(() => const HomeView());
+    // await Get.offAll(() => const HomeView());
 
     final controller = Get.find<HomeController>();
 
-    // Wait for HomeView and filteredRequestsData to be ready
-    int retries = 0;
-    while ((!controller.singleRequestScrollController.hasClients ||
-        controller.filteredRequestsData.isEmpty) &&
-        retries < 20) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      retries++;
-      debugPrint("Waiting for scroll controller and data... retry $retries");
-    }
+    // // Wait for HomeView and filteredRequestsData to be ready
+    // int retries = 0;
+    // while ((!controller.singleRequestScrollController.hasClients ||
+    //     controller.filteredRequestsData.isEmpty) &&
+    //     retries < 20) {
+    //   await Future.delayed(const Duration(milliseconds: 300));
+    //   retries++;
+    //   debugPrint("Waiting for scroll controller and data... retry $retries");
+    // }
 
     // Switch to the Requests tab
     controller.handleNavigation(1);
