@@ -22,19 +22,19 @@ import '../../../../global/widgets/BannerAdExample.dart';
 class DonationsView extends GetView<HomeController> {
   DonationsView({super.key});
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: controller.scaffoldKey,
-      key: _scaffoldKey,
+      key: controller.scaffoldKey,
+      // key: _scaffoldKey,
       backgroundColor: AppColors.askBackground,
       drawer: NavBar(),
       appBar: CustomAppBar(
         onMenuPressed: () {
-          // controller.scaffoldKey.currentState?.openDrawer();
-          _scaffoldKey.currentState?.openDrawer();
+          controller.scaffoldKey.currentState?.openDrawer();
+          // _scaffoldKey.currentState?.openDrawer();
         },
         onMorePressed: () {
         },

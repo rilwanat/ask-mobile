@@ -67,7 +67,7 @@ class HomeController extends GetxController {
 
   final CachedData _cachedData = CachedData();
 
-  // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   var notificationMessages = <Map<String, dynamic>>[].obs;
@@ -835,8 +835,11 @@ class HomeController extends GetxController {
 
 
 
-    startAutoScrollHelpRequests();
-    startAutoScrollBeneficiaries();
+    // // Start auto-scroll only after views are ready
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   startAutoScrollHelpRequests();
+    //   startAutoScrollBeneficiaries();
+    // });
 
     super.onInit();
   }
@@ -946,6 +949,12 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+
+    // Start auto-scroll only after view is ready
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startAutoScrollHelpRequests();
+      startAutoScrollBeneficiaries();
+    });
   }
 
   @override
@@ -965,7 +974,10 @@ class HomeController extends GetxController {
   @override
   void dispose() {
     helpAutoScrollTimer?.cancel();
+    helpAutoScrollTimer?.cancel();
+    beneficiariesAutoScrollTimer?.cancel();
     helpScrollController.dispose();
+
 
     cameraController.value?.dispose();
     cameraController.value = null;
@@ -976,6 +988,7 @@ class HomeController extends GetxController {
   }
 
   void startAutoScrollHelpRequests() {
+    helpAutoScrollTimer?.cancel(); // Cancel existing timer
     helpAutoScrollTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
       if (helpCurrentIndex < helpRequestsData.length - 1) {
         helpCurrentIndex++;
@@ -983,16 +996,25 @@ class HomeController extends GetxController {
         helpCurrentIndex = 0; // Loop back to first item
       }
 
-      // Animate to the next item
-      helpScrollController.animateTo(
-        helpCurrentIndex * 160.0, // 144 width + 8 margin on each side
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+
+
+      try {
+        if (helpScrollController.hasClients) {
+          // Animate to the next item
+          helpScrollController.animateTo(
+            helpCurrentIndex * 160.0, // 144 width + 8 margin on each side
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (e) {
+        debugPrint('Scroll error: $e');
+      }
     });
   }
 
   void startAutoScrollBeneficiaries() {
+    beneficiariesAutoScrollTimer?.cancel();
     beneficiariesAutoScrollTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
       if (beneficiariesCurrentIndex < beneficiariesData.length - 1) {
         beneficiariesCurrentIndex++;
@@ -1000,12 +1022,19 @@ class HomeController extends GetxController {
         beneficiariesCurrentIndex = 0; // Loop back to first item
       }
 
-      // Animate to the next item
-      beneficiariesScrollController.animateTo(
-        beneficiariesCurrentIndex * 160.0, // 144 width + 8 margin on each side
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+
+      try {
+        if (beneficiariesScrollController.hasClients) {
+          // Animate to the next item
+          beneficiariesScrollController.animateTo(
+            beneficiariesCurrentIndex * 160.0, // 144 width + 8 margin on each side
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (e) {
+        debugPrint('Scroll error: $e');
+      }
     });
   }
 

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
+import '../modules/default/bindings/default_binding.dart';
+import '../modules/default/views/default_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -14,6 +16,7 @@ class AppPages {
 
   static const INITIAL = Routes.ONBOARDING;
   static const HOME = Routes.HOME;
+  static const DEFAULT = Routes.DEFAULT;
 
   static final routes = [
     GetPage(
@@ -30,6 +33,11 @@ class AppPages {
       name: _Paths.AUTH,
       page: () => const AuthView(),
       binding: AuthBinding(),
+    ),
+    GetPage(
+      name: _Paths.DEFAULT,
+      page: () => const DefaultView(),
+      binding: DefaultBinding(),
     ),
   ];
 }

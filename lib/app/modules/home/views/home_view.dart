@@ -11,6 +11,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.scaffoldKey,
+
       backgroundColor: AppColors.askBackground,
       // appBar: AppBar(
       //   title: const Text('HomeView'),
