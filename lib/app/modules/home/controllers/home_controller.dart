@@ -72,6 +72,16 @@ class HomeController extends GetxController {
 
 
   var notificationMessages = <Map<String, dynamic>>[].obs;
+  DateTime? _lastNotificationTime;
+  // RxBool hasNewNotification = false.obs;
+  final _hasNewNotification = false.obs;
+  bool get hasNewNotification => _hasNewNotification.value;
+  void setHasNewNotification(bool value) {
+    if (_hasNewNotification.value != value) {
+      _hasNewNotification.value = value;
+      update();
+    }
+  }
 
 
   var showBottomNav = true.obs;
@@ -692,7 +702,13 @@ class HomeController extends GetxController {
       update();
     } catch (e) {
       // print("Error fetching initial notifications: $e");
-      Get.snackbar('Error', 'Failed to load notifications');
+      Utils.showTopSnackBar(
+          t: "Error",
+          m: 'Failed to load notifications',
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
     }
   }
 
@@ -710,27 +726,116 @@ class HomeController extends GetxController {
     }).toList();
   }
 
-// Step 2: Append new notifications from listener (stream)
-  void listenToNewNotificationMessages(String fDocument) {
-    getNewNotificationStream(fDocument).listen((newMessages) {
-      for (var message in newMessages) {
-        // More reliable check using documentId
-        if (!notificationMessages.any((item) =>
-        item['documentId'] == message['documentId'])) {
 
+// Step 2: Append new notifications from listener (stream)
+//   void listenToNewNotificationMessages(String fDocument) {
+//     getNewNotificationStream(fDocument).listen((newMessages) {
+//       bool anyNew = false;
+//
+//       for (var message in newMessages) {
+//         // More reliable check using documentId
+//         if (!notificationMessages.any((item) =>
+//         item['documentId'] == message['documentId'])) {
+//
+//           final messageTime = (message['timestamp'] as Timestamp).toDate();
+//           String formattedMessage = Utils.stripBrTags(message['message']);
+//           message['message'] = formattedMessage;
+//
+//           // notificationMessages.add(message);
+//           notificationMessages.insert(0, message); // insert at top
+//
+//
+//           // Check if this is actually newer than our last recorded notification
+//           if (_lastNotificationTime == null || messageTime.isAfter(_lastNotificationTime!)) {
+//             anyNew = true;
+//             _lastNotificationTime = messageTime;
+//           }
+//         }
+//       }
+//
+//       // Only update state and show notifications if we found truly new messages
+//       if (anyNew) {
+//         setHasNewNotification(true);
+//         // Show notification for the most recent message
+//         if (notificationMessages.isNotEmpty) {
+//           final latest = notificationMessages.first;
+//           displayNotification("A.S.K Nomination", latest['message'], latest['meta']);
+//
+//           // print("New notification: ${message['message']} (ID: ${message['documentId']}) "
+//           //     "(meta: ${message['meta']})");
+//         }
+//       } else {
+//         setHasNewNotification(false);
+//       }
+//       update();
+//     });
+//   }
+  void listenToNewNotificationMessages(String fDocument) {
+    getNewNotificationStream(fDocument).listen((newMessages) async {
+      bool anyNew = false;
+      final List<String> seenIds = await _cachedData.getSeenNotificationIds();
+      final DateTime? lastSeenTime = await _cachedData.getLastSeenNotificationTime();
+      final List<String> newSeenIds = List.from(seenIds);
+
+      for (var message in newMessages) {
+        final messageId = message['documentId'];
+        final messageTime = (message['timestamp'] as Timestamp).toDate();
+
+        if (!notificationMessages.any((item) => item['documentId'] == messageId)) {
           String formattedMessage = Utils.stripBrTags(message['message']);
           message['message'] = formattedMessage;
+          notificationMessages.insert(0, message);
 
-          // notificationMessages.add(message);
-          notificationMessages.insert(0, message); // insert at top
-          displayNotification("A.S.K Nomination", formattedMessage, message['meta']);
-          // print("New notification: ${message['message']} (ID: ${message['documentId']}) "
-          //     "(meta: ${message['meta']})");
+          // Check if notification is new (not seen before)
+          bool isNew = !seenIds.contains(messageId) &&
+              (lastSeenTime == null || messageTime.isAfter(lastSeenTime));
+
+          if (isNew) {
+            anyNew = true;
+            displayNotification("A.S.K Nomination", formattedMessage, message['meta']);
+          }
+
+          // Mark as seen in local cache
+          if (!newSeenIds.contains(messageId)) {
+            newSeenIds.add(messageId);
+          }
         }
       }
+
+      // Update seen notifications in storage
+      if (newSeenIds.length > seenIds.length) {
+        await _cachedData.saveSeenNotificationIds(newSeenIds);
+      }
+
+      setHasNewNotification(anyNew);
       update();
     });
   }
+
+// Call this when user views notifications
+  Future<void> markNotificationsAsSeen() async {
+    if (notificationMessages.isNotEmpty) {
+      final newestTime = (notificationMessages.first['timestamp'] as Timestamp).toDate();
+      await _cachedData.saveLastSeenNotificationTime(newestTime);
+      setHasNewNotification(false);
+      update();
+    }
+  }
+  Future<bool> checkForNewNotifications() async {
+    if (notificationMessages.isEmpty) return false;
+
+    final newestMessage = notificationMessages.first;
+    final newestId = newestMessage['documentId'];
+    final newestTime = (newestMessage['timestamp'] as Timestamp).toDate();
+
+    final seenIds = await _cachedData.getSeenNotificationIds();
+    final lastSeenTime = await _cachedData.getLastSeenNotificationTime();
+
+    return !seenIds.contains(newestId) &&
+        (lastSeenTime == null || newestTime.isAfter(lastSeenTime));
+  }
+
+
 
 // Return only new messages from snapshot stream with document IDs
   Stream<List<Map<String, dynamic>>> getNewNotificationStream(String fDocument) {
@@ -777,7 +882,7 @@ class HomeController extends GetxController {
       }
 
       update();
-      print('Successfully deleted notification');
+      // print('Successfully deleted notification');
       Utils.showTopSnackBar(
           t: "A.S.K Delete Notification",
           m: 'Success',
@@ -793,10 +898,10 @@ class HomeController extends GetxController {
       // );
 
     } catch (e) {
-      print('Error deleting notification: $e');
+      // print('Error deleting notification: $e');
       Utils.showTopSnackBar(
           t: "A.S.K Delete Notification",
-          m: 'Failed to delete notification',
+          m: 'Failed to delete notification: $e',
           tc: AppColors.white,
           d: 3,
           bc: AppColors.red,
@@ -817,7 +922,7 @@ class HomeController extends GetxController {
   void onInit() {
 
     _initializeControllers();
-    initializeProfileData().then((_) {
+    /*initializeProfileData().then((_) {
       _initializeNotifications();
 
 
@@ -832,7 +937,7 @@ class HomeController extends GetxController {
       // startAutoScroll();
       debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
 
-    });
+    });*/
 
 
 
@@ -860,9 +965,16 @@ class HomeController extends GetxController {
   // }
   Future<void> requestNotificationPermission() async {
     if (await Permission.notification.request().isDenied) {
-      print("Notification permission denied!");
+      // print("Notification permission denied!");
+      Utils.showTopSnackBar(
+          t: "Notification",
+          m: 'Notification permission denied!',
+          tc: AppColors.white,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
     } else {
-      print("Notification permission granted!");
+      // print("Notification permission granted!");
     }
   }
   Future<void> initNotifications() async {
@@ -883,13 +995,14 @@ class HomeController extends GetxController {
         final meta = data['meta'] ?? '';
 
         // print("Notification clicked: ${response.payload}");
-        print("Notification clicked: ${meta}");
+        // print("Notification clicked: ${meta}");
 
         if (meta != '') {
           // handleNavigation(1);
           // await Get.find<HomeController>().scrollToNewRequest(int.parse(meta!));
 
           Get.to(() => NotificationsView());
+          markNotificationsAsSeen();
         }
       },
     );
@@ -953,8 +1066,38 @@ class HomeController extends GetxController {
 
     // Start auto-scroll only after view is ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      startAutoScrollHelpRequests();
+      // startAutoScrollHelpRequests();
       startAutoScrollBeneficiaries();
+    });
+
+
+  }
+
+  void onHomeViewLoaded() {
+    // This will be called every time HomeView loads
+    // Utils.showTopSnackBar(
+    //     t: "Error",
+    //     m: "YOH",
+    //     tc: AppColors.black,
+    //     d: 3,
+    //     bc: AppColors.red,
+    //     sp: SnackPosition.TOP);
+
+    initializeProfileData().then((_) {
+      _initializeNotifications();
+
+
+      String fDocument = "adm-${profileData.value!.emailAddress!}";
+      // Step 1: Get all existing notifications once
+      getAllNotificationMessagesOnce(fDocument);
+      // Step 2: Listen to new incoming notifications (assume a stream)
+      listenToNewNotificationMessages(fDocument);
+
+
+
+      // startAutoScroll();
+      debounce(searchText, (_) => filterHelpRequests(), time: const Duration(milliseconds: 500));
+
     });
   }
 

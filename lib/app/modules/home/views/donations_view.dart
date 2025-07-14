@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 
@@ -680,15 +681,11 @@ class DonationsView extends GetView<HomeController> {
                                                     ),
                                                     child: selected.image != null
                                                         ?
-                                                    // Image.network(
-                                                    //   "${const String.fromEnvironment('API_SERVER_URL', defaultValue: 'https://playground.askfoundations.org/')}/${selected.image}",
-                                                    //   fit: BoxFit.contain,
-                                                    // )
                                                     CachedNetworkImage(
                                                       imageUrl:
-                                                      // "https://playground.askfoundations.org/" +
-                                                          "https://askfoundations.org/" +
-                                                          "/${selected.image}",
+                                                      dotenv.getBool('LIVE_MODE') == false
+                                                          ? "https://playground.askfoundations.org/${selected.image}"
+                                                          : "https://askfoundations.org/${selected.image}",
                                                       fit: BoxFit.contain,//cover, // Changed from contain to cover
                                                       width: double.infinity,
                                                       height: double.infinity,

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../app/modules/home/views/notifications_view.dart';
+import '../../utils/utils.dart';
 import '../app_color.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -87,18 +88,67 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // homeCtrl.initializeProfileData();
-                        Get.to(() => const NotificationsView());
+                        String helpToken = homeCtrl.myHelpRequestsData.value?.helpToken ?? '';
+
+                        if (helpToken.isNotEmpty) {
+                          Get.back();
+                          await homeCtrl.handleNavigation(1);
+                          await homeCtrl.scrollToNewRequestViaHelptoken(helpToken);
+                        } else {
+                          // Utils.showTopSnackBar(
+                          //   t: "My Request",
+                          //   m: "You don't have an active help request. Please create one.",
+                          //   tc: AppColors.white,
+                          //   d: 3,
+                          //   bc: AppColors.askBlue,
+                          //   sp: SnackPosition.TOP,
+                          // );
+                          Utils.showInformationDialog(status: null,
+                              title: "My Request",
+                              message: "You don't have an active help request. Please create one."
+                          );
+                        }
                       },
                       child: Icon(
                         // Icons.more_vert_rounded,
-                        // Icons.refresh,
-                        Icons.notifications,
+                        Icons.request_page,
                         color: iconColor,
                       ),
                     ),
                   ],
                 ),
+              ),
+
+              const SizedBox(width: 10,),
+
+              GestureDetector(
+                onTap: () async {
+                  // homeCtrl.initializeProfileData();
+                  Get.to(() => const NotificationsView());
+                  homeCtrl.markNotificationsAsSeen();
+                },
+                child: Obx(() => Stack(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(
+                              // Icons.more_vert_rounded,
+                              // Icons.refresh,
+                              Icons.notifications,
+                              color: iconColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      homeCtrl.hasNewNotification ?
+                      Positioned(top: 0, right: 4, child: Container(width: 8, height: 8, color: AppColors.red))
+                          : Container()
+                    ]
+                ),)
               ),
 
               const SizedBox(width: 10,),

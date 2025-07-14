@@ -36,7 +36,7 @@ class NotificationsView extends GetView<HomeController> {
         },
         onMorePressed: () {
         },
-        title: 'A.S.K - Notifications',
+        title: 'Notifications',
         backgroundColor: AppColors.askBlue,
       ),
       body:
@@ -59,7 +59,18 @@ class NotificationsView extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: ScreenSize.scaleHeight(context, 70),),
+                      SizedBox(height: ScreenSize.scaleHeight(context, 10),),
+                      //
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Container(
+                          // color: AppColors.askBlue,
+                            height: AdSize.banner.height.toDouble(), // 50.0 for standard banner
+                            child: BannerAdExample()
+                          // ),
+                        ),
+                      ),
+                      //
                       // const FlashAppBar(
                       //   title: "Notifications",
                       //   showBackArrow: true,

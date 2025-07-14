@@ -1,6 +1,7 @@
 import 'package:ask_mobile/app/modules/home/controllers/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 
@@ -34,7 +35,7 @@ class BeneficiariesView extends GetView<HomeController> {
           onMorePressed: () {
 
           },
-          title: 'A.S.K - Beneficiaries',
+          title: 'Beneficiaries',
           backgroundColor: AppColors.askBlue,
         ),
         body: Container(
@@ -127,9 +128,9 @@ class BeneficiariesView extends GetView<HomeController> {
                                               borderRadius: BorderRadius.circular(10), // Match container's border radius
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                // "https://playground.askfoundations.org/backend/api/v1/" +
-                                                    "https://askfoundations.org/" + "" +
-                                                    "${data?.user!.profilePicture}",
+                                                dotenv.getBool('LIVE_MODE') == false
+                                                    ? "https://playground.askfoundations.org/backend/api/v1/${data?.user!.profilePicture}"
+                                                    : "https://askfoundations.org/${data?.user!.profilePicture}",
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,
                                                 height: double.infinity,

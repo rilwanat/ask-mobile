@@ -3,6 +3,7 @@ import 'package:ask_mobile/app/modules/home/views/beneficiaries_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -31,6 +32,11 @@ class DashboardView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.onHomeViewLoaded();
+    });
+
+
     return Scaffold(
       key: controller.scaffoldKey,
       // key: _scaffoldKey,
@@ -43,7 +49,7 @@ class DashboardView extends GetView<HomeController> {
         },
         onMorePressed: () {
         },
-        title: 'A.S.K - Home',
+        title: 'Home',
         backgroundColor: AppColors.askBlue,
       ),
       body: Container(
@@ -394,6 +400,16 @@ class DashboardView extends GetView<HomeController> {
                                   hrd.Data helpRequest = controller.helpRequestsData[index]!;
 
                                   return GestureDetector(
+                                    // onHorizontalDragStart: (details) {
+                                    //   // Pause auto-scroll when user starts dragging horizontally
+                                    //   controller.pauseAutoScroll();
+                                    // },
+                                    // onHorizontalDragEnd: (details) {
+                                    //   // Resume auto-scroll after a delay when dragging ends
+                                    //   Future.delayed(const Duration(seconds: 10), () {
+                                    //     controller.resumeAutoScroll();
+                                    //   });
+                                    // },
                                     onLongPress: () {
                                       // controller.showTopSnackBar(
                                       //   t: "#",
@@ -406,18 +422,17 @@ class DashboardView extends GetView<HomeController> {
                                     },
                                     onTap: () async {
 
-
                                       controller.searchRequestsController.clear();
 
                                       await controller.handleNavigation(1);
                                       await controller.scrollToNewRequestViaId(int.parse(helpRequest.id!));
 
-                                      // //open product details view
-                                      // Get.to(() => ProductDetailsView(
-                                      //   product: product,
-                                      //   productImage:
-                                      //   "https://es.shopafricana.co/product-images/detailed-900x1125/" + "${product.productImages![0]}",
-                                      // ));
+
+                                      // // Optionally resume after delay
+                                      // Future.delayed(const Duration(seconds: 10), () {
+                                      //   controller.resumeAutoScroll();
+                                      // });
+
 
                                       // Utils.showTopSnackBar(
                                       //   t: helpRequest.user!.fullname!,
@@ -456,9 +471,9 @@ class DashboardView extends GetView<HomeController> {
                                                     borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                     child: CachedNetworkImage(
                                                       imageUrl:
-                                                      // "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                          "https://askfoundations.org/" +
-                                                          "${helpRequest.requestImage}",
+                                                      dotenv.getBool('LIVE_MODE') == false
+                                                          ? "https://playground.askfoundations.org/backend/api/v1/response/${helpRequest.requestImage}"
+                                                          : "https://askfoundations.org/${helpRequest.requestImage}",
                                                       fit: BoxFit.cover, // Changed from contain to cover
                                                       width: double.infinity,
                                                       height: double.infinity,
@@ -684,9 +699,9 @@ class DashboardView extends GetView<HomeController> {
                                                     borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                     child: CachedNetworkImage(
                                                       imageUrl:
-                                                      // "https://playground.askfoundations.org/backend/api/v1/" +
-                                                          "https://askfoundations.org/" + "" +
-                                                          "${beneficiary.user!.profilePicture}",
+                                                      dotenv.getBool('LIVE_MODE') == false
+                                                          ? "https://playground.askfoundations.org/backend/api/v1/response/${beneficiary.user!.profilePicture}"
+                                                          : "https://askfoundations.org/${beneficiary.user!.profilePicture}",
                                                       fit: BoxFit.cover, // Changed from contain to cover
                                                       width: double.infinity,
                                                       height: double.infinity,

@@ -6,6 +6,7 @@ import 'package:ask_mobile/app/modules/home/views/requests_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 import '../../app/modules/home/controllers/home_controller.dart';
@@ -34,7 +35,7 @@ class NavBar extends GetView<HomeController> {
               child: UserAccountsDrawerHeader(
               currentAccountPictureSize: const Size(64, 64),
                 accountName: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -44,7 +45,7 @@ class NavBar extends GetView<HomeController> {
                 ),
                 accountEmail: SizedBox(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Obx(() => Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -136,9 +137,9 @@ class NavBar extends GetView<HomeController> {
                           borderRadius: BorderRadius.circular(30), // Match container's border radius
                           child: CachedNetworkImage(
                             imageUrl:
-                            // "https://playground.askfoundations.org/" +
-                                "https://askfoundations.org/" +
-                                "${controller.profileData.value!.profilePicture!}",
+                            dotenv.getBool('LIVE_MODE') == false
+                                ? "https://playground.askfoundations.org/${controller.profileData.value!.profilePicture!}"
+                                : "https://askfoundations.org/${controller.profileData.value!.profilePicture!}",
                             fit: BoxFit.cover, // Changed from contain to cover
                             width: ScreenSize.width(context) * 0.2,
                             height: ScreenSize.width(context) * 0.2,

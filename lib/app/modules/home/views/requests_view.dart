@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 
@@ -39,7 +40,7 @@ class RequestsView extends GetView<HomeController> {
         },
         onMorePressed: () {
         },
-        title: 'A.S.K - Requests',
+        title: 'Requests',
         backgroundColor: AppColors.askBlue,
       ),
       body: Obx(() => controller.isLoading
@@ -329,9 +330,9 @@ class RequestsView extends GetView<HomeController> {
                                               borderRadius: BorderRadius.circular(10), // Match container's border radius
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                // "https://playground.askfoundations.org/backend/api/v1/response/" +
-                                                    "https://askfoundations.org/" +
-                                                    "${helpRequest.requestImage}",
+                                                dotenv.getBool('LIVE_MODE') == false
+                                                    ? "https://playground.askfoundations.org/backend/api/v1/response/${helpRequest.requestImage}"
+                                                    : "https://askfoundations.org/${helpRequest.requestImage}",
                                                 fit: BoxFit.cover, // Changed from contain to cover
                                                 width: double.infinity,
                                                 height: double.infinity,
@@ -421,8 +422,12 @@ class RequestsView extends GetView<HomeController> {
                                       text: "Share",
                                       function: () async {
 
-                                        // Utils.shareText("https://playground.askfoundations.org/help-request/${helpRequest.helpToken}");
-                                        Utils.shareText("https://askfoundations.org/help-request/${helpRequest.helpToken}");
+                                        // Utils.shareText();
+                                        Utils.shareText(
+                                        dotenv.getBool('LIVE_MODE') == false
+                                        ? "https://playground.askfoundations.org/help-request/${helpRequest.helpToken}"
+                                        : "https://askfoundations.org/help-request/${helpRequest.helpToken}"
+                                        );
 
                                       },
                                       backgroundColor: AppColors.askBlue,

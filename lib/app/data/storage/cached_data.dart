@@ -132,4 +132,28 @@ class CachedData {
   }
 
 
+  //
+// Add these methods to your CachedData class
+  Future<void> saveLastSeenNotificationTime(DateTime time) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('last_seen_notification', time.toIso8601String());
+  }
+
+  Future<DateTime?> getLastSeenNotificationTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final timeString = prefs.getString('last_seen_notification');
+    return timeString != null ? DateTime.parse(timeString) : null;
+  }
+
+  Future<void> saveSeenNotificationIds(List<String> ids) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('seen_notification_ids', ids);
+  }
+
+  Future<List<String>> getSeenNotificationIds() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('seen_notification_ids') ?? [];
+  }
+//
+
 }

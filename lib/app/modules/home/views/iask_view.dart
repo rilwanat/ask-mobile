@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -2126,9 +2127,9 @@ class IaskView extends GetView<HomeController> {
                                                           borderRadius: BorderRadius.circular(10), // Match container's border radius
                                                           child: CachedNetworkImage(
                                                             imageUrl:
-                                                            // "https://playground.askfoundations.org/backend/api/v1/" +
-                                                                "https://askfoundations.org/" + "" +
-                                                                "${controller.myHelpRequestsData.value!.requestImage!}",
+                                                            dotenv.getBool('LIVE_MODE') == false
+                                                                ? "https://playground.askfoundations.org/backend/api/v1/${controller.myHelpRequestsData.value!.requestImage!}"
+                                                                : "https://askfoundations.org/${controller.myHelpRequestsData.value!.requestImage!}",
                                                             fit: BoxFit.cover, // Changed from contain to cover
                                                             width: 250,//double.infinity,
                                                             height: 250,//double.infinity,
@@ -2269,7 +2270,7 @@ class IaskView extends GetView<HomeController> {
                                               ),
                                               AskButton(
                                                   enabled: true,
-                                                  text: controller.isLoading ? 'Please wait..' : "Delete Request",
+                                                  text: controller.isLoading ? 'Please wait..' : "View Request",
                                                   function: () async {
 
                                                     String email = controller.profileData.value!.emailAddress!;
@@ -2281,9 +2282,9 @@ class IaskView extends GetView<HomeController> {
                                                     // description != "" &&
                                                     //     image.path != "") {
                                                     //
-                                                      controller.deleteHelpRequest(
-                                                          email: email,
-                                                          helpToken: helpToken
+                                                    controller.handleNavigation(1);
+                                                      controller.scrollToNewRequestViaHelptoken(
+                                                           helpToken
                                                       );
                                                     //
                                                     // } else {
@@ -2291,6 +2292,90 @@ class IaskView extends GetView<HomeController> {
                                                     //       title: 'A.S.K Help Request',
                                                     //       message: "Enter a Help Request description and select an image to upload");
                                                     // }
+                                                  },
+                                                  backgroundColor: AppColors.white,
+                                                  textColor: AppColors.askBlue,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                  borderCurve: 26,
+                                                  border: true,
+                                                  borderColor: AppColors.askBlue,
+                                                  textSize: 16
+                                              ),
+                                              // const SizedBox(
+                                              //   height: 20,
+                                              // ),
+                                              // Divider(),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              AskButton(
+                                                  enabled: true,
+                                                  text: controller.isLoading ? 'Please wait..' : "Delete Request",
+                                                  function: () async {
+
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext context) {
+                                                        return AlertDialog(
+                                                          title: const Text("Confirm Deletion"),
+                                                          content: const Text("Are you sure you want to delete your help request?"),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              child: const Text("Cancel"),
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop(); // Close the dialog
+                                                              },
+                                                            ),
+                                                            TextButton(
+                                                              child: const Text("OK"),
+                                                              onPressed: () async {
+                                                                Navigator.of(context).pop(); // Close the dialog
+                                                                try {
+                                                                  String email = controller.profileData.value!.emailAddress!;
+                                                                  String helpToken = controller.myHelpRequestsData.value!.helpToken!;
+                                                                  await controller.deleteHelpRequest(
+                                                                    email: email,
+                                                                    helpToken: helpToken,
+                                                                  );
+                                                                  // Optional: Show success message
+                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                  //   SnackBar(content: Text('Help request deleted successfully')),
+                                                                  // );
+                                                                } catch (e) {
+                                                                  // Optional: Show error message
+                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                    SnackBar(content: Text('Error deleting help request: $e')),
+                                                                  );
+                                                                }
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+
+
+
+                                                    // String email = controller.profileData.value!.emailAddress!;
+                                                    // String helpToken = controller.myHelpRequestsData.value!.helpToken!;
+                                                    // // String fullname = controller.profileData.value!.fullname!;
+                                                    // // File? image = controller.helpRequestImage.value!;
+                                                    // //
+                                                    // // if (
+                                                    // // description != "" &&
+                                                    // //     image.path != "") {
+                                                    // //
+                                                    // controller.deleteHelpRequest(
+                                                    //     email: email,
+                                                    //     helpToken: helpToken
+                                                    // );
+                                                    // //
+                                                    // // } else {
+                                                    // //   Utils.showInformationDialog(status: null,
+                                                    // //       title: 'A.S.K Help Request',
+                                                    // //       message: "Enter a Help Request description and select an image to upload");
+                                                    // // }
                                                   },
                                                   backgroundColor: AppColors.red,
                                                   textColor: AppColors.white,

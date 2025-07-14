@@ -11,12 +11,13 @@ Dio client() {
   final Dio dio = Dio();
 
 
-  final isLive = dotenv.getBool('DEBUG_MODE');
+  final isLive = dotenv.getBool('LIVE_MODE');
   final apiUrl = dotenv.get(isLive ? 'LIVE_API_BASE_URL' : 'DEMO_API_BASE_URL');
 
   dio.options.baseUrl = apiUrl;
   dio.options.connectTimeout = const Duration(seconds: 30);
   dio.options.receiveTimeout = const Duration(seconds: 30);
+  dio.options.sendTimeout = const Duration(seconds: 30);
 
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {

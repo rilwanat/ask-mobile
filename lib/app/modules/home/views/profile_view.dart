@@ -1,6 +1,7 @@
 import 'package:ask_mobile/global/screen_size.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
 
@@ -29,7 +30,7 @@ class ProfileView extends GetView<HomeController> {
         },
         onMorePressed: () {
         },
-        title: 'A.S.K - Profile',
+        title: 'Profile',
         backgroundColor: AppColors.askBlue,
       ),
       body: Container(
@@ -80,9 +81,9 @@ class ProfileView extends GetView<HomeController> {
                                       borderRadius: BorderRadius.circular(300), // Match container's border radius
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                        // "https://playground.askfoundations.org/" +
-                                            "https://askfoundations.org/" +
-                                            "${controller.profileData.value!.profilePicture!}",
+                                        dotenv.getBool('LIVE_MODE') == false
+                                            ? "https://playground.askfoundations.org/backend/api/v1/response/${controller.profileData.value!.profilePicture!}"
+                                            : "https://askfoundations.org/${controller.profileData.value!.profilePicture!}",
                                         fit: BoxFit.cover, // Changed from contain to cover
                                         width: ScreenSize.width(context) * 0.2,
                                         height: ScreenSize.width(context) * 0.2,
@@ -101,7 +102,7 @@ class ProfileView extends GetView<HomeController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,//paceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     GestureDetector(
                                         onTap: () {
@@ -115,6 +116,45 @@ class ProfileView extends GetView<HomeController> {
                                             ),
                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                             child: const Text("Refresh", style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "LatoRegular",
+                                              color: AppColors.white,)))),
+
+                                    GestureDetector(
+                                        onTap: () async {
+
+                                          String helpToken = controller.myHelpRequestsData.value?.helpToken ?? '';
+
+                                          if (helpToken.isNotEmpty) {
+                                            Get.back();
+                                            await controller.handleNavigation(1);
+                                            await controller.scrollToNewRequestViaHelptoken(helpToken);
+                                          } else {
+                                            // Utils.showTopSnackBar(
+                                            //   t: "My Request",
+                                            //   m: "You don't have an active help request. Please create one.",
+                                            //   tc: AppColors.white,
+                                            //   d: 3,
+                                            //   bc: AppColors.askBlue,
+                                            //   sp: SnackPosition.TOP,
+                                            // );
+                                            Utils.showInformationDialog(status: null,
+                                                title: "My Request",
+                                                message: "You don't have an active help request. Please create one."
+                                            );
+                                          }
+
+
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColors.askBlue,
+                                              border: Border.all(color: AppColors.askBlue, width: 2),
+                                              borderRadius: BorderRadius.circular(30),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                            child: const Text("View Request", style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: "LatoRegular",
