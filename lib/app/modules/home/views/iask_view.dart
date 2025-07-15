@@ -2284,7 +2284,7 @@ class IaskView extends GetView<HomeController> {
                                                     //
                                                     controller.handleNavigation(1);
                                                       controller.scrollToNewRequestViaHelptoken(
-                                                           helpToken
+                                                           helpToken,
                                                       );
                                                     //
                                                     // } else {

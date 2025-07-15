@@ -87,27 +87,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () async {
-                        String helpToken = homeCtrl.myHelpRequestsData.value?.helpToken ?? '';
+                      onTap: () {
+                        Future(() async {
+                          String helpToken = homeCtrl.myHelpRequestsData.value?.helpToken ?? '';
 
-                        if (helpToken.isNotEmpty) {
+                          if (helpToken.isNotEmpty) {
 
-                          await homeCtrl.handleTheHelptokenNavigation(helpToken);
+                            await homeCtrl.handleTheHelptokenNavigation(helpToken);
 
-                        } else {
-                          // Utils.showTopSnackBar(
-                          //   t: "My Request",
-                          //   m: "You don't have an active help request. Please create one.",
-                          //   tc: AppColors.white,
-                          //   d: 3,
-                          //   bc: AppColors.askBlue,
-                          //   sp: SnackPosition.TOP,
-                          // );
-                          Utils.showInformationDialog(status: null,
-                              title: "My Request",
-                              message: "You don't have an active help request. Please create one."
-                          );
-                        }
+                          } else {
+                            // Utils.showTopSnackBar(
+                            //   t: "My Request",
+                            //   m: "You don't have an active help request. Please create one.",
+                            //   tc: AppColors.white,
+                            //   d: 3,
+                            //   bc: AppColors.askBlue,
+                            //   sp: SnackPosition.TOP,
+                            // );
+                            Utils.showInformationDialog(status: null,
+                                title: "My Request",
+                                message: "You don't have an active help request. Please create one."
+                            );
+                          }
+                        });
                       },
                       child: Icon(
                         // Icons.more_vert_rounded,

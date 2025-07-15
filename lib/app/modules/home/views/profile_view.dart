@@ -122,29 +122,31 @@ class ProfileView extends GetView<HomeController> {
                                               color: AppColors.white,)))),
 
                                     GestureDetector(
-                                        onTap: () async {
+                                        onTap: () {
 
-                                          String helpToken = controller.myHelpRequestsData.value?.helpToken ?? '';
+                                          Future(() async {
+                                            String helpToken = controller.myHelpRequestsData.value?.helpToken ?? '';
 
-                                          if (helpToken.isNotEmpty) {
+                                            if (helpToken.isNotEmpty) {
 
-                                            await controller.handleTheHelptokenNavigation(helpToken);
+                                              await controller.handleTheHelptokenNavigation(helpToken);
 
 
-                                          } else {
-                                            // Utils.showTopSnackBar(
-                                            //   t: "My Request",
-                                            //   m: "You don't have an active help request. Please create one.",
-                                            //   tc: AppColors.white,
-                                            //   d: 3,
-                                            //   bc: AppColors.askBlue,
-                                            //   sp: SnackPosition.TOP,
-                                            // );
-                                            Utils.showInformationDialog(status: null,
-                                                title: "My Request",
-                                                message: "You don't have an active help request. Please create one."
-                                            );
-                                          }
+                                            } else {
+                                              // Utils.showTopSnackBar(
+                                              //   t: "My Request",
+                                              //   m: "You don't have an active help request. Please create one.",
+                                              //   tc: AppColors.white,
+                                              //   d: 3,
+                                              //   bc: AppColors.askBlue,
+                                              //   sp: SnackPosition.TOP,
+                                              // );
+                                              Utils.showInformationDialog(status: null,
+                                                  title: "My Request",
+                                                  message: "You don't have an active help request. Please create one."
+                                              );
+                                            }
+                                          });
 
 
                                         },

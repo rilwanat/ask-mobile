@@ -644,46 +644,39 @@ class HomeController extends GetxController {
 
   Future<void> scrollToNewRequestViaHelptoken(String helptoken) async {
     try {
+      setLoading(true);
 
-      if (Get.context == null) {
+      // Immediate context check
+      if (Get.context == null || !Get.context!.mounted) {
         setLoading(false);
         return;
       }
 
 
-      setLoading(true);
+
       // final double screenWidth = Get.context!.size!.width * .8 + 8;
       // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
-      final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8; // Match your item's total width
+      // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8; // Match your item's total width
 
 
 
       final index = filteredRequestsData.indexWhere((e) => e?.helpToken == helptoken);
-
       print("index of " + helptoken.toString() + " is " + index.toString());
-      // index of 18 is 2
-
       currentRequestIndex.value = index;
       update();
 
-      // if (index != -1) {
-      //   await Future.delayed(Duration(milliseconds: 100));
-      //
-      //   if (!singleRequestScrollController.hasClients) return;
-      //
-      //   final targetPosition = index * screenWidth;
-      //   final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
-      //
-      //   await singleRequestScrollController.animateTo(
-      //     targetPosition.clamp(0.0, maxScrollExtent),
-      //     duration: Duration(milliseconds: 500),
-      //     curve: Curves.easeInOut,
-      //   );
-      // }
-
       if (index != -1) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!singleRequestScrollController.hasClients) return;
+
+
+          // Additional safety checks
+          if (!Get.context!.mounted ||
+              !singleRequestScrollController.hasClients ||
+              singleRequestScrollController.positions.isEmpty) {
+            setLoading(false);
+            return;
+          }
+
 
           final itemWidth = ScreenSize.width(Get.context!) * 0.8;
           final itemSpacing = 8;
@@ -696,7 +689,7 @@ class HomeController extends GetxController {
             targetPosition.clamp(0.0, maxScrollExtent),
             duration: Duration(milliseconds: 500),
             curve: Curves.easeInOut,
-          );
+          ).then((_) => setLoading(false));
         });
         setLoading(false);
       } else {
@@ -740,12 +733,14 @@ class HomeController extends GetxController {
 
     setLoading(true);
     // Add a small delay to ensure the new screen is built
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     // setLoading(false);
 
-    // Get the new context safely
-    final context = Get.context;
-    if (context == null) return;
+    // Use Get.context with null check immediately
+    if (Get.context == null) {
+      setLoading(false);
+      return;
+    }
 
     await scrollToNewRequestViaHelptoken(helpToken);
   }
