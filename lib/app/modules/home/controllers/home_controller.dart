@@ -644,34 +644,73 @@ class HomeController extends GetxController {
 
   Future<void> scrollToNewRequestViaHelptoken(String helptoken) async {
     try {
-      if (Get.context == null) return;
 
-      final double screenWidth = Get.context!.size!.width * .8 + 8;
+      if (Get.context == null) {
+        setLoading(false);
+        return;
+      }
+
+
+      setLoading(true);
+      // final double screenWidth = Get.context!.size!.width * .8 + 8;
       // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
+      final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8; // Match your item's total width
+
+
+
       final index = filteredRequestsData.indexWhere((e) => e?.helpToken == helptoken);
 
-      // print("index of " + helptoken.toString() + " is " + index.toString());
+      print("index of " + helptoken.toString() + " is " + index.toString());
       // index of 18 is 2
 
       currentRequestIndex.value = index;
       update();
 
+      // if (index != -1) {
+      //   await Future.delayed(Duration(milliseconds: 100));
+      //
+      //   if (!singleRequestScrollController.hasClients) return;
+      //
+      //   final targetPosition = index * screenWidth;
+      //   final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
+      //
+      //   await singleRequestScrollController.animateTo(
+      //     targetPosition.clamp(0.0, maxScrollExtent),
+      //     duration: Duration(milliseconds: 500),
+      //     curve: Curves.easeInOut,
+      //   );
+      // }
+
       if (index != -1) {
-        await Future.delayed(Duration(milliseconds: 100));
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!singleRequestScrollController.hasClients) return;
 
-        if (!singleRequestScrollController.hasClients) return;
+          final itemWidth = ScreenSize.width(Get.context!) * 0.8;
+          final itemSpacing = 8;
+          final screenWidth = itemWidth + itemSpacing;
 
-        final targetPosition = index * screenWidth;
-        final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
+          final targetPosition = index * screenWidth;
+          final maxScrollExtent = singleRequestScrollController.position.maxScrollExtent;
 
-        await singleRequestScrollController.animateTo(
-          targetPosition.clamp(0.0, maxScrollExtent),
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
+          singleRequestScrollController.animateTo(
+            targetPosition.clamp(0.0, maxScrollExtent),
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        });
+        setLoading(false);
+      } else {
+        setLoading(false);
+        Utils.showInformationDialog(status: null,
+            title: 'A.S.K Request',
+            message: "Request no longer available."
         );
       }
+
     } catch (e) {
+      setLoading(false);
       // Optional: Add error handling if needed
+      print(e.toString());
     }
   }
 
@@ -691,6 +730,24 @@ class HomeController extends GetxController {
     // Optionally reset scroll to first item
     currentRequestIndex.value = 0;
     scrollToIndex(0);
+  }
+
+  handleTheHelptokenNavigation(helpToken) async {
+    Get.back();
+
+    // Wait for the navigation to complete
+    await handleNavigation(1);
+
+    setLoading(true);
+    // Add a small delay to ensure the new screen is built
+    await Future.delayed(Duration(milliseconds: 300));
+    // setLoading(false);
+
+    // Get the new context safely
+    final context = Get.context;
+    if (context == null) return;
+
+    await scrollToNewRequestViaHelptoken(helpToken);
   }
 
 
@@ -2714,7 +2771,9 @@ class HomeController extends GetxController {
   }
       ) async {
 
-    final secretKey = dotenv.get('PAYSTACK_API_KEY');
+    final secretKey = dotenv.getBool('LIVE_MODE')
+    ? dotenv.get('LIVE_PAYSTACK_API_SECRET_KEY')
+    : dotenv.get('DEMO_PAYSTACK_API_SECRET_KEY');
 
     final client = PaystackClient(secretKey: secretKey);
 

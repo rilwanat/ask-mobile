@@ -127,9 +127,10 @@ class ProfileView extends GetView<HomeController> {
                                           String helpToken = controller.myHelpRequestsData.value?.helpToken ?? '';
 
                                           if (helpToken.isNotEmpty) {
-                                            Get.back();
-                                            await controller.handleNavigation(1);
-                                            await controller.scrollToNewRequestViaHelptoken(helpToken);
+
+                                            await controller.handleTheHelptokenNavigation(helpToken);
+
+
                                           } else {
                                             // Utils.showTopSnackBar(
                                             //   t: "My Request",

@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../app/modules/auth/bindings/auth_binding.dart';
 import '../app/modules/auth/controllers/auth_controller.dart';
 import '../app/modules/home/bindings/home_binding.dart';
 import '../app/modules/home/views/donations_view.dart';
@@ -291,9 +292,17 @@ class Utils {
 
                             }
 
+
                             if (message.contains("Registration failed. Email already exists.")) {
                               Get.to(() => const LoginView());
                               Get.find<AuthController>().loginEmailController.text = meta!;
+                            }
+                            if (message.contains("Registration successful.")) {
+                              Get.off(() => LoginView(),
+                                  transition: Transition.fadeIn, // Built-in transition type
+                                  duration: Duration(milliseconds: 500),
+                                  binding: AuthBinding()
+                              );
                             }
 
 
@@ -307,6 +316,7 @@ class Utils {
                               // Get.to(() => const HomeView());
                               Get.find<HomeController>().handleNavigation(0);
                             }
+
 
 
 

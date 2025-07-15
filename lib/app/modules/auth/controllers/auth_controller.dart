@@ -160,12 +160,14 @@ class AuthController extends GetxController {
         //     bc: AppColors.gold,
         //     sp: SnackPosition.TOP);
 
-
-        Get.off(() => LoginView(),
-            transition: Transition.fadeIn, // Built-in transition type
-            duration: Duration(milliseconds: 500),
-            binding: AuthBinding()
+        Utils.showInformationDialog(
+            status: true,
+            title: 'A.S.K Registration',
+            message: "${response!.message.toString()}"
         );
+
+
+
 
         registerEmailController.clear();
         registerPasswordController.clear();
@@ -181,6 +183,12 @@ class AuthController extends GetxController {
             d: 3,
             bc: AppColors.askBlue,
             sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(
+            status: false,
+            title: 'A.S.K Registration',
+            message: errorMessage.value, //"${response.message}",
+        );
       }
 
       //clearOtpFields();
@@ -196,6 +204,12 @@ class AuthController extends GetxController {
           d: 3,
           bc: AppColors.red,
           sp: SnackPosition.TOP);
+
+      Utils.showInformationDialog(
+        status: false,
+        title: "A.S.K Registration: Attention",
+        message: "$message",
+      );
     }
   }
 

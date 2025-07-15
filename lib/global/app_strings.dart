@@ -4,7 +4,7 @@ class OnboardingStrings {
   static const String SUBTITLE1 = "A.S.K is a simple way to support those in need with dignity and kindness.";
 
   static const String HEADER2 = "Community-Powered Giving";
-  static const String SUBTITLE2 = "From your mobile device, nominate or support someone in need—instantly and transparently!";
+  static const String SUBTITLE2 = "From your mobile device, nominate or support someone in need, instantly and transparently!";
 
   static const String HEADER3 = "Dignified Support";
   static const String SUBTITLE3 = "A.S.K for support through a fair, tech-driven community process.";
