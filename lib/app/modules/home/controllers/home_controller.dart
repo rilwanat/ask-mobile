@@ -696,7 +696,7 @@ class HomeController extends GetxController {
         setLoading(false);
         Utils.showInformationDialog(status: null,
             title: 'A.S.K Request',
-            message: "Request no longer available."
+            message: "Request not currently available or no longer available."
         );
       }
 
@@ -2859,7 +2859,9 @@ class HomeController extends GetxController {
             reference: uniqueTransRef,
             callbackUrl: "https://google.com",
             currency: "NGN",
-            paymentChannel:["mobile_money", "card"],
+            // paymentChannel:["mobile_money", "card"],
+            // paymentChannel:["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer", "eft"],
+            paymentChannel:["card", "bank", "ussd", "mobile_money", "bank_transfer"],
             amount: double.parse(priceToPay.toString()),
             transactionCompleted: (paymentData) async {
               setLoading(false);
