@@ -509,8 +509,38 @@ class Utils {
     return true;
   }
 
-  static String stripBrTags(String input) {
-    return input.replaceAll(RegExp(r'<br\s*/?>'), '');
+  static String normalizeHtmlText(String input) {
+    // First replace <br> tags
+    String result = input.replaceAll(RegExp(r'<br\s*/?>'), '');
+
+    // Then replace common character references
+    result = result.replaceAllMapped(RegExp(r'&(#?)(\w+);'), (match) {
+      final isNumeric = match.group(1) == '#';
+      final code = match.group(2)!;
+
+      if (isNumeric) {
+        // Handle numeric references like &#039;
+        final int? codePoint = int.tryParse(code);
+        if (codePoint != null && codePoint < 128) {
+          return String.fromCharCode(codePoint);
+        }
+      } else {
+        // Handle named references like &amp;
+        switch (code) {
+          case 'amp': return '&';
+          case 'lt': return '<';
+          case 'gt': return '>';
+          case 'quot': return '"';
+          case 'apos': return "'";
+        // Add other named entities as needed
+        }
+      }
+
+      // If we don't recognize it, leave it unchanged
+      return match.group(0)!;
+    });
+
+    return result;
   }
 
 

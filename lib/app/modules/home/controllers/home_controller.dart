@@ -834,7 +834,7 @@ class HomeController extends GetxController {
         final messageTime = (message['timestamp'] as Timestamp).toDate();
 
         if (!notificationMessages.any((item) => item['documentId'] == messageId)) {
-          String formattedMessage = Utils.stripBrTags(message['message']);
+          String formattedMessage = Utils.normalizeHtmlText(message['message']);
           message['message'] = formattedMessage;
           notificationMessages.insert(0, message);
 

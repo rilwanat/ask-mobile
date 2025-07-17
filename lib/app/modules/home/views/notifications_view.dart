@@ -149,7 +149,7 @@ class NotificationsView extends GetView<HomeController> {
                                           Utils.showInformationDialog(
                                               status: null,
                                               title: "Notification",
-                                              message: Utils.stripBrTags(askNotification['message'])
+                                              message: Utils.normalizeHtmlText(askNotification['message'])
                                           );
                                         }
                                       },
@@ -349,7 +349,7 @@ class NotificationsView extends GetView<HomeController> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      Utils.stripBrTags(askNotification['message']),
+                                                      Utils.normalizeHtmlText(askNotification['message']),
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.w500,
