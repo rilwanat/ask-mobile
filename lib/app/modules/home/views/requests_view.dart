@@ -236,9 +236,9 @@ class RequestsView extends GetView<HomeController> {
 
                           // Utils.showTopSnackBar(
                           //   t: helpRequest.user!.fullname!,
-                          //   m: "Request view will open",
+                          //   m: helpRequest.user!.toJson().toString(),
                           //   tc: AppColors.white,
-                          //   d: 3,
+                          //   d: 5,
                           //   bc: AppColors.askBlue,
                           //   sp: SnackPosition.BOTTOM,
                           // );
@@ -340,53 +340,37 @@ class RequestsView extends GetView<HomeController> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Obx(() => Center(
+                                Center(
                                   child: SizedBox(
                                     height: ScreenSize.width(context) * .6,
                                     width: ScreenSize.width(context) * .6,
-                                    child: Stack(
-                                      children: [
-                                        controller.isNominating ?
-                                    Center(
-                                    child: SizedBox(
-                                        height: ScreenSize.width(context) * .2,
-                                      width: ScreenSize.width(context) * .2,
-                                      child: const CircularProgressIndicator(
-                                        color: AppColors.askBlue,
-                                        strokeWidth: 1,
-                                      ) //Lottie.asset('assets/json/loading.json'),
-                                  ),
-                                )
-                                            :
-                                        AspectRatio(
-                                          aspectRatio: 1,
-                                          child: Container(
-                                            // height: ScreenSize.width(context) * .8,
-                                            // width: ScreenSize.width(context) * .8,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.askBlue,
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(10), // Match container's border radius
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                dotenv.getBool('LIVE_MODE') == false
-                                                    ? "https://playground.askfoundations.org/backend/api/v1/response/${helpRequest.requestImage}"
-                                                    : "https://askfoundations.org/${helpRequest.requestImage}",
-                                                fit: BoxFit.cover, // Changed from contain to cover
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
-                                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                              ),
-                                            ),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Container(
+                                        // height: ScreenSize.width(context) * .8,
+                                        // width: ScreenSize.width(context) * .8,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.askBlue,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10), // Match container's border radius
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                            dotenv.getBool('LIVE_MODE') == false
+                                                ? "https://playground.askfoundations.org/backend/api/v1/response/${helpRequest.requestImage}"
+                                                : "https://askfoundations.org/${helpRequest.requestImage}",
+                                            fit: BoxFit.cover, // Changed from contain to cover
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
                                           ),
-                                        )
-                                      ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),),
+                                ),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -419,12 +403,12 @@ class RequestsView extends GetView<HomeController> {
                                   children: [
                                     Obx(() => AskButton(
                                       enabled: true,
-                                      text: controller.isNominating ? "Please wait..." : "Confirm Nomination",
+                                      text: controller.isLoading ? "Please wait..." : "Confirm Nomination",
                                       function: () async {
 
-                                        if (controller.isNominating) {
-                                          return;
-                                        }
+                                        // if (controller.isLoading) {
+                                        //   return;
+                                        // }
 
                                         String email = controller.profileData.value!.emailAddress!;
                                         String helpToken = helpRequest.helpToken!;

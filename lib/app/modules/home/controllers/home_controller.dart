@@ -113,8 +113,8 @@ class HomeController extends GetxController {
   ];
 
 
-  final _isNominating = false.obs;
-  bool get isNominating => _isNominating.value;
+  // final _isNominating = false.obs;
+  // bool get isNominating => _isNominating.value;
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
@@ -124,6 +124,7 @@ class HomeController extends GetxController {
   }
 
   RxString errorMessage = "".obs;
+  RxString tempHelptoken = "".obs;
 
   Rx<UserData?> profileData = Rx<UserData?>(null);
 
@@ -586,6 +587,10 @@ class HomeController extends GetxController {
       currentRequestIndex.value++;
       scrollToIndex(currentRequestIndex.value);
     }
+    // else {
+    //   currentRequestIndex.value = 0;
+    //   scrollToIndex(0);
+    // }
   }
   void goToPreviousItem() {
     if (currentRequestIndex.value > 0) {
@@ -594,7 +599,8 @@ class HomeController extends GetxController {
     }
   }
   void scrollToIndex(int index) {
-    final double screenWidth = Get.context!.size!.width * .8 + 8;
+    final double screenWidth = (Get.context!.size!.width * .8) + 8;
+    print("animate to :" + index.toString());
     singleRequestScrollController.animateTo(
       index * screenWidth,
       duration: const Duration(milliseconds: 300),
@@ -722,11 +728,15 @@ class HomeController extends GetxController {
         final description = request?.description?.toLowerCase() ?? '';
         return userName.contains(query) || description.contains(query);
       }).toList());
+
+
     }
 
+    // print("This happened");
     // Optionally reset scroll to first item
     currentRequestIndex.value = 0;
     scrollToIndex(0);
+
   }
 
   handleTheHelptokenNavigation(helpToken) async {
@@ -1321,6 +1331,13 @@ class HomeController extends GetxController {
 
         helpRequestsData.value = response.data!;
         filteredRequestsData.assignAll(helpRequestsData);
+
+        if (tempHelptoken.value.isNotEmpty) {
+          scrollToNewRequestViaHelptoken(tempHelptoken.value);
+        }
+        // scrollToIndex(currentRequestIndex.value);
+
+        // print("currentRequestIndex: " + currentRequestIndex.value.toString());
 
 
       } else {
@@ -2366,8 +2383,8 @@ class HomeController extends GetxController {
     required String helpToken,
     required String fingerPrint
   }) async {
-    // setLoading(true);
-    _isNominating.value = true;
+    setLoading(true);
+    // _isNominating.value = true;
     //print("registerUser");
 
     errorMessage.value = "";
@@ -2380,10 +2397,10 @@ class HomeController extends GetxController {
           fingerPrint: fingerPrint
       );
 
-      print(response!.toJson().toString());
+      // print(response!.toJson().toString());
       //
-      // setLoading(false);
-      _isNominating.value = false;
+      setLoading(false);
+      // _isNominating.value = false;
       if (response!.status == true) {
         // showTopSnackBar(
         //     t: "A.S.K Create Help Request",
@@ -2393,7 +2410,9 @@ class HomeController extends GetxController {
         //     bc: AppColors.gold,
         //     sp: SnackPosition.TOP);
 
+        tempHelptoken.value = helpToken;
         await initializeProfileData();
+        tempHelptoken.value = "";
 
         Utils.showInformationDialog(status: true,
           title: 'A.S.K Nominate',
@@ -2419,8 +2438,8 @@ class HomeController extends GetxController {
 
       //clearOtpFields();
     } on DioException catch (e) {
-      // setLoading(false);
-      _isNominating.value = false;
+      setLoading(false);
+      // _isNominating.value = false;
       //print(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //

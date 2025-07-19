@@ -101,7 +101,14 @@ class _InterstitialAdExampleState extends State<InterstitialAdExample> {
           children: [
             CircularProgressIndicator(strokeWidth: 1),
             SizedBox(height: 20),
-            Text('Loading advertisement...',
+            // Text('Loading advertisement...',
+            //   style: const TextStyle(
+            //     fontFamily: "LatoRegular",
+            //     color: Colors.black,
+            //     fontSize: 12.0,
+            //     fontWeight: FontWeight.w600,
+            //   ),),
+            Text('Please wait...',
               style: const TextStyle(
                 fontFamily: "LatoRegular",
                 color: Colors.black,
