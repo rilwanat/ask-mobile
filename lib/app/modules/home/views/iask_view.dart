@@ -2228,7 +2228,7 @@ class IaskView extends GetView<HomeController> {
                                               ),
                                               AskButton(
                                                   enabled: true,
-                                                  text: controller.isLoading ? 'Please wait..' : "Edit Request",
+                                                  text: controller.isLoading ? 'Please wait..' : "Update Request",
                                                   function: () async {
 
                                                     String email = controller.profileData.value!.emailAddress!;
