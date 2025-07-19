@@ -307,14 +307,20 @@ class Utils {
 
 
                             if (
-                            // message.contains("As a recent beneficiary, you must have")
                             message.contains("Your request was granted")
-                            ||
+                            ) {
+                              // Get.to(() => const HomeView());
+                              Get.find<HomeController>().handleNavigation(0);
+                            }
+
+                            if (
                                 (message.contains("Successfully Nominated!".toUpperCase()))
                             ) {
 
+
+                              //remain on page
                               // Get.to(() => const HomeView());
-                              Get.find<HomeController>().handleNavigation(0);
+                              // Get.find<HomeController>().handleNavigation(0);
                             }
 
 

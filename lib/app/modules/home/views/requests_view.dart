@@ -232,14 +232,7 @@ class RequestsView extends GetView<HomeController> {
                           // );
                         },
                         onTap: () {
-                          // controller.handleNavigation(1);
 
-                          // //open product details view
-                          // Get.to(() => ProductDetailsView(
-                          //   product: product,
-                          //   productImage:
-                          //   "https://es.shopafricana.co/product-images/detailed-900x1125/" + "${product.productImages![0]}",
-                          // ));
 
                           // Utils.showTopSnackBar(
                           //   t: helpRequest.user!.fullname!,
@@ -347,12 +340,24 @@ class RequestsView extends GetView<HomeController> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Center(
+                                Obx(() => Center(
                                   child: SizedBox(
                                     height: ScreenSize.width(context) * .6,
                                     width: ScreenSize.width(context) * .6,
                                     child: Stack(
                                       children: [
+                                        controller.isNominating ?
+                                    Center(
+                                    child: SizedBox(
+                                        height: ScreenSize.width(context) * .2,
+                                      width: ScreenSize.width(context) * .2,
+                                      child: const CircularProgressIndicator(
+                                        color: AppColors.askBlue,
+                                        strokeWidth: 1,
+                                      ) //Lottie.asset('assets/json/loading.json'),
+                                  ),
+                                )
+                                            :
                                         AspectRatio(
                                           aspectRatio: 1,
                                           child: Container(
@@ -381,7 +386,7 @@ class RequestsView extends GetView<HomeController> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                ),),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -412,10 +417,14 @@ class RequestsView extends GetView<HomeController> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    AskButton(
+                                    Obx(() => AskButton(
                                       enabled: true,
-                                      text: "Confirm Nomination",
+                                      text: controller.isNominating ? "Please wait..." : "Confirm Nomination",
                                       function: () async {
+
+                                        if (controller.isNominating) {
+                                          return;
+                                        }
 
                                         String email = controller.profileData.value!.emailAddress!;
                                         String helpToken = helpRequest.helpToken!;
@@ -444,7 +453,7 @@ class RequestsView extends GetView<HomeController> {
                                       borderCurve: 12,
                                       border: false,
                                       textSize: 14,
-                                    ),
+                                    ),)
                                   ],
                                 ),
                                 const SizedBox(

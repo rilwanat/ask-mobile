@@ -112,6 +112,10 @@ class HomeController extends GetxController {
 
   ];
 
+
+  final _isNominating = false.obs;
+  bool get isNominating => _isNominating.value;
+
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
   setLoading(bool? b) {
@@ -2290,6 +2294,8 @@ class HomeController extends GetxController {
     setLoading(true);
     //print("registerUser");
 
+
+
     errorMessage.value = "";
     try {
       CreateHelpRequestResponse? response;
@@ -2360,7 +2366,8 @@ class HomeController extends GetxController {
     required String helpToken,
     required String fingerPrint
   }) async {
-    setLoading(true);
+    // setLoading(true);
+    _isNominating.value = true;
     //print("registerUser");
 
     errorMessage.value = "";
@@ -2375,7 +2382,8 @@ class HomeController extends GetxController {
 
       print(response!.toJson().toString());
       //
-      setLoading(false);
+      // setLoading(false);
+      _isNominating.value = false;
       if (response!.status == true) {
         // showTopSnackBar(
         //     t: "A.S.K Create Help Request",
@@ -2411,12 +2419,13 @@ class HomeController extends GetxController {
 
       //clearOtpFields();
     } on DioException catch (e) {
-      setLoading(false);
+      // setLoading(false);
+      _isNominating.value = false;
       //print(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Attention",
+      //     t: "A.S.K Nominate: Attention",
       //     m: "$message",
       //     tc: AppColors.black,
       //     d: 3,
@@ -2767,8 +2776,8 @@ class HomeController extends GetxController {
       ) async {
 
     final secretKey = dotenv.getBool('LIVE_MODE')
-    ? dotenv.get('LIVE_PAYSTACK_API_SECRET_KEY')
-    : dotenv.get('DEMO_PAYSTACK_API_SECRET_KEY');
+        ? dotenv.get('LIVE_PAYSTACK_API_SECRET_KEY')
+        : dotenv.get('DEMO_PAYSTACK_API_SECRET_KEY');
 
     final client = PaystackClient(secretKey: secretKey);
 
@@ -2890,7 +2899,7 @@ class HomeController extends GetxController {
               // });
 
 
-String customerCode = paymentData.customer!.customerCode!;
+              String customerCode = paymentData.customer!.customerCode!;
 
 
               if (isSubscription) {
