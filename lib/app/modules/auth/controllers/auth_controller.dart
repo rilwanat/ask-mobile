@@ -731,11 +731,26 @@ class AuthController extends GetxController {
         //     bc: AppColors.gold,
         //     sp: SnackPosition.TOP);
 
+
+
         _cachedData.saveAuthToken(response.token!);
         _cachedData.saveUserType("User");
 
         await _cachedData.saveProfileData(response.userData!);
 
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Registration",
+        //     m: "${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+        //
+        // Get.to(() => LoginView(),
+        //     transition: Transition.fadeIn, // Built-in transition type
+        //     duration: Duration(milliseconds: 500),
+        //     binding: AuthBinding()
+        // );
 
         Get.to(() => HomeView(),
             transition: Transition.fadeIn, // Built-in transition type
@@ -752,7 +767,7 @@ class AuthController extends GetxController {
         errorMessage.value = "A.S.K Register: Something wrong happened. Try again";//response.message!;
 
         Utils.showTopSnackBar(
-            t: "A.S.K Login",
+            t: "A.S.K Registration",
             m: errorMessage.value, //"${response.message}",
             tc: AppColors.white,
             d: 3,
