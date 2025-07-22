@@ -229,6 +229,7 @@ class HomeController extends GetxController {
 
   RxList<bc.Data?> bankCodeData = RxList<bc.Data?>([]);
 
+  late TextEditingController deleteEmailController;
   late TextEditingController deleteTokenController;
 
   late TextEditingController emailVerificationController;
@@ -475,6 +476,7 @@ class HomeController extends GetxController {
     }
   }
   _initializeControllers() {
+    deleteEmailController = TextEditingController();
     deleteTokenController = TextEditingController();
 
     emailVerificationController = TextEditingController();
@@ -3110,6 +3112,143 @@ class HomeController extends GetxController {
           sp: SnackPosition.TOP);
       Utils.showInformationDialog(status: false, title: 'A.S.K incrementDNQ', message: "$message");
 
+    }
+  }
+
+
+  sendDeleteToken({
+    required String email
+  }) async {
+    setLoading(true);
+    //print("getCheckIfUserCanAsk");
+
+    errorMessage.value = "";
+    try {
+      NominateResponse? response;
+      response =
+      await SecureService().sendDeleteToken(
+        email: email
+      );
+
+      print(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(status: null,
+          title: 'A.S.K Send Delete Token',
+          message: "${response!.message!}",
+          // meta: response!.id
+        );
+
+      } else {
+        errorMessage.value = "A.S.K Send Delete Token: Something wrong happened. Try again";//response.message!;
+
+        Utils.showTopSnackBar(
+            t: "A.S.K Send Delete Token",
+            m: errorMessage.value, //"${response.message}",
+            tc: AppColors.white,
+            d: 3,
+            bc: AppColors.askBlue,
+            sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Create Help Request: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: null,
+          title: 'A.S.K Send Delete Token: Attention',
+          message: "$message");
+    }
+  }
+
+  deleteAccount({
+    required String email,
+    required String deleteToken,
+  }) async {
+    setLoading(true);
+    //print("getCheckIfUserCanAsk");
+
+    errorMessage.value = "";
+    try {
+      NominateResponse? response;
+      response =
+      await SecureService().deleteAccount(
+        email: email, deleteToken: deleteToken
+      );
+
+      print(response!.toJson().toString());
+      //
+
+      setLoading(false);
+      if (response!.status == true) {
+        // showTopSnackBar(
+        //     t: "A.S.K",
+        //     m: "${response!.toJson().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.gold,
+        //     sp: SnackPosition.TOP);
+
+        await logoutUser();
+
+        Utils.showInformationDialog(status: null,
+          title: 'A.S.K Delete Account',
+          message: "${response!.message!}",
+          // meta: response!.id
+        );
+
+      } else {
+        // errorMessage.value = "A.S.K Delete Account: Something wrong happened. Try again";//response.message!;
+
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Delete Account",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(status: false,
+            title: 'A.S.K Delete Account: Attention',
+            message: "${response!.message!}");
+      }
+
+
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      //print(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Account: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+      Utils.showInformationDialog(status: false,
+          title: 'A.S.K Delete Account: Attention',
+          message: "$message");
     }
   }
 

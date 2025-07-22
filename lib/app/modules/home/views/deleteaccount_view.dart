@@ -115,10 +115,11 @@ class DeleteaccountView extends GetView<HomeController> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
                                           "Hello,",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -129,7 +130,9 @@ class DeleteaccountView extends GetView<HomeController> {
                                         ),
                                         const SizedBox(height: 4),
                                         const Text(
-                                          "You requested to delete your A.S.K account.\nEnter your email below and we'll send you a token.",
+                                          "You requested to delete your A.S.K account.",
+                                          // "\nEnter your email below and we'll send you a token.",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -143,8 +146,8 @@ class DeleteaccountView extends GetView<HomeController> {
                                           delayMilliSeconds: 400,
                                           duration: 700,
                                           child: TextFormField(
-                                            //readOnly: controller.canUserAsk.value,
-                                            // controller: controller.,
+                                            readOnly: true,
+                                            controller: controller.deleteEmailController,
                                             // focusNode: controller.loginEmailFocusNode,
                                             //cursorColor: AppColors.blue,
                                             decoration: InputDecoration(
@@ -152,7 +155,7 @@ class DeleteaccountView extends GetView<HomeController> {
                                               // fillColor: AppColors.white,
                                               border: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: AppColors.askBlue,
+                                                  color: AppColors.askBackground,//askBlue,
                                                 ),
                                                 borderRadius:
                                                 BorderRadius.circular(8),
@@ -160,14 +163,14 @@ class DeleteaccountView extends GetView<HomeController> {
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                   color: AppColors
-                                                      .askBlue,
+                                                      .askBackground,
                                                 ),
                                                 borderRadius:
                                                 BorderRadius.circular(8),
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: AppColors.askBlue,
+                                                  color: AppColors.askBackground,
                                                 ),
                                                 borderRadius:
                                                 BorderRadius.circular(8),
@@ -186,6 +189,7 @@ class DeleteaccountView extends GetView<HomeController> {
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "LatoRegular",
                                             ),
+                                            textAlign: TextAlign.center,
                                             inputFormatters: const [
                                               //FilteringTextInputFormatter.digitsOnly,
                                               //LengthLimitingTextInputFormatter(13),
@@ -211,9 +215,13 @@ class DeleteaccountView extends GetView<HomeController> {
                                                   text: controller.isLoading ? 'Please wait..' : "Send Delete Token",
                                                   function: () async {
 
-                                                    Utils.showInformationDialog(status: null,
-                                                        title: 'A.S.K Help Request',
-                                                        message: "Enter a Help Request description and select an image to upload");
+                                                    await controller.sendDeleteToken(
+                                                        email: controller.deleteEmailController.text
+                                                    );
+
+                                                    // Utils.showInformationDialog(status: null,
+                                                    //     title: 'A.S.K Help Request',
+                                                    //     message: "Enter a Help Request description and select an image to upload");
 
                                                   },
                                                   backgroundColor: AppColors.askBlue,
@@ -235,13 +243,16 @@ class DeleteaccountView extends GetView<HomeController> {
 
 
 
-
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
 
 
 
                                         const SizedBox(height: 20),
                                         const Text(
                                           "Enter the token you received below to delete your A.S.K account:",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -298,6 +309,7 @@ class DeleteaccountView extends GetView<HomeController> {
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "LatoRegular",
                                             ),
+                                            textAlign: TextAlign.center,
                                             inputFormatters: const [
                                               //FilteringTextInputFormatter.digitsOnly,
                                               //LengthLimitingTextInputFormatter(13),
@@ -332,9 +344,14 @@ class DeleteaccountView extends GetView<HomeController> {
                                             text: controller.isLoading ? 'Please wait..' : "Delete My Account",
                                             function: () async {
 
-                                              Utils.showInformationDialog(status: null,
-                                                  title: 'A.S.K Help Request',
-                                                  message: "Enter a Help Request description and select an image to upload");
+                                              await controller.deleteAccount(
+                                                  email: controller.deleteEmailController.text,
+                                                  deleteToken: controller.deleteTokenController.text
+                                              );
+
+                                              // Utils.showInformationDialog(status: null,
+                                              //     title: 'A.S.K Help Request',
+                                              //     message: "Enter a Help Request description and select an image to upload");
 
                                             },
                                             backgroundColor: AppColors.red,

@@ -1035,4 +1035,84 @@ class SecureService {
     }
   }
 
+  //
+  Future<NominateResponse?> sendDeleteToken({
+    required String email
+  }) async {
+    NominateResponse? responseData;
+
+    // // Create FormData for multipart upload
+    // FormData formData = FormData.fromMap({
+    //   "email": email,
+    //   "description": description,
+    //   "fullname": fullname
+    // });
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-delete-account-request-deletion.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = NominateResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+  Future<NominateResponse?> deleteAccount({
+    required String email,
+    required String deleteToken,
+  }) async {
+    NominateResponse? responseData;
+
+    // // Create FormData for multipart upload
+    // FormData formData = FormData.fromMap({
+    //   "email": email,
+    //   "description": description,
+    //   "fullname": fullname
+    // });
+    // Convert FormData to a JSON string
+    Map<String, dynamic> formDataMap = {
+      "email": email,
+      "deleteToken": deleteToken,
+    };
+    String formDataString = json.encode(formDataMap);
+
+    print(formDataString);
+
+    try {
+      final response = await apiClient.post(
+        "/response/ask-delete-account.php",
+        data: formDataMap,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = NominateResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
+
+
 }

@@ -219,7 +219,9 @@ class ProfileView extends GetView<HomeController> {
                                       children: [
                                         GestureDetector(
                                             onTap: () {
-                                              Get.to(() => DeleteaccountView(),
+                                              controller.deleteEmailController.text = controller.profileData!.value!.emailAddress!;
+
+                                              Get.to(() => const DeleteaccountView(),
                                                   transition: Transition.fadeIn, // Built-in transition type
                                                   duration: Duration(milliseconds: 500),
                                                   binding: HomeBinding()
