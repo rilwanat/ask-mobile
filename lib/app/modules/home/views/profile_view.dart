@@ -1,3 +1,4 @@
+import 'package:ask_mobile/app/modules/home/views/deleteaccount_view.dart';
 import 'package:ask_mobile/global/screen_size.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../../../../global/widgets/app_bar_page.dart';
 import '../../../../global/widgets/app_bar.dart';
 import '../../../../global/widgets/navbar.dart';
 import '../../../../utils/utils.dart';
+import '../bindings/home_binding.dart';
 import '../controllers/home_controller.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -129,7 +131,7 @@ class ProfileView extends GetView<HomeController> {
 
                                             if (helpToken.isNotEmpty) {
 
-                                              await controller.handleTheHelptokenNavigation(helpToken);
+                                              await controller.handleTheHelptokenNavigation(helpToken: helpToken, goBack: true);
 
 
                                             } else {
@@ -211,6 +213,32 @@ class ProfileView extends GetView<HomeController> {
                                     //   fontFamily: "LatoRegular",
                                     //   color: AppColors.askText,
                                     // ))
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => DeleteaccountView(),
+                                                  transition: Transition.fadeIn, // Built-in transition type
+                                                  duration: Duration(milliseconds: 500),
+                                                  binding: HomeBinding()
+                                              );
+                                            },
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.askLightRed,
+                                                  border: Border.all(color: AppColors.red, width: 2),
+                                                  borderRadius: BorderRadius.circular(30),
+                                                ),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                child: const Text("Delete My Account", style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  color: AppColors.red,)))),
+                                      ],
+                                    ),
                                 
                                   ],
                                 )
@@ -240,6 +268,12 @@ class ProfileView extends GetView<HomeController> {
                     // infoTile('Account Age:', controller.profileData.value!.registrationDate!),
                                 
                                 infoTile('Consistency: ', Utils.formatVoterConsistencyDays(controller.profileData.value?.voterConsistency ?? 'N/A')),
+
+
+
+
+
+
                               ],
                             ),
                   ),

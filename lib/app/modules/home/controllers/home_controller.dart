@@ -229,6 +229,8 @@ class HomeController extends GetxController {
 
   RxList<bc.Data?> bankCodeData = RxList<bc.Data?>([]);
 
+  late TextEditingController deleteTokenController;
+
   late TextEditingController emailVerificationController;
 
   late TextEditingController kycPhoneNumberController;
@@ -473,6 +475,8 @@ class HomeController extends GetxController {
     }
   }
   _initializeControllers() {
+    deleteTokenController = TextEditingController();
+
     emailVerificationController = TextEditingController();
 
 
@@ -739,8 +743,11 @@ class HomeController extends GetxController {
 
   }
 
-  handleTheHelptokenNavigation(helpToken) async {
-    Get.back();
+  handleTheHelptokenNavigation({required String helpToken, required bool goBack}) async {
+
+    if (goBack) {
+      Get.back();
+    }
 
     // Wait for the navigation to complete
     await handleNavigation(1);

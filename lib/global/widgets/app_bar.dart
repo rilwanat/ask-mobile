@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
                           if (helpToken.isNotEmpty) {
 
-                            await homeCtrl.handleTheHelptokenNavigation(helpToken);
+                            await homeCtrl.handleTheHelptokenNavigation(helpToken: helpToken, goBack: false);
 
                           } else {
                             // Utils.showTopSnackBar(
