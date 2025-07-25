@@ -88,7 +88,7 @@ class HomeController extends GetxController {
   final _navIndex = 0.obs;
   int get navIndex => _navIndex.value;
   Future<void> handleNavigation(int value) async {
-    // print(value);
+    debugPrint(value.toString());
 
     update([_navIndex.value = value]);
 
@@ -102,7 +102,7 @@ class HomeController extends GetxController {
     if (value == 3) {
       selectOption('recurring');
     }
-    // print(value);
+    debugPrint(value.toString());
   }
   final screens = <Widget>[
     DashboardView(key: UniqueKey()),
@@ -519,7 +519,7 @@ class HomeController extends GetxController {
 
   homeGetUserProfileFromServer() async {
     setLoading(true);
-    // print("homeGetUserProfileFromServer");
+    debugPrint("homeGetUserProfileFromServer");
 
     errorMessage.value = "";
     try {
@@ -527,7 +527,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().getUserProfile(email: profileData.value!.emailAddress!);
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -540,13 +540,13 @@ class HomeController extends GetxController {
         //     sp: SnackPosition.TOP);
 
         await _cachedData.saveProfileData(UserData.fromJson(response.profileUserData!.toJson()));
-        // print("Saved from H");
+        debugPrint("Saved from H");
         profileData.value = await _cachedData.getProfileData();
 
 
 
       } else {
-        errorMessage.value = "homeGetUserProfileFromServer: Something wrong happened. Try again";//response.message!;
+        errorMessage.value = "HomeGetUserProfileFromServer: Something wrong happened. Try again";//response.message!;
 
         Utils.showTopSnackBar(
             t: "homeGetUserProfileFromServer-h",
@@ -560,7 +560,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -577,8 +577,8 @@ class HomeController extends GetxController {
 
     try {
       profileData.value = await _cachedData.getProfileData();
-      // print("_cachedData profileData");
-      // print(profileData.value!.toJson().toString());
+      debugPrint("_cachedData profileData");
+      debugPrint(profileData.value!.toJson().toString());
 
       await homeGetUserProfileFromServer();
 
@@ -606,7 +606,7 @@ class HomeController extends GetxController {
   }
   void scrollToIndex(int index) {
     final double screenWidth = (Get.context!.size!.width * .8) + 8;
-    print("animate to :" + index.toString());
+    debugPrint("animate to :" + index.toString());
     singleRequestScrollController.animateTo(
       index * screenWidth,
       duration: const Duration(milliseconds: 300),
@@ -633,7 +633,7 @@ class HomeController extends GetxController {
       // final double screenWidth = ScreenSize.width(Get.context!) * 0.8 + 8 + 16;
       final index = filteredRequestsData.indexWhere((e) => e?.id == requestId.toString());
 
-      // print("index of " + requestId.toString() + " is " + index.toString());
+      debugPrint("index of " + requestId.toString() + " is " + index.toString());
       // index of 18 is 2
 
       currentRequestIndex.value = index;
@@ -677,7 +677,7 @@ class HomeController extends GetxController {
 
 
       final index = filteredRequestsData.indexWhere((e) => e?.helpToken == helptoken);
-      print("index of " + helptoken.toString() + " is " + index.toString());
+      debugPrint("index of " + helptoken.toString() + " is " + index.toString());
       currentRequestIndex.value = index;
       update();
 
@@ -719,7 +719,7 @@ class HomeController extends GetxController {
     } catch (e) {
       setLoading(false);
       // Optional: Add error handling if needed
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -738,7 +738,7 @@ class HomeController extends GetxController {
 
     }
 
-    // print("This happened");
+    debugPrint("This happened");
     // Optionally reset scroll to first item
     currentRequestIndex.value = 0;
     scrollToIndex(0);
@@ -776,7 +776,7 @@ class HomeController extends GetxController {
       notificationMessages.assignAll(allMessages);
       update();
     } catch (e) {
-      // print("Error fetching initial notifications: $e");
+      debugPrint("Error fetching initial notifications: $e");
       Utils.showTopSnackBar(
           t: "Error",
           m: 'Failed to load notifications',
@@ -836,7 +836,7 @@ class HomeController extends GetxController {
 //           final latest = notificationMessages.first;
 //           displayNotification("A.S.K Nomination", latest['message'], latest['meta']);
 //
-//           // print("New notification: ${message['message']} (ID: ${message['documentId']}) "
+//           debugPrint("New notification: ${message['message']} (ID: ${message['documentId']}) "
 //           //     "(meta: ${message['meta']})");
 //         }
 //       } else {
@@ -934,11 +934,11 @@ class HomeController extends GetxController {
     try {
       final docId = notification['documentId'];
       if (docId == null) {
-        print('Cannot delete - missing documentId');
+        debugPrint('Cannot delete - missing documentId');
         return;
       }
 
-      print('Deleting notification ID: $docId');
+      debugPrint('Deleting notification ID: $docId');
 
       // Delete from Firestore
       await FirebaseFirestore.instance
@@ -953,11 +953,11 @@ class HomeController extends GetxController {
       notificationMessages.removeWhere((item) => item['documentId'] == docId);
 
       if (notificationMessages.length == initialCount) {
-        print('Warning: Notification not found in local list');
+        debugPrint('Warning: Notification not found in local list');
       }
 
       update();
-      // print('Successfully deleted notification');
+      debugPrint('Successfully deleted notification');
       Utils.showTopSnackBar(
           t: "A.S.K Delete Notification",
           m: 'Success',
@@ -973,7 +973,7 @@ class HomeController extends GetxController {
       // );
 
     } catch (e) {
-      // print('Error deleting notification: $e');
+      debugPrint('Error deleting notification: $e');
       Utils.showTopSnackBar(
           t: "A.S.K Delete Notification",
           m: 'Failed to delete notification: $e',
@@ -1035,12 +1035,12 @@ class HomeController extends GetxController {
   }
   // Future<void> requestExactAlarmPermission() async {
   //   if (await Permission.scheduleExactAlarm.request().isDenied) {
-  //     print("Exact alarm permission is required!");
+  //     debugPrint("Exact alarm permission is required!");
   //   }
   // }
   Future<void> requestNotificationPermission() async {
     if (await Permission.notification.request().isDenied) {
-      // print("Notification permission denied!");
+      debugPrint("Notification permission denied!");
       Utils.showTopSnackBar(
           t: "Notification",
           m: 'Notification permission denied!',
@@ -1049,7 +1049,7 @@ class HomeController extends GetxController {
           bc: AppColors.red,
           sp: SnackPosition.TOP);
     } else {
-      // print("Notification permission granted!");
+      debugPrint("Notification permission granted!");
     }
   }
   Future<void> initNotifications() async {
@@ -1069,8 +1069,8 @@ class HomeController extends GetxController {
         final data = jsonDecode(response.payload!);
         final meta = data['meta'] ?? '';
 
-        // print("Notification clicked: ${response.payload}");
-        // print("Notification clicked: ${meta}");
+        debugPrint("Notification clicked: ${response.payload}");
+        debugPrint("Notification clicked: ${meta}");
 
         if (meta != '') {
           // handleNavigation(1);
@@ -1265,7 +1265,7 @@ class HomeController extends GetxController {
 
   logoutUser() async {
     setLoading(true);
-    //print("loginPatient");
+    debugPrint("loginPatient");
 
     //int.tryParse(
     //
@@ -1302,7 +1302,7 @@ class HomeController extends GetxController {
 
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1318,7 +1318,7 @@ class HomeController extends GetxController {
 
   getRequests() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1326,7 +1326,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readRequests();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1346,25 +1346,25 @@ class HomeController extends GetxController {
         }
         // scrollToIndex(currentRequestIndex.value);
 
-        // print("currentRequestIndex: " + currentRequestIndex.value.toString());
+        debugPrint("currentRequestIndex: " + currentRequestIndex.value.toString());
 
 
       } else {
         errorMessage.value = "A.S.K Help Requests: Something wrong happened. Try again";//response.message!;
 
-        Utils.showTopSnackBar(
-            t: "A.S.K Help Requests",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.red,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Help Requests",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.red,
+        //     sp: SnackPosition.TOP);
       }
 
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1381,7 +1381,7 @@ class HomeController extends GetxController {
     required String email,
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1389,7 +1389,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readMyHelpRequests(email: email);
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1410,19 +1410,19 @@ class HomeController extends GetxController {
       } else {
         errorMessage.value = "A.S.K My Help Requests: Something wrong happened. Try again";//response.message!;
 
-        Utils.showTopSnackBar(
-            t: "A.S.K My Help Requests",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.red,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K My Help Requests",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.red,
+        //     sp: SnackPosition.TOP);
       }
 
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1437,7 +1437,7 @@ class HomeController extends GetxController {
 
   getBeneficiaries() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1445,7 +1445,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readBeneficiaries();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1463,13 +1463,13 @@ class HomeController extends GetxController {
         errorMessage.value = "A.S.K Beneficiaries: Something wrong happened. Try again";//response.message!;
 
         beneficiariesData.value = [defaultBeneficiaries];
-        Utils.showTopSnackBar(
-            t: "A.S.K Beneficiaries",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.red,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Beneficiaries",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.red,
+        //     sp: SnackPosition.TOP);
       }
 
 
@@ -1477,7 +1477,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1492,7 +1492,7 @@ class HomeController extends GetxController {
 
   getSponsors() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1500,7 +1500,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readSponsors();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1530,7 +1530,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1545,7 +1545,7 @@ class HomeController extends GetxController {
 
   getCryptos() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1553,7 +1553,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readCryptos();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1583,7 +1583,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1598,7 +1598,7 @@ class HomeController extends GetxController {
 
   getDonations() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1606,7 +1606,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readDonations();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1636,7 +1636,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1651,7 +1651,7 @@ class HomeController extends GetxController {
 
   getDollarExchange() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1659,7 +1659,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readDollarExchange();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1689,7 +1689,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1704,7 +1704,7 @@ class HomeController extends GetxController {
 
   getPaystackSubscriptions() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1712,7 +1712,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readPaystackSubscriptions();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1742,7 +1742,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1757,7 +1757,7 @@ class HomeController extends GetxController {
 
   getBanks() async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -1765,7 +1765,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readBankCodes();
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1795,7 +1795,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1813,7 +1813,7 @@ class HomeController extends GetxController {
     required String email
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -1823,7 +1823,7 @@ class HomeController extends GetxController {
           email: email
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1854,7 +1854,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1872,7 +1872,7 @@ class HomeController extends GetxController {
     required String verificationCode,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -1883,7 +1883,7 @@ class HomeController extends GetxController {
           verificationCode: verificationCode
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1914,7 +1914,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -1938,7 +1938,7 @@ class HomeController extends GetxController {
     required String imagePath,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -1955,7 +1955,7 @@ class HomeController extends GetxController {
 
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1991,7 +1991,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2012,7 +2012,7 @@ class HomeController extends GetxController {
     required String imagePath,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -2031,7 +2031,7 @@ class HomeController extends GetxController {
         userId: userId,
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2066,7 +2066,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -2088,7 +2088,7 @@ class HomeController extends GetxController {
     required File image,
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -2101,7 +2101,7 @@ class HomeController extends GetxController {
           image: image
       );
 
-      print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2143,7 +2143,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2167,7 +2167,7 @@ class HomeController extends GetxController {
     required File image,
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -2178,7 +2178,7 @@ class HomeController extends GetxController {
           image: image
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2220,7 +2220,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2242,7 +2242,7 @@ class HomeController extends GetxController {
     required String helpToken
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -2254,7 +2254,7 @@ class HomeController extends GetxController {
           helpToken: helpToken
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2296,7 +2296,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2318,7 +2318,7 @@ class HomeController extends GetxController {
     required String helpToken
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
 
 
@@ -2331,7 +2331,7 @@ class HomeController extends GetxController {
           helpToken: helpToken
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2371,7 +2371,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2394,7 +2394,7 @@ class HomeController extends GetxController {
   }) async {
     setLoading(true);
     // _isNominating.value = true;
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -2406,7 +2406,7 @@ class HomeController extends GetxController {
           fingerPrint: fingerPrint
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       // _isNominating.value = false;
@@ -2449,7 +2449,7 @@ class HomeController extends GetxController {
     } on DioException catch (e) {
       setLoading(false);
       // _isNominating.value = false;
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2469,7 +2469,7 @@ class HomeController extends GetxController {
     required String email,
   }) async {
     setLoading(true);
-    //print("getCheckIfUserCanAsk");
+    debugPrint("getCheckIfUserCanAsk");
 
     errorMessage.value = "";
     try {
@@ -2479,7 +2479,7 @@ class HomeController extends GetxController {
         email: email,
       );
 
-      print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2524,7 +2524,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -2825,8 +2825,8 @@ class HomeController extends GetxController {
     //         customer: email,
     //         plan: planCode
     //     );
-    //     print(response.runtimeType);
-    //     print(response.toString());
+    //     debugPrint(response.runtimeType);
+    //     debugPrint(response.toString());
     //
     //     if (response.data['data'].isNotEmpty) {
     //       // return response.data['data']; // List of subscriptions
@@ -2850,21 +2850,21 @@ class HomeController extends GetxController {
           plan: planCode,
         );
 
-        // print(response.runtimeType); // Debug: Verify response type
-        // print(response.toString());  // Debug: Verify raw response
+        debugPrint(response.runtimeType.toString()); // Debug: Verify response type
+        debugPrint(response.toString());  // Debug: Verify raw response
 
         // Check if the API returned successfully (status: true)
         if (response.data['status'] == true) {
           // No subscriptions found (valid case)
           if (response.data['data'].isEmpty) {
             isAlreadySubscribed = false;
-            // print('No active subscriptions found for $email on plan $planCode.');
-            print('No active subscriptions found for $email on plan.');
+            debugPrint('No active subscriptions found for $email on plan $planCode.');
+            debugPrint('No active subscriptions found for $email on plan.');
           }
           // Subscriptions found
           else {
             isAlreadySubscribed = true;
-            print('Subscriptions found: ${response.data['data']}');
+            debugPrint('Subscriptions found: ${response.data['data']}');
           }
         }
         // API returned an error (status: false)
@@ -2884,7 +2884,7 @@ class HomeController extends GetxController {
 
 
 
-    // print("#1");
+    debugPrint("#1");
     try {
 
       if (isAlreadySubscribed == false)
@@ -2903,7 +2903,7 @@ class HomeController extends GetxController {
             transactionCompleted: (paymentData) async {
               setLoading(false);
 
-              print("Transaction Successful: " + paymentData.toJson().toString());
+              debugPrint("Transaction Successful: " + paymentData.toJson().toString());
               // Get.back();
 
               // Navigator.of(context).pop();
@@ -2935,7 +2935,7 @@ class HomeController extends GetxController {
                 final authCode = paymentData.authorization!.authorizationCode;
 
 
-                print(
+                debugPrint(
                     customerCode + "\n" +
                         planCode! + "\n" +
                         authCode! + "\n" +
@@ -2955,7 +2955,7 @@ class HomeController extends GetxController {
                   startDate: DateTime.now().toIso8601String(),
                 );
 
-                print(subscriptionResponse.toString());
+                debugPrint(subscriptionResponse.toString());
 
                 if (!subscriptionResponse.data['status']) {
                   Utils.showInformationDialog(status: false, title: 'THANK YOU FOR YOUR DONATION!',
@@ -2991,7 +2991,7 @@ class HomeController extends GetxController {
             },
             transactionNotCompleted: (reason) async {
               setLoading(false);
-              print("Transaction Not Successful!" + reason.toString());
+              debugPrint("Transaction Not Successful!" + reason.toString());
               // Get.back();
 
 
@@ -3019,14 +3019,14 @@ class HomeController extends GetxController {
         );
       }
 
-      // print("#2");
+      debugPrint("#2");
 
       setLoading(false);
 
     } catch (e) {
-      // print("#3");
+      debugPrint("#3");
       setLoading(false);
-      print("Error during payment: $e"); // Log the error for debugging
+      debugPrint("Error during payment: $e"); // Log the error for debugging
 
       Utils.showTopSnackBar(
         t: "Payment Error",
@@ -3048,7 +3048,7 @@ class HomeController extends GetxController {
     required String reference,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -3065,7 +3065,7 @@ class HomeController extends GetxController {
         reference: reference,
       );
 
-      // print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -3100,7 +3100,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -3120,7 +3120,7 @@ class HomeController extends GetxController {
     required String email
   }) async {
     setLoading(true);
-    //print("getCheckIfUserCanAsk");
+    debugPrint("getCheckIfUserCanAsk");
 
     errorMessage.value = "";
     try {
@@ -3130,7 +3130,7 @@ class HomeController extends GetxController {
         email: email
       );
 
-      print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -3163,7 +3163,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
@@ -3184,7 +3184,7 @@ class HomeController extends GetxController {
     required String deleteToken,
   }) async {
     setLoading(true);
-    //print("getCheckIfUserCanAsk");
+    debugPrint("getCheckIfUserCanAsk");
 
     errorMessage.value = "";
     try {
@@ -3194,7 +3194,7 @@ class HomeController extends GetxController {
         email: email, deleteToken: deleteToken
       );
 
-      print(response!.toJson().toString());
+      debugPrint(response!.toJson().toString());
       //
 
       setLoading(false);
@@ -3236,7 +3236,7 @@ class HomeController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(

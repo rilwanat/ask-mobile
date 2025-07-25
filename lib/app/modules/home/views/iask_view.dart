@@ -394,8 +394,10 @@ class IaskView extends GetView<HomeController> {
                                     controller.profileData.value!.kycStatus != "APPROVED"
                                 || controller.profileData.value!.kycStatus == ""
                                 || controller.profileData.value!.kycStatus == null
+
+                                || controller.profileData.value!.isCheat == "Yes"
                             )
-                                    && controller.profileData.value!.isCheat != "Yes"
+                                    // && controller.profileData.value!.isCheat != "Yes"
                             ) ?
                             Container(
                               // color: AppColors.askGreen,

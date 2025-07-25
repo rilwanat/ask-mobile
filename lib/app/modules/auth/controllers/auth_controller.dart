@@ -137,7 +137,7 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     setLoading(true);
-    //print("registerUser");
+    debugPrint("registerUser");
 
     errorMessage.value = "";
     try {
@@ -148,7 +148,7 @@ class AuthController extends GetxController {
           password: password
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -194,7 +194,7 @@ class AuthController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -218,7 +218,7 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -229,7 +229,7 @@ class AuthController extends GetxController {
           password: password
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -273,7 +273,7 @@ class AuthController extends GetxController {
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -291,7 +291,7 @@ class AuthController extends GetxController {
     required String email
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -301,7 +301,7 @@ class AuthController extends GetxController {
           email: email
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -341,7 +341,7 @@ class AuthController extends GetxController {
       return response;
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -361,7 +361,7 @@ class AuthController extends GetxController {
     required String emailCode,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -371,7 +371,7 @@ class AuthController extends GetxController {
           email: email, emailCode: emailCode
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -411,7 +411,7 @@ class AuthController extends GetxController {
       return response;
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -431,7 +431,7 @@ class AuthController extends GetxController {
     required String newPassword
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -441,7 +441,7 @@ class AuthController extends GetxController {
           email: email, newPassword: newPassword
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -481,7 +481,7 @@ class AuthController extends GetxController {
       return response;
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
       Utils.showTopSnackBar(
@@ -508,10 +508,10 @@ class AuthController extends GetxController {
       //   await googleSignIn.signOut();  // Sign out from Google
       //   await googleSignIn.disconnect(); // Optional: Revoke permissions (if needed)
       //
-      //   print("User signed out successfully");
+      //   debugPrint("User signed out successfully");
       //   return;
       // } else {
-      //   print("No user is currently signed in");
+      //   debugPrint("No user is currently signed in");
       //   return;
       // }
 
@@ -527,11 +527,11 @@ class AuthController extends GetxController {
         // - googleAuth.accessToken (for API calls)
         // - googleUser (contains email, display name, photo, etc.)
 
-        // print('User Email: ${googleUser.email}');
-        // print('User Name: ${googleUser.displayName}');
-        // print('User Photo: ${googleUser.photoUrl}');
-        // print('ID Token: ${googleAuth.idToken}');
-        // print('Access Token: ${googleAuth.accessToken}');
+        // debugPrint('User Email: ${googleUser.email}');
+        // debugPrint('User Name: ${googleUser.displayName}');
+        // debugPrint('User Photo: ${googleUser.photoUrl}');
+        // debugPrint('ID Token: ${googleAuth.idToken}');
+        // debugPrint('Access Token: ${googleAuth.accessToken}');
 
         // You can use these tokens directly in your app
         // For example, store them in shared preferences
@@ -550,11 +550,11 @@ class AuthController extends GetxController {
 
       }
     } catch (e) {
-      print('Google Sign-In Error: $e');
+      debugPrint('Google Sign-In Error: $e');
       if (e is PlatformException) {
-        print('Detailed error: ${e.message}');
-        print('Error code: ${e.code}');
-        print('Error details: ${e.details}');
+        debugPrint('Detailed error: ${e.message}');
+        debugPrint('Error code: ${e.code}');
+        debugPrint('Error details: ${e.details}');
       }
     }
   }
@@ -571,10 +571,10 @@ class AuthController extends GetxController {
       //   await googleSignIn.signOut();  // Sign out from Google
       //   await googleSignIn.disconnect(); // Optional: Revoke permissions (if needed)
       //
-      //   print("User signed out successfully");
+      //   debugPrint("User signed out successfully");
       //   return;
       // } else {
-      //   print("No user is currently signed in");
+      //   debugPrint("No user is currently signed in");
       //   return;
       // }
 
@@ -590,11 +590,11 @@ class AuthController extends GetxController {
         // - googleAuth.accessToken (for API calls)
         // - googleUser (contains email, display name, photo, etc.)
 
-        // print('User Email: ${googleUser.email}');
-        // print('User Name: ${googleUser.displayName}');
-        // print('User Photo: ${googleUser.photoUrl}');
-        // print('ID Token: ${googleAuth.idToken}');
-        // print('Access Token: ${googleAuth.accessToken}');
+        // debugPrint('User Email: ${googleUser.email}');
+        // debugPrint('User Name: ${googleUser.displayName}');
+        // debugPrint('User Photo: ${googleUser.photoUrl}');
+        // debugPrint('ID Token: ${googleAuth.idToken}');
+        // debugPrint('Access Token: ${googleAuth.accessToken}');
 
         // You can use these tokens directly in your app
         // For example, store them in shared preferences
@@ -613,11 +613,11 @@ class AuthController extends GetxController {
 
       }
     } catch (e) {
-      print('Google Sign-In Error: $e');
+      debugPrint('Google Sign-In Error: $e');
       if (e is PlatformException) {
-        print('Detailed error: ${e.message}');
-        print('Error code: ${e.code}');
-        print('Error details: ${e.details}');
+        debugPrint('Detailed error: ${e.message}');
+        debugPrint('Error code: ${e.code}');
+        debugPrint('Error details: ${e.details}');
       }
     }
   }
@@ -627,7 +627,7 @@ class AuthController extends GetxController {
     // required String password,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -638,7 +638,7 @@ class AuthController extends GetxController {
           // password: password
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -670,32 +670,43 @@ class AuthController extends GetxController {
       } else {
         errorMessage.value = "A.S.K Login: Something wrong happened. Try again";//response.message!;
 
-        Utils.showTopSnackBar(
-            t: "A.S.K Login",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Login",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(
+          status: false,
+          title: "A.S.K Login", message: errorMessage.value,
+        );
       }
 
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
 
 
 
 
       final message = DioExceptions.fromDioError(e).toString();
       //
-      Utils.showTopSnackBar(
-          t: "A.S.K Login: Attention",
-          m: "$message",
-          tc: AppColors.black,
-          d: 3,
-          bc: AppColors.red,
-          sp: SnackPosition.TOP);
+      // Utils.showTopSnackBar(
+      //     t: "A.S.K Login: Attention",
+      //     m: "$message",
+      //     tc: AppColors.black,
+      //     d: 3,
+      //     bc: AppColors.red,
+      //     sp: SnackPosition.TOP);
+
+      Utils.showInformationDialog(
+        status: false,
+        title: 'A.S.K Login: Attention', message: "$message",
+      );
+
 
       final GoogleSignIn googleSignIn = GoogleSignIn();
       await googleSignIn.signOut();
@@ -708,7 +719,7 @@ class AuthController extends GetxController {
     // required String password,
   }) async {
     setLoading(true);
-    //print("loginUser");
+    debugPrint("loginUser");
 
     errorMessage.value = "";
     try {
@@ -719,7 +730,7 @@ class AuthController extends GetxController {
         // password: password
       );
 
-      // print(response!.toJson().toString());
+      // debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -766,19 +777,24 @@ class AuthController extends GetxController {
       } else {
         errorMessage.value = "A.S.K Register: Something wrong happened. Try again";//response.message!;
 
-        Utils.showTopSnackBar(
-            t: "A.S.K Registration",
-            m: errorMessage.value, //"${response.message}",
-            tc: AppColors.white,
-            d: 3,
-            bc: AppColors.askBlue,
-            sp: SnackPosition.TOP);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Registration",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+        Utils.showInformationDialog(
+          status: false,
+          title: "A.S.K Registration", message: errorMessage.value,
+        );
       }
 
       //clearOtpFields();
     } on DioException catch (e) {
       setLoading(false);
-      //print(e.toString());
+      debugPrint(e.toString());
       String message = DioExceptions.fromDioError(e).toString();
       //
       // Utils.showTopSnackBar(
