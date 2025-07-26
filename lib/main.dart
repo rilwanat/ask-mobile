@@ -114,29 +114,33 @@ Future<void> _safeDeepLinkNavigation(String requestId) async {
 
 
     int retries = 0;
-    const maxRetries = 10;
+    const maxRetries = 3;
 
     controller.setLoading(true);
-    while (controller.filteredRequestsData.isEmpty && retries < maxRetries) {
-      await Future.delayed(const Duration(milliseconds: 2000));
-      retries++;
-      // debugPrint('Waiting for filteredRequestsData... retry $retries');
+    //if (controller.profileData.value != null)
+    {
+      while (controller.filteredRequestsData.isEmpty && retries < maxRetries) {
+        await Future.delayed(const Duration(milliseconds: 2000));
+        retries++;
+        // debugPrint('Waiting for filteredRequestsData... retry $retries');
 
-      Get.snackbar("Fetching", 'Waiting for Requests... retry $retries',
-          snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.white
-      );
-    }
+        Get.snackbar("Fetching", 'Waiting for Requests... retry $retries',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.white
+        );
+      }
 
 
-    if (controller.filteredRequestsData.isNotEmpty) {
+
+      if (controller.filteredRequestsData.isNotEmpty) {
 // Scroll to the request
-      await controller.scrollToNewRequestViaHelptoken(requestId);
+        await controller.scrollToNewRequestViaHelptoken(requestId);
+      }
+      debugPrint('### Deep link finished');
     }
-
     controller.setLoading(false);
 
-    debugPrint('### Deep link finished');
+    // debugPrint('### Deep link controller.profileData null');
   } catch (e, stack) {
     debugPrint('Deep link error: $e\n$stack');
   }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' as getx;
 import '../../routes/app_pages.dart';
 import '../storage/cached_data.dart';
@@ -27,13 +28,13 @@ Dio client() {
       final String? accessTokenResponse = await cachedData.getAuthToken();
       final String? token = accessTokenResponse;
 
-      // print("DIO token: $token");
+      // debugPrint("DIO token: $token");
 
       if (token != null && token.isNotEmpty) {
         options.headers["Authorization"] = "Bearer $token";
 
         if (JwtDecoder.isExpired(token)) {
-          // print("Token expired. Logging out...");
+          // debugPrint("Token expired. Logging out...");
           await cachedData.clearAllSavedDetails(userType: "");
           // // authController.logout(); // Trigger logout
           // getx.Get.offAllNamed(Routes.LOGIN);
@@ -59,10 +60,10 @@ Dio client() {
               ? DateTime.fromMillisecondsSinceEpoch(expiry * 1000)
               : null;
 
-          // print('Token Issued At: $issuedAtTime');
-          // print('Token Expiry At: $expiryTime');
+          // debugPrint('Token Issued At: $issuedAtTime');
+          // debugPrint('Token Expiry At: $expiryTime');
         } catch (e) {
-          print('Error decoding token: $e');
+          debugPrint('Error decoding token: $e');
         }
         //
 
@@ -73,18 +74,18 @@ Dio client() {
         print(formData.fields);
       }
 
-      // print('Request URI: ${options.uri}');
-      // print('Request Headers: ${options.headers}');
-      // print('Request Data: ${options.data}');
+      // debugPrint('Request URI: ${options.uri}');
+      // debugPrint('Request Headers: ${options.headers}');
+      // debugPrint('Request Data: ${options.data}');
       return handler.next(options); // continue
     },
     onError: (DioException e, handler) {
       // Do something with response error
-      print('======================');
-      print('DioError: $e');
-      print('Response data: ${e.response?.data}');
-      print('Error message: ${e.message}');
-      print('======================');
+      debugPrint('======================');
+      debugPrint('DioError: $e');
+      debugPrint('Response data: ${e.response?.data}');
+      debugPrint('Error message: ${e.message}');
+      debugPrint('======================');
       return handler.next(e); // continue
     },
   ));

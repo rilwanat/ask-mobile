@@ -527,7 +527,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().getUserProfile(email: profileData.value!.emailAddress!);
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -578,7 +578,7 @@ class HomeController extends GetxController {
     try {
       profileData.value = await _cachedData.getProfileData();
       debugPrint("_cachedData profileData");
-      debugPrint(profileData.value!.toJson().toString());
+      // debugPrint(profileData.value!.toJson().toString());
 
       await homeGetUserProfileFromServer();
 
@@ -1326,7 +1326,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readRequests();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1389,7 +1389,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readMyHelpRequests(email: email);
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1445,7 +1445,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readBeneficiaries();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1500,7 +1500,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readSponsors();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1553,7 +1553,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readCryptos();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1606,7 +1606,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readDonations();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1659,7 +1659,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readDollarExchange();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1712,7 +1712,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readPaystackSubscriptions();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1765,7 +1765,7 @@ class HomeController extends GetxController {
       response =
       await SecureService().readBankCodes();
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1823,7 +1823,7 @@ class HomeController extends GetxController {
           email: email
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1883,7 +1883,7 @@ class HomeController extends GetxController {
           verificationCode: verificationCode
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -1955,7 +1955,7 @@ class HomeController extends GetxController {
 
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2031,7 +2031,7 @@ class HomeController extends GetxController {
         userId: userId,
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2101,7 +2101,7 @@ class HomeController extends GetxController {
           image: image
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2178,7 +2178,7 @@ class HomeController extends GetxController {
           image: image
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2254,7 +2254,7 @@ class HomeController extends GetxController {
           helpToken: helpToken
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2331,7 +2331,7 @@ class HomeController extends GetxController {
           helpToken: helpToken
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -2406,7 +2406,7 @@ class HomeController extends GetxController {
           fingerPrint: fingerPrint
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       // _isNominating.value = false;
@@ -2479,7 +2479,7 @@ class HomeController extends GetxController {
         email: email,
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -3065,7 +3065,7 @@ class HomeController extends GetxController {
         reference: reference,
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -3130,7 +3130,7 @@ class HomeController extends GetxController {
         email: email
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
       setLoading(false);
       if (response!.status == true) {
@@ -3194,7 +3194,7 @@ class HomeController extends GetxController {
         email: email, deleteToken: deleteToken
       );
 
-      debugPrint(response!.toJson().toString());
+      //debugPrint(response!.toJson().toString());
       //
 
       setLoading(false);

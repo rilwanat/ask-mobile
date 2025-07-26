@@ -35,7 +35,7 @@
 //       size: AdSize.banner,
 //       listener: BannerAdListener(
 //         onAdLoaded: (Ad ad) {
-//           print('$BannerAd loaded.');
+//           debugPrint('$BannerAd loaded.');
 //           // isBannerAdLoaded = true;
 //
 //           setState(() {
@@ -45,7 +45,7 @@
 //           });
 //         },
 //         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-//           print('$BannerAd failedToLoad: $error');
+//           debugPrint('$BannerAd failedToLoad: $error');
 //           ad.dispose();
 //
 //           // isBannerAdLoaded = false;

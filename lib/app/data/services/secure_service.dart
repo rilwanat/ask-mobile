@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ask_mobile/app/data/models/banks/BankCodeResponse.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http_parser/http_parser.dart';
 import '../models/beneficiaries/BeneficiariesResponse.dart';
 import '../models/create_help_request/CreateHelpRequestResponse.dart';
@@ -43,7 +44,7 @@ class SecureService {
     };
     String formDataString = json.encode(formDataMap);
 
-    // print(formDataString);
+    // debugPrint(formDataString);
 
     try {
       final response = await apiClient.post(
@@ -59,7 +60,7 @@ class SecureService {
       responseData = RegisterResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
-      print(s);
+      debugPrint(s.toString());
       rethrow;
     }
   }
@@ -80,7 +81,7 @@ class SecureService {
     };
     String formDataString = json.encode(formDataMap);
 
-    // print(formDataString);
+    // debugPrint(formDataString);
 
     try {
       final response = await apiClient.post(
@@ -96,7 +97,7 @@ class SecureService {
       responseData = LoginResponse.fromJson(response.data);
       return responseData;
     } catch (e, s) {
-      print(s);
+      debugPrint(s.toString());
       rethrow;
     }
   }

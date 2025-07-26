@@ -395,9 +395,8 @@ class IaskView extends GetView<HomeController> {
                                 || controller.profileData.value!.kycStatus == ""
                                 || controller.profileData.value!.kycStatus == null
 
-                                || controller.profileData.value!.isCheat == "Yes"
                             )
-                                    // && controller.profileData.value!.isCheat != "Yes"
+                                    && controller.profileData.value!.isCheat != "Yes"
                             ) ?
                             Container(
                               // color: AppColors.askGreen,
@@ -1324,7 +1323,7 @@ class IaskView extends GetView<HomeController> {
                                                 //     bc: AppColors.askBlue,
                                                 //     sp: SnackPosition.TOP);
 
-                                                // print(
+                                                // debugPrint(
                                                 //   "${phoneNumber}\n"
                                                 //       "${accountNumber}\n"
                                                 //       "${bankName}\n"
@@ -1399,7 +1398,7 @@ class IaskView extends GetView<HomeController> {
                                   // height: 60,
                                   child: Column(
                                     children: [
-                                  (controller.profileData.value!.accountName != "") ?
+                                  // (controller.profileData.value!.accountName != "") ?
                                   Padding(
                                         padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
                                         child: Column(
@@ -1462,7 +1461,8 @@ class IaskView extends GetView<HomeController> {
                                             ),
                                           ],
                                         ),
-                                      ) : Container(),
+                                      )
+                                      // : Container(),
                                     ],
                                   )
                                     ,
@@ -2199,7 +2199,7 @@ class IaskView extends GetView<HomeController> {
                                                     File? image = controller.helpRequestImage.value!;
                                                     //
 
-                                                    // print(description);
+                                                    // debugPrint(description);
                                                     if (
                                                     // description != ""
                                                     // &&
@@ -2240,7 +2240,7 @@ class IaskView extends GetView<HomeController> {
                                                     // File? image = controller.helpRequestImage.value!;
                                                     //
 
-                                                    print(description);
+                                                    debugPrint(description);
                                                     if (
                                                     description != ""
                                                         // &&

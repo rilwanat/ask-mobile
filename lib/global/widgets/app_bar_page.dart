@@ -47,7 +47,7 @@ class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
             children: [
               GestureDetector(
                 onTap:
-                // () { print("x"); Get.to(() => HomeView()); },
+                // () { debugPrint("x"); Get.to(() => HomeView()); },
                 onMenuPressed,
                 child: const SizedBox(
                   width: 32,  // Larger tap area

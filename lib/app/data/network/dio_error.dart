@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 class DioExceptions implements Exception {
   DioExceptions.fromDioError(DioException dioError) {
@@ -37,7 +38,7 @@ class DioExceptions implements Exception {
   late String message;
 
   String _handleError(dynamic statusCode, dynamic error) {
-    print(statusCode);
+    debugPrint(statusCode);
     switch (statusCode) {
       case "success":
         return error["message"];

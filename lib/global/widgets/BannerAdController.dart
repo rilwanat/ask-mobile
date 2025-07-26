@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -27,12 +28,12 @@ class BannerAdController extends GetxController {
           bannerAd.value = ad as BannerAd;
           isBannerAdLoaded.value = true;
           _retryAttempt = 0;
-          print('BannerAd loaded.');
+          debugPrint('BannerAd loaded.');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           ad.dispose();
           isBannerAdLoaded.value = false;
-          print('BannerAd failedToLoad: $error');
+          debugPrint('BannerAd failedToLoad: $error');
 
           if (_retryAttempt < _maxRetryAttempts) {
             _retryAttempt++;
