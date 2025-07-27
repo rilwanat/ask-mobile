@@ -1364,7 +1364,309 @@ class IaskView extends GetView<HomeController> {
                                   ),
                                 ],
                               ),
-                            ) : Container()
+                            ) :
+
+                            // IS CHEAT AND EMAIL IS NOT VERIFIED
+                            controller.profileData.value!.emailVerified != "Yes" ?
+                            Container(
+                              // color: AppColors.askGreen,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    AskStrings.COMPLETE_LEVEL1_VERIFICIATION,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "LatoRegular",
+                                      color: AppColors.askText,
+                                      height: 1.0,
+                                      // letterSpacing: .2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        color: AppColors.askBlue,
+                                        height: 2,
+                                        width: 64,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  // const SizedBox(height: 20),
+                                  // const Text(
+                                  //     AuthStrings.LOGIN_SUBHEADER,
+                                  //     style: TextStyle(
+                                  //       fontSize: 16,
+                                  //       fontWeight: FontWeight.w400,
+                                  //       fontFamily: "LatoRegular",
+                                  //       color: AppColors.askText,
+                                  //       // letterSpacing: .2,
+                                  //     )
+                                  // ),
+                                  const SizedBox(height: 0),
+                                  // Email Field
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Email: ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "LatoRegular",
+                                            // letterSpacing: .2,
+                                            color: AppColors.askText,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        FadeDownAnimation(
+                                          delayMilliSeconds: 400,
+                                          duration: 700,
+                                          child: TextFormField(
+                                            initialValue: controller.profileData.value!.emailAddress,
+                                            // controller: controller.loginEmailController,
+                                            // focusNode: controller.loginEmailFocusNode,
+                                            //cursorColor: AppColors.blue,
+                                            decoration: InputDecoration(
+                                              hintText: "Email",
+                                              // filled: true,
+                                              // fillColor: AppColors.white,
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: AppColors.askBlue,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: AppColors
+                                                      .askBlue,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: AppColors.askBlue,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(8),
+                                              ),
+                                              contentPadding:
+                                              const EdgeInsets.only(left: 20),
+                                            ),
+                                            readOnly: true,
+                                            keyboardType:
+                                            TextInputType.emailAddress,
+                                            style: const TextStyle(
+                                              //letterSpacing: 0.7,
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "LatoRegular",
+                                            ),
+                                            inputFormatters: const [
+                                              //FilteringTextInputFormatter.digitsOnly,
+                                              //LengthLimitingTextInputFormatter(13),
+                                            ],
+                                            validator: (value) {
+                                              Pattern pattern =
+                                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                              RegExp regex = RegExp('$pattern');
+                                              if (!regex.hasMatch(value!)) {
+                                                return 'Please enter a valid Email Address';
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Verification Code Field
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Verification Code: ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "LatoRegular",
+                                            // letterSpacing: .2,
+                                            color: AppColors.askText,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Stack(
+                                          alignment: Alignment.centerRight,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.grey.shade300),
+                                                borderRadius: BorderRadius.circular(2),
+                                                color: Colors.white,
+                                              ),
+                                              child:
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: TextFormField(
+                                                  controller: controller.emailVerificationController,
+                                                  // focusNode: controller.loginEmailFocusNode,
+                                                  //cursorColor: AppColors.blue,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Enter Verification Code",
+                                                    // fillColor: AppColors.white,
+                                                    border: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors
+                                                            .askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    contentPadding:
+                                                    const EdgeInsets.only(left: 20),
+                                                  ),
+                                                  // readOnly: true,
+                                                  keyboardType:
+                                                  TextInputType.text,
+                                                  style: const TextStyle(
+                                                    // //letterSpacing: 0.7,
+                                                    fontSize: 16,
+                                                    color: AppColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "LatoRegular",
+                                                  ),
+                                                  inputFormatters: const [
+                                                    //FilteringTextInputFormatter.digitsOnly,
+                                                    //LengthLimitingTextInputFormatter(13),
+                                                  ],
+                                                  validator: (value) {
+
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: 8,
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  String email = controller.profileData.value!.emailAddress!;
+
+                                                  controller.resendVerificationCode(email: email);
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  backgroundColor: Colors.grey.shade300,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  'resend',
+                                                  style:  TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "LatoRegular",
+                                                    // letterSpacing: .2,
+                                                    color: AppColors.askText,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 20),
+
+
+
+                                      ],
+                                    ),
+                                  ),
+
+                                  Container(
+                                    width: ScreenSize.width(context),
+                                    alignment: Alignment.bottomCenter,
+                                    // color: AppColors.askBlue,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        AskButton(
+                                            enabled: true,
+                                            text: "Submit",
+                                            function: () async {
+
+                                              String email = controller.profileData.value!.emailAddress!;
+                                              String verificationCode = controller.emailVerificationController.text;
+
+                                              if (verificationCode.isEmpty) {
+                                                Utils.showTopSnackBar(
+                                                    t: "A.S.K Verification Code",
+                                                    m: "Verification code cannot be empty",
+                                                    tc: AppColors.white,
+                                                    d: 3,
+                                                    bc: AppColors.askBlue,
+                                                    sp: SnackPosition.TOP);
+                                              } else {
+                                                await controller.verifyEmail(
+                                                  email: email,
+                                                  verificationCode: verificationCode,
+                                                );
+                                              }
+                                            },
+                                            backgroundColor: AppColors.askBlue,
+                                            textColor: AppColors.white,
+                                            buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                            buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                            borderCurve: 26,
+                                            border: false,
+                                            textSize: 16
+                                        ),
+
+
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ) :
+                            // IS CHEAT AND EMAIL IS NOT VERIFIED
+
+                                Container()
                             ),
                             ),
 
@@ -1398,7 +1700,7 @@ class IaskView extends GetView<HomeController> {
                                   // height: 60,
                                   child: Column(
                                     children: [
-                                  // (controller.profileData.value!.accountName != "") ?
+                                  (controller.profileData.value!.accountName != "") ?
                                   Padding(
                                         padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
                                         child: Column(
@@ -1462,7 +1764,980 @@ class IaskView extends GetView<HomeController> {
                                           ],
                                         ),
                                       )
-                                      // : Container(),
+                                      :
+
+                                  // IS CHEAT AND EMAIL IS VERIFIED
+                                  controller.profileData.value!.emailVerified == "Yes" ?
+                                  Container(
+                                    // color: AppColors.askGreen,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          AskStrings.COMPLETE_LEVEL2_VERIFICIATION,
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "LatoRegular",
+                                            color: AppColors.askText,
+                                            height: 1.0,
+                                            // letterSpacing: .2,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              color: AppColors.askBlue,
+                                              height: 2,
+                                              width: 64,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        // const SizedBox(height: 20),
+                                        // const Text(
+                                        //     AuthStrings.LOGIN_SUBHEADER,
+                                        //     style: TextStyle(
+                                        //       fontSize: 16,
+                                        //       fontWeight: FontWeight.w400,
+                                        //       fontFamily: "LatoRegular",
+                                        //       color: AppColors.askText,
+                                        //       // letterSpacing: .2,
+                                        //     )
+                                        // ),
+                                        const SizedBox(height: 0),
+                                        Container(
+                                          // color: AppColors.askOrange,
+                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.askLightRed,
+                                            borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                            // border: Border.all(width: 1, color: AppColors.askGray),
+                                          ),
+                                          child: const Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  AskStrings.STRICTLY,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "LatoRegular",
+                                                    color: AppColors.black,
+                                                    // letterSpacing: .2,
+                                                  )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        // Email Field
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Email: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: TextFormField(
+                                                  initialValue: controller.profileData.value!.emailAddress,
+                                                  // controller: controller.loginEmailController,
+                                                  // focusNode: controller.loginEmailFocusNode,
+                                                  //cursorColor: AppColors.blue,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Email",
+                                                    // filled: true,
+                                                    // fillColor: AppColors.white,
+                                                    border: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors
+                                                            .askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    contentPadding:
+                                                    const EdgeInsets.only(left: 20),
+                                                  ),
+                                                  readOnly: true,
+                                                  keyboardType:
+                                                  TextInputType.emailAddress,
+                                                  style: const TextStyle(
+                                                    //letterSpacing: 0.7,
+                                                    fontSize: 16,
+                                                    color: AppColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "LatoRegular",
+                                                  ),
+                                                  inputFormatters: const [
+                                                    //FilteringTextInputFormatter.digitsOnly,
+                                                    //LengthLimitingTextInputFormatter(13),
+                                                  ],
+                                                  validator: (value) {
+                                                    Pattern pattern =
+                                                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                    RegExp regex = RegExp('$pattern');
+                                                    if (!regex.hasMatch(value!)) {
+                                                      return 'Please enter a valid Email Address';
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Phone Number
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Phone Number: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: TextFormField(
+                                                  // initialValue: controller.profileData.value!.emailAddress,
+                                                  controller: controller.kycPhoneNumberController,
+                                                  // focusNode: controller.loginEmailFocusNode,
+                                                  //cursorColor: AppColors.blue,
+                                                  maxLength: 10,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Enter your Phone Number: (10 digits)",
+                                                    // filled: true,
+                                                    // fillColor: AppColors.white,
+                                                    counterText: "",
+                                                    border: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors
+                                                            .askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    contentPadding:
+                                                    const EdgeInsets.only(left: 20),
+                                                    prefixIcon: Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          right: 0, left: 8),
+                                                      child: Container(
+                                                        width: 100,
+                                                        height: 40,
+                                                        // color: AppColors.orange,
+                                                        child: Center(
+                                                          child: IgnorePointer(
+                                                            ignoring: true,
+                                                            child: CountryCodePicker(
+                                                              enabled: false,
+                                                              onChanged: null,//controller.onCountryChanged,
+                                                              builder: (countryCode) {
+                                                                return Padding(
+                                                                  padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                    horizontal: 8.0,
+                                                                  ),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        countryCode!
+                                                                            .flagUri!,
+                                                                        package:
+                                                                        'country_code_picker',
+                                                                        width: 22.0,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width: 6.0),
+                                                                      Text(
+                                                                        controller
+                                                                            .countryCode,
+                                                                        style:
+                                                                        const TextStyle(
+                                                                          fontSize:
+                                                                          13.5,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                          fontFamily:
+                                                                          "LatoRegular",
+                                                                          // letterSpacing: .2,
+                                                                          color: AppColors
+                                                                              .askText,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width: 4),
+                                                                      const Icon(
+                                                                        Icons
+                                                                            .keyboard_arrow_down_outlined,
+                                                                        color: AppColors
+                                                                            .askText,
+                                                                        size: 14,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                              initialSelection: 'NG',
+                                                              showCountryOnly: true,
+                                                              showOnlyCountryWhenClosed:
+                                                              true,
+                                                              // alignLeft: true,
+                                                              showFlag: true,
+                                                              showDropDownButton: false,
+                                                              hideMainText: true,
+                                                              flagWidth: 40.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // readOnly: true,
+                                                  keyboardType:
+                                                  TextInputType.number,
+                                                  style: const TextStyle(
+                                                    //letterSpacing: 0.7,
+                                                    fontSize: 16,
+                                                    color: AppColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "LatoRegular",
+                                                  ),
+                                                  inputFormatters: const [
+                                                    //FilteringTextInputFormatter.digitsOnly,
+                                                    //LengthLimitingTextInputFormatter(13),
+                                                  ],
+                                                  validator: (value) {
+                                                    // Pattern pattern =
+                                                    //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                    // RegExp regex = RegExp('$pattern');
+                                                    // if (!regex.hasMatch(value!)) {
+                                                    //   return 'Please enter a valid Email Address';
+                                                    // } else {
+                                                    //   return null;
+                                                    // }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Account Number: (10 digits)
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Account Number: (10 digits)",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: TextFormField(
+                                                  // initialValue: controller.profileData.value!.emailAddress,
+                                                  controller: controller.kycAccountNumberController,
+                                                  // focusNode: controller.loginEmailFocusNode,
+                                                  //cursorColor: AppColors.blue,
+                                                  maxLength: 10,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Enter your Account Number",
+                                                    // filled: true,
+                                                    // fillColor: AppColors.white,
+                                                    counterText: "",
+                                                    border: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors
+                                                            .askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                        color: AppColors.askBlue,
+                                                      ),
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    contentPadding:
+                                                    const EdgeInsets.only(left: 20),
+                                                  ),
+                                                  // readOnly: true,
+                                                  keyboardType:
+                                                  TextInputType.number,
+                                                  style: const TextStyle(
+                                                    //letterSpacing: 0.7,
+                                                    fontSize: 16,
+                                                    color: AppColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "LatoRegular",
+                                                  ),
+                                                  inputFormatters: const [
+                                                    //FilteringTextInputFormatter.digitsOnly,
+                                                    //LengthLimitingTextInputFormatter(13),
+                                                  ],
+                                                  validator: (value) {
+                                                    // Pattern pattern =
+                                                    //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                    // RegExp regex = RegExp('$pattern');
+                                                    // if (!regex.hasMatch(value!)) {
+                                                    //   return 'Please enter a valid Email Address';
+                                                    // } else {
+                                                    //   return null;
+                                                    // }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Bank Name:
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Bank Name: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: SizedBox(
+                                                    width: ScreenSize.width(context),
+                                                    child: TextFormField(
+                                                      // initialValue: controller.profileData.value!.emailAddress,
+                                                      controller: controller.kycBankNameController,
+                                                      // focusNode: controller.loginEmailFocusNode,
+                                                      //cursorColor: AppColors.blue,
+                                                      // maxLength: 10,
+                                                      decoration: InputDecoration(
+                                                        hintText: "Enter Bank Name",
+                                                        // filled: true,
+                                                        // fillColor: AppColors.white,
+                                                        border: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors
+                                                                .askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        contentPadding:
+                                                        const EdgeInsets.only(left: 20),
+                                                      ),
+                                                      readOnly: true,
+                                                      keyboardType:
+                                                      TextInputType.text,
+                                                      style: const TextStyle(
+                                                        //letterSpacing: 0.7,
+                                                        fontSize: 16,
+                                                        color: AppColors.black,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: "LatoRegular",
+                                                      ),
+                                                      inputFormatters: const [
+                                                        //FilteringTextInputFormatter.digitsOnly,
+                                                        //LengthLimitingTextInputFormatter(13),
+                                                      ],
+                                                      validator: (value) {
+                                                        // Pattern pattern =
+                                                        //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                        // RegExp regex = RegExp('$pattern');
+                                                        // if (!regex.hasMatch(value!)) {
+                                                        //   return 'Please enter a valid Email Address';
+                                                        // } else {
+                                                        //   return null;
+                                                        // }
+                                                      },
+                                                      onTap: () {
+                                                        controller.showBanksDialog();
+                                                      },
+                                                    )
+                                                ),
+
+
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Gender:
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Gender: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: SizedBox(
+                                                    width: ScreenSize.width(context),
+                                                    child: TextFormField(
+                                                      // initialValue: controller.profileData.value!.emailAddress,
+                                                      controller: controller.kycGenderController,
+                                                      // focusNode: controller.loginEmailFocusNode,
+                                                      //cursorColor: AppColors.blue,
+                                                      // maxLength: 10,
+                                                      decoration: InputDecoration(
+                                                        hintText: "Enter Gender",
+                                                        // filled: true,
+                                                        // fillColor: AppColors.white,
+                                                        border: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors
+                                                                .askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        contentPadding:
+                                                        const EdgeInsets.only(left: 20),
+                                                      ),
+                                                      readOnly: true,
+                                                      keyboardType:
+                                                      TextInputType.text,
+                                                      style: const TextStyle(
+                                                        //letterSpacing: 0.7,
+                                                        fontSize: 16,
+                                                        color: AppColors.black,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: "LatoRegular",
+                                                      ),
+                                                      inputFormatters: const [
+                                                        //FilteringTextInputFormatter.digitsOnly,
+                                                        //LengthLimitingTextInputFormatter(13),
+                                                      ],
+                                                      validator: (value) {
+                                                        // Pattern pattern =
+                                                        //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                        // RegExp regex = RegExp('$pattern');
+                                                        // if (!regex.hasMatch(value!)) {
+                                                        //   return 'Please enter a valid Email Address';
+                                                        // } else {
+                                                        //   return null;
+                                                        // }
+                                                      },
+                                                      onTap: () {
+                                                        controller.showGenderDialog();
+                                                      },
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // State of Residence:
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "State of Residence: ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "LatoRegular",
+                                                  // letterSpacing: .2,
+                                                  color: AppColors.askText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              FadeDownAnimation(
+                                                delayMilliSeconds: 400,
+                                                duration: 700,
+                                                child: SizedBox(
+                                                    width: ScreenSize.width(context),
+                                                    child: TextFormField(
+                                                      // initialValue: controller.profileData.value!.emailAddress,
+                                                      controller: controller.kycStateOfResidenceController,
+                                                      // focusNode: controller.loginEmailFocusNode,
+                                                      //cursorColor: AppColors.blue,
+                                                      // maxLength: 10,
+                                                      decoration: InputDecoration(
+                                                        hintText: "Enter State of Residence",
+                                                        // filled: true,
+                                                        // fillColor: AppColors.white,
+                                                        border: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors
+                                                                .askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                            color: AppColors.askBlue,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(8),
+                                                        ),
+                                                        contentPadding:
+                                                        const EdgeInsets.only(left: 20),
+                                                      ),
+                                                      readOnly: true,
+                                                      keyboardType:
+                                                      TextInputType.text,
+                                                      style: const TextStyle(
+                                                        //letterSpacing: 0.7,
+                                                        fontSize: 16,
+                                                        color: AppColors.black,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: "LatoRegular",
+                                                      ),
+                                                      inputFormatters: const [
+                                                        //FilteringTextInputFormatter.digitsOnly,
+                                                        //LengthLimitingTextInputFormatter(13),
+                                                      ],
+                                                      validator: (value) {
+                                                        // Pattern pattern =
+                                                        //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                                                        // RegExp regex = RegExp('$pattern');
+                                                        // if (!regex.hasMatch(value!)) {
+                                                        //   return 'Please enter a valid Email Address';
+                                                        // } else {
+                                                        //   return null;
+                                                        // }
+                                                      },
+                                                      onTap: () {
+                                                        controller.showStateOfResidenceDialog();
+                                                      },
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 8,),
+                                        Container(
+                                          // color: AppColors.askOrange,
+                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.askLightRed,
+                                            borderRadius: BorderRadius.circular(ScreenSize.scaleHeight(context, 12)),
+                                            // border: Border.all(width: 1, color: AppColors.askGray),
+                                          ),
+                                          child: const Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                    AskStrings.SELFIE,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: "LatoRegular",
+                                                      color: AppColors.black,
+                                                      // letterSpacing: .2,
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        const SizedBox(height: 16),
+                                        // Camera Preview with Loading State
+                                        Obx(() {
+                                          return
+                                            controller.imagePath.isNotEmpty
+                                                ? Center(
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(8),
+                                                child: Image.file(
+                                                  File(controller.imagePath.value),
+                                                  height: 200,
+                                                  width: 200,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
+                                                :
+                                            controller.isCameraInitialized.value
+                                                ? Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: SizedBox(
+                                                    width: 200,
+                                                    height: 200,
+                                                    child: FittedBox(
+                                                      fit: BoxFit.cover, // Ensures the center crop effect
+                                                      alignment: Alignment.center,
+                                                      child: SizedBox(
+                                                        width: controller.cameraController.value!.value.previewSize!.height,
+                                                        height: controller.cameraController.value!.value.previewSize!.width,
+                                                        child: CameraPreview(controller.cameraController.value!),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+
+                                                : Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  height: 200,
+                                                  width: 200,
+                                                  color: Colors.grey[200],
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Camera not initialized',
+                                                      style: TextStyle(color: Colors.grey[600]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                        }),
+
+
+                                        const SizedBox(height: 8,),
+                                        const SizedBox(height: 8,),
+                                        // Take Picture Button
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: ScreenSize.scaleWidth(context, 24)),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Visibility(
+                                                // visible: controller.isCameraInitialized.value ? false : true,
+                                                visible: true,
+                                                child: AskButton(
+                                                  enabled: controller.isCameraInitialized.value ? false : true,
+                                                  text: (controller.imagePath.value == "" && !controller.isCameraInitialized.value) ? "Camera" : "Retake",
+                                                  function: () async {
+
+                                                    if (controller.isCameraInitialized.value) {
+                                                      // Utils.showTopSnackBar(
+                                                      //     t: "A.S.K Camera",
+                                                      //     m: "Already started",
+                                                      //     tc: AppColors.white,
+                                                      //     d: 3,
+                                                      //     bc: AppColors.askBlue,
+                                                      //     sp: SnackPosition.TOP);
+                                                      Utils.showInformationDialog(status: null, title: 'A.S.K KYC Camera', message: "Already started. Take your selfie ;)");
+                                                      return;
+                                                    }
+
+                                                    controller.imagePath.value = "";
+                                                    if (!controller.isCameraInitialized.value) {
+                                                      await controller.initializeCamera();
+                                                    }
+
+                                                    // if (controller.cameraController.value != null) {
+                                                    //   await controller.takePicture();
+                                                    // }
+                                                  },
+                                                  backgroundColor: controller.isCameraInitialized.value ? AppColors.askGray : AppColors.askBlue,
+                                                  textColor: controller.isCameraInitialized.value ? AppColors.askText : AppColors.white,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 140),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 48),
+                                                  borderCurve: 26,
+                                                  border: false,
+                                                  textSize: 14,
+                                                ),
+                                              ),
+
+                                              const SizedBox(width: 10,),
+
+                                              AskButton(
+                                                enabled: true,
+                                                text: "Take Selfie",
+                                                function: () async {
+                                                  if (!controller.isCameraInitialized.value) {
+                                                    return;
+                                                  }
+
+
+
+                                                  if (controller.cameraController.value != null) {
+                                                    await controller.takePicture();
+                                                  }
+                                                },
+                                                backgroundColor: !controller.isCameraInitialized.value ? AppColors.askGray : AppColors.askBlue,
+                                                textColor: !controller.isCameraInitialized.value ? AppColors.askText : AppColors.white,
+                                                buttonWidth: ScreenSize.scaleWidth(context, 140),
+                                                buttonHeight: ScreenSize.scaleHeight(context, 48),
+                                                borderCurve: 26,
+                                                border: false,
+                                                textSize: 14,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+
+                                        const SizedBox(height: 10),
+
+
+                                        Container(
+                                          width: ScreenSize.width(context),
+                                          alignment: Alignment.bottomCenter,
+                                          // color: AppColors.askBlue,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              AskButton(
+                                                  enabled: true,
+                                                  text: "Submit", //"""Verify KYC",
+                                                  function: () async {
+
+
+
+                                                    String email = controller.profileData.value!.emailAddress!;
+
+                                                    String phoneNumber = controller.countryCode + controller.kycPhoneNumberController.text;
+                                                    String accountNumber = controller.kycAccountNumberController.text;
+                                                    String bankName = controller.kycBankNameController.text;
+                                                    String bankCode = controller.selectedBankCode;
+                                                    String gender = controller.kycGenderController.text;
+                                                    String stateOfResidence = controller.kycStateOfResidenceController.text;
+
+                                                    String imagePath = controller.imagePath.value;
+
+
+                                                    List<String> missingFields = [];
+                                                    if (phoneNumber.isEmpty || phoneNumber.length == 4) {
+                                                      missingFields.add("Phone Number");
+                                                    }
+                                                    if (phoneNumber.length != 14) {
+                                                      missingFields.add("10-digit Phone Number ");
+                                                    }
+                                                    if (accountNumber.isEmpty) {
+                                                      missingFields.add("Account Number");
+                                                    }
+                                                    if (accountNumber.length != 10) {
+                                                      missingFields.add("10-digit Account Number ");
+                                                    }
+                                                    if (bankName.isEmpty) {
+                                                      missingFields.add("Bank Name");
+                                                    }
+                                                    if (gender.isEmpty) {
+                                                      missingFields.add("Gender");
+                                                    }
+                                                    if (stateOfResidence.isEmpty) {
+                                                      missingFields.add("State of Residence");
+                                                    }
+                                                    if (imagePath.isEmpty) {
+                                                      missingFields.add("Selfie");
+                                                    }
+
+
+                                                    if (missingFields.isNotEmpty) {
+                                                      // Utils.showTopSnackBar(
+                                                      //     t: "A.S.K Verify KYC",
+                                                      //     m: "KYC selfie and text fields cannot be empty",
+                                                      //     tc: AppColors.white,
+                                                      //     d: 3,
+                                                      //     bc: AppColors.askBlue,
+                                                      //     sp: SnackPosition.TOP);
+                                                      // Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc', message: "KYC selfie and text fields cannot be empty");
+                                                      Utils.showInformationDialog(
+                                                        status: false,
+                                                        title: 'A.S.K Update Kyc',
+                                                        message: "The following fields cannot be empty:\n${missingFields.join('\n')}",
+                                                      );
+                                                    } else {
+                                                      // Utils.showTopSnackBar(
+                                                      //     t: "A.S.K Verify KYC",
+                                                      //     m:
+                                                      //     "${phoneNumber}\n"
+                                                      //         "${accountNumber}\n"
+                                                      //         "${bankName}\n"
+                                                      //         "${bankCode}\n"
+                                                      //         "${gender}\n"
+                                                      //         "${stateOfResidence}\n"
+                                                      //         "${imagePath}\n",
+                                                      //     tc: AppColors.white,
+                                                      //     d: 3,
+                                                      //     bc: AppColors.askBlue,
+                                                      //     sp: SnackPosition.TOP);
+
+                                                      // debugPrint(
+                                                      //   "${phoneNumber}\n"
+                                                      //       "${accountNumber}\n"
+                                                      //       "${bankName}\n"
+                                                      //       "${bankCode}\n"
+                                                      //       "${gender}\n"
+                                                      //       "${stateOfResidence}\n"
+                                                      //       "${imagePath}\n",
+                                                      // );
+
+
+                                                      await controller.updateUserKyc(
+                                                        email: email,
+                                                        phoneNumber: phoneNumber,
+                                                        accountNumber: accountNumber,
+                                                        bankName: bankName,
+                                                        bankCode: bankCode,
+                                                        gender: gender,
+                                                        residence: stateOfResidence,
+                                                        imagePath: imagePath,
+                                                      );
+                                                    }
+                                                  },
+                                                  backgroundColor: AppColors.askBlue,
+                                                  textColor: AppColors.white,
+                                                  buttonWidth: ScreenSize.scaleWidth(context, 340),
+                                                  buttonHeight: ScreenSize.scaleHeight(context, 60),
+                                                  borderCurve: 26,
+                                                  border: false,
+                                                  textSize: 16
+                                              ),
+
+
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ) :
+                                  // IS CHEAT AND EMAIL IS VERIFIED
+
+                                   Container(),
                                     ],
                                   )
                                     ,
