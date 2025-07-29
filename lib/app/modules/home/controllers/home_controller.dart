@@ -1993,14 +1993,7 @@ class HomeController extends GetxController {
       setLoading(false);
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
-      //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Update Kyc: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false, title: 'A.S.K Update Kyc: Attention', message: "$message");
 
     }
@@ -2069,13 +2062,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      Utils.showTopSnackBar(
-          t: "A.S.K Update User KYC Selfie: Attention",
-          m: "$message",
-          tc: AppColors.black,
-          d: 3,
-          bc: AppColors.red,
-          sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false, title: 'A.S.K Update KYC Selfie', message: "$message");
 
     }
@@ -2146,13 +2133,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
 
       await initializeProfileData();
 
@@ -2223,13 +2204,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Update Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Update Help Request Image: Attention',
           message: "$message");
@@ -2299,13 +2274,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Update Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Update Help Request: Attention',
           message: "$message");
@@ -2374,13 +2343,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Delete Help Request: Attention',
           message: "$message");
@@ -2452,13 +2415,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Nominate: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Nominate: Attention',
           message: "$message");
@@ -2527,13 +2484,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: null,
           title: 'A.S.K: Attention',
           message: "$message");
@@ -3103,13 +3054,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      Utils.showTopSnackBar(
-          t: "A.S.K incrementDNQ: Attention",
-          m: "$message",
-          tc: AppColors.black,
-          d: 3,
-          bc: AppColors.red,
-          sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false, title: 'A.S.K incrementDNQ', message: "$message");
 
     }
@@ -3166,13 +3111,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Create Help Request: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: null,
           title: 'A.S.K Send Delete Token: Attention',
           message: "$message");
@@ -3239,13 +3178,7 @@ class HomeController extends GetxController {
       debugPrint(e.toString());
       final message = DioExceptions.fromDioError(e).toString();
       //
-      // Utils.showTopSnackBar(
-      //     t: "A.S.K Account: Attention",
-      //     m: "$message",
-      //     tc: AppColors.black,
-      //     d: 3,
-      //     bc: AppColors.red,
-      //     sp: SnackPosition.TOP);
+
       Utils.showInformationDialog(status: false,
           title: 'A.S.K Delete Account: Attention',
           message: "$message");
