@@ -557,7 +557,7 @@ class IaskView extends GetView<HomeController> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
-                                          "Phone Number: ",
+                                          "Phone Number: (10 digits)",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -577,7 +577,7 @@ class IaskView extends GetView<HomeController> {
                                             //cursorColor: AppColors.blue,
                                             maxLength: 10,
                                             decoration: InputDecoration(
-                                              hintText: "Enter your Phone Number: (10 digits)",
+                                              hintText: "Enter your Phone Number",
                                               // filled: true,
                                               // fillColor: AppColors.white,
                                               counterText: "",
@@ -1923,7 +1923,7 @@ class IaskView extends GetView<HomeController> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               const Text(
-                                                "Phone Number: ",
+                                                "Phone Number: (10 digits)",
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
@@ -1943,7 +1943,7 @@ class IaskView extends GetView<HomeController> {
                                                   //cursorColor: AppColors.blue,
                                                   maxLength: 10,
                                                   decoration: InputDecoration(
-                                                    hintText: "Enter your Phone Number: (10 digits)",
+                                                    hintText: "Enter your Phone Number",
                                                     // filled: true,
                                                     // fillColor: AppColors.white,
                                                     counterText: "",
