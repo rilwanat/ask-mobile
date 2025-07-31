@@ -398,6 +398,8 @@ class IaskView extends GetView<HomeController> {
                             )
                                     && controller.profileData.value!.isCheat != "Yes"
                             ) ?
+
+                            // NO KYC, AND IS NOTCHEAT
                             Container(
                               // color: AppColors.askGreen,
                               child: Column(
@@ -1677,12 +1679,7 @@ class IaskView extends GetView<HomeController> {
                             ) ? Container(
                               color: AppColors.askOrange,
                               // height: 60,
-                              child: Column(
-                                children: [
-
-                                ],
-                              ),
-                            ) :
+                              child: Column( children: [], ), ) :
                                 Container(
                                 ),
 
@@ -1700,6 +1697,7 @@ class IaskView extends GetView<HomeController> {
                                   // height: 60,
                                   child: Column(
                                     children: [
+                                      // NO KYC, AND IS CHEAT AND HAS NAME,
                                   (controller.profileData.value!.accountName != "") ?
                                   Padding(
                                         padding: EdgeInsets.symmetric(horizontal: ScreenSize.scaleWidth(context, 24)),
@@ -1766,8 +1764,8 @@ class IaskView extends GetView<HomeController> {
                                       )
                                       :
 
-                                  // IS CHEAT AND EMAIL IS VERIFIED
-                                  controller.profileData.value!.emailVerified == "Yes" ?
+                                  // NO KYC, AND IS CHEAT AND NO NAME, AND EMAIL IS VERIFIED
+                                  controller.profileData.value!.emailVerified == "Yes" && controller.profileData.value!.isCheat == "Yes" ?
                                   Container(
                                     // color: AppColors.askGreen,
                                     child: Column(

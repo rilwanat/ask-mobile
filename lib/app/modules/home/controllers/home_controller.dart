@@ -94,6 +94,18 @@ class HomeController extends GetxController {
 
     //myrequests
     if (value == 2) {
+
+      //
+      kycPhoneNumberController.text = "";
+      kycAccountNumberController.text = "";
+      kycBankNameController.text = "";
+      kycGenderController.text = "";
+      kycStateOfResidenceController.text = "";
+      // cameraController = Rx<CameraController?>(null);
+      isCameraInitialized.value = false;
+      imagePath.value = '';
+      //
+
       await getCheckIfUserCanAsk(email: profileData.value!.emailAddress!);
       await getMyHelpRequests(email: profileData.value!.emailAddress!);
     }
@@ -348,7 +360,6 @@ class HomeController extends GetxController {
     ]);
   }
   //
-
 
   // Camera variables
   Rx<CameraController?> cameraController = Rx<CameraController?>(null);
