@@ -5,9 +5,12 @@ import 'BannerAdController.dart';
 
 class BannerAdExample extends StatelessWidget {
 
-  final BannerAdController controller = Get.isRegistered<BannerAdController>()
-      ? Get.find<BannerAdController>()
-      : Get.put(BannerAdController());
+  final BannerAdController controller =
+  // Get.isRegistered<BannerAdController>()
+  //     ? Get.find<BannerAdController>()
+  //     :
+  // Get.put(BannerAdController());
+  Get.put(BannerAdController(), tag: UniqueKey().toString());
 
   @override
   Widget build(BuildContext context) {

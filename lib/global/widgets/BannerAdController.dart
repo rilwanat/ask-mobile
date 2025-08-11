@@ -13,8 +13,6 @@ class BannerAdController extends GetxController {
   final int _maxRetryAttempts = 1;
 
   final homeController = Get.find<HomeController>();
-  // final adUnitId = dotenv.get('ADMOB_AD_UNIT');
-  // String adUnitId = Get.find<HomeController>().adMobUnit.value;
   String? adUnitId;
 
   @override
@@ -29,7 +27,7 @@ class BannerAdController extends GetxController {
     ever(Get.find<HomeController>().adMobUnit, (value) {
       if (value.isNotEmpty) {
         adUnitId = value;
-        debugPrint('AdUnitId loaded: $adUnitId');
+        // debugPrint('AdUnitId loaded: $adUnitId');
         _loadBannerAd();
       }
     });
@@ -38,7 +36,7 @@ class BannerAdController extends GetxController {
     final homeAdUnit = Get.find<HomeController>().adMobUnit.value;
     if (homeAdUnit.isNotEmpty) {
       adUnitId = homeAdUnit;
-      debugPrint('AdUnitId loaded immediately: $adUnitId');
+      // debugPrint('AdUnitId loaded immediately: $adUnitId');
       _loadBannerAd();
     }
   }
