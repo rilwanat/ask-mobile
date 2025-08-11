@@ -10,6 +10,11 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
+
+import 'package:encrypt/encrypt.dart' as enc;
+import 'package:crypto/crypto.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,6 +31,7 @@ import '../../../data/models/beneficiaries/BeneficiariesResponse.dart';
 import '../../../data/models/cryptos/CryptosResponse.dart';
 import '../../../data/models/dnq/DnqResponse.dart';
 import '../../../data/models/donations/DonationsResponse.dart';
+import '../../../data/models/keys/KeysResponse.dart';
 import '../../../data/models/login/UserData.dart';
 import '../../../data/models/my_requests/MyHelpRequestsResponse.dart';
 import '../../../data/models/nominate/NominateResponse.dart';
@@ -69,6 +75,10 @@ class HomeController extends GetxController {
   final CachedData _cachedData = CachedData();
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  RxString liveKey = "".obs;
+  RxString testKey = "".obs;
+  RxString adMobUnit = "".obs;
 
 
   var notificationMessages = <Map<String, dynamic>>[].obs;
@@ -452,6 +462,8 @@ class HomeController extends GetxController {
       // Then get other data in parallel
       // Run all independent requests in parallel
       await Future.wait<void>([
+        getKeys(),
+
         getRequests(),
         getBeneficiaries(),
         // getMyHelpRequests(email: profileData.value!.emailAddress!),
@@ -1327,9 +1339,69 @@ class HomeController extends GetxController {
   }
 
 
+  getKeys() async {
+    setLoading(true);
+    // debugPrint("getKeys");
+
+    errorMessage.value = "";
+    try {
+      KeysResponse? response;
+      response =
+      await SecureService().readKeys();
+
+      //debugPrint(response!.toJson().toString());
+      //
+      setLoading(false);
+      if (response!.status == true) {
+        liveKey.value = KeyDecryptor.decrypt(response.data!.live!);
+        testKey.value = KeyDecryptor.decrypt(response.data!.test!);
+        adMobUnit.value = KeyDecryptor.decrypt(response.data!.admob!);
+
+        // debugPrint(liveKey.value);
+        // debugPrint(testKey.value);
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Keys",
+        //     m: "${response.data!.length.toString().toString()}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.askBlue,
+        //     sp: SnackPosition.TOP);
+
+
+
+
+      } else {
+        errorMessage.value = "A.S.K Keys: Something wrong happened. Try again";//response.message!;
+
+        // Utils.showTopSnackBar(
+        //     t: "A.S.K Keys",
+        //     m: errorMessage.value, //"${response.message}",
+        //     tc: AppColors.white,
+        //     d: 3,
+        //     bc: AppColors.red,
+        //     sp: SnackPosition.TOP);
+      }
+
+      //clearOtpFields();
+    } on DioException catch (e) {
+      setLoading(false);
+      debugPrint(e.toString());
+      final message = DioExceptions.fromDioError(e).toString();
+      //
+      Utils.showTopSnackBar(
+          t: "A.S.K Keys: Attention",
+          m: "$message",
+          tc: AppColors.black,
+          d: 3,
+          bc: AppColors.red,
+          sp: SnackPosition.TOP);
+    }
+  }
+
+
   getRequests() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getRequests");
 
     errorMessage.value = "";
     try {
@@ -1392,7 +1464,7 @@ class HomeController extends GetxController {
     required String email,
   }) async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getMyHelpRequests");
 
     errorMessage.value = "";
     try {
@@ -1448,7 +1520,7 @@ class HomeController extends GetxController {
 
   getBeneficiaries() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getBeneficiaries");
 
     errorMessage.value = "";
     try {
@@ -1503,7 +1575,7 @@ class HomeController extends GetxController {
 
   getSponsors() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getSponsors");
 
     errorMessage.value = "";
     try {
@@ -1556,7 +1628,7 @@ class HomeController extends GetxController {
 
   getCryptos() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getCryptos");
 
     errorMessage.value = "";
     try {
@@ -1609,7 +1681,7 @@ class HomeController extends GetxController {
 
   getDonations() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getDonations");
 
     errorMessage.value = "";
     try {
@@ -1662,7 +1734,7 @@ class HomeController extends GetxController {
 
   getDollarExchange() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getDollarExchange");
 
     errorMessage.value = "";
     try {
@@ -1715,7 +1787,7 @@ class HomeController extends GetxController {
 
   getPaystackSubscriptions() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getPaystackSubscriptions");
 
     errorMessage.value = "";
     try {
@@ -1768,7 +1840,7 @@ class HomeController extends GetxController {
 
   getBanks() async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("getBanks");
 
     errorMessage.value = "";
     try {
@@ -1824,7 +1896,7 @@ class HomeController extends GetxController {
     required String email
   }) async {
     setLoading(true);
-    debugPrint("loginUser");
+    debugPrint("resendVerificationCode");
 
     errorMessage.value = "";
     try {
@@ -1883,7 +1955,7 @@ class HomeController extends GetxController {
     required String verificationCode,
   }) async {
     setLoading(true);
-    debugPrint("loginUser");
+    // debugPrint("verifyEmail");
 
     errorMessage.value = "";
     try {
@@ -1949,7 +2021,7 @@ class HomeController extends GetxController {
     required String imagePath,
   }) async {
     setLoading(true);
-    debugPrint("loginUser");
+    // debugPrint("updateUserKyc");
 
     errorMessage.value = "";
     try {
@@ -2016,7 +2088,7 @@ class HomeController extends GetxController {
     required String imagePath,
   }) async {
     setLoading(true);
-    debugPrint("loginUser");
+    // debugPrint("updateUserKycSelfie");
 
     errorMessage.value = "";
     try {
@@ -2086,7 +2158,7 @@ class HomeController extends GetxController {
     required File image,
   }) async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("createHelpRequest");
 
     errorMessage.value = "";
     try {
@@ -2159,7 +2231,7 @@ class HomeController extends GetxController {
     required File image,
   }) async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("updateHelpRequestImage");
 
     errorMessage.value = "";
     try {
@@ -2228,7 +2300,7 @@ class HomeController extends GetxController {
     required String helpToken
   }) async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("updateHelpRequest");
 
     errorMessage.value = "";
     try {
@@ -2298,7 +2370,7 @@ class HomeController extends GetxController {
     required String helpToken
   }) async {
     setLoading(true);
-    debugPrint("registerUser");
+    // debugPrint("deleteHelpRequest");
 
 
 
@@ -2368,7 +2440,7 @@ class HomeController extends GetxController {
   }) async {
     setLoading(true);
     // _isNominating.value = true;
-    debugPrint("registerUser");
+    // debugPrint("handleNominate");
 
     errorMessage.value = "";
     try {
@@ -2437,7 +2509,7 @@ class HomeController extends GetxController {
     required String email,
   }) async {
     setLoading(true);
-    debugPrint("getCheckIfUserCanAsk");
+    // debugPrint("getCheckIfUserCanAsk");
 
     errorMessage.value = "";
     try {
@@ -2765,9 +2837,10 @@ class HomeController extends GetxController {
   }
       ) async {
 
-    final secretKey = dotenv.getBool('LIVE_MODE')
-        ? dotenv.get('LIVE_PAYSTACK_API_SECRET_KEY')
-        : dotenv.get('DEMO_PAYSTACK_API_SECRET_KEY');
+    final secretKey = (dotenv.getBool('LIVE_MODE')
+        ? liveKey
+        : testKey
+    ).value;
 
     final client = PaystackClient(secretKey: secretKey);
 
@@ -2846,7 +2919,7 @@ class HomeController extends GetxController {
 
 
 
-    debugPrint("#1");
+    // debugPrint("#1");
     try {
 
       if (isAlreadySubscribed == false)
@@ -2981,12 +3054,12 @@ class HomeController extends GetxController {
         );
       }
 
-      debugPrint("#2");
+      // debugPrint("#2");
 
       setLoading(false);
 
     } catch (e) {
-      debugPrint("#3");
+      // debugPrint("#3");
       setLoading(false);
       debugPrint("Error during payment: $e"); // Log the error for debugging
 
@@ -3010,7 +3083,7 @@ class HomeController extends GetxController {
     required String reference,
   }) async {
     setLoading(true);
-    debugPrint("loginUser");
+    // debugPrint("incrementDNQ");
 
     errorMessage.value = "";
     try {
@@ -3076,7 +3149,7 @@ class HomeController extends GetxController {
     required String email
   }) async {
     setLoading(true);
-    debugPrint("getCheckIfUserCanAsk");
+    // debugPrint("sendDeleteToken");
 
     errorMessage.value = "";
     try {
@@ -3134,7 +3207,7 @@ class HomeController extends GetxController {
     required String deleteToken,
   }) async {
     setLoading(true);
-    debugPrint("getCheckIfUserCanAsk");
+    // debugPrint("deleteAccount");
 
     errorMessage.value = "";
     try {
@@ -3197,4 +3270,49 @@ class HomeController extends GetxController {
   }
 
 
+}
+
+
+class KeyDecryptor {
+  static final String encryptionKey = "ASK-32CharacterSecretKey1234567890!";
+
+  static String decrypt(String encryptedData) {
+    try {
+      // Verify the encrypted data format
+      if (!encryptedData.contains('::')) {
+        throw FormatException('Missing IV separator');
+      }
+
+      final parts = encryptedData.split('::');
+      if (parts.length != 2) {
+        throw FormatException('Invalid format - expected encrypted::iv');
+      }
+
+      // Handle base64 decoding
+      final encryptedBase64 = parts[0];
+      final ivBase64 = parts[1];
+
+      if (encryptedBase64.isEmpty || ivBase64.isEmpty) {
+        throw FormatException('Empty encrypted data or IV');
+      }
+
+      // Create encryption objects
+      final encrypted = enc.Encrypted.fromBase64(encryptedBase64);
+      final iv = enc.IV.fromBase64(ivBase64);
+
+      // Generate proper 256-bit key
+      final keyBytes = sha256.convert(utf8.encode(encryptionKey)).bytes;
+      final key = enc.Key(Uint8List.fromList(keyBytes));
+
+      // Initialize encrypter
+      final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
+
+      // Perform decryption
+      return encrypter.decrypt(encrypted, iv: iv);
+    } catch (e) {
+      debugPrint('Decryption error: $e');
+      debugPrint('Failed to decrypt: $encryptedData');
+      return '';
+    }
+  }
 }

@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../app/modules/home/controllers/home_controller.dart';
+
 class BannerAdController extends GetxController {
   final Rx<BannerAd?> bannerAd = Rx<BannerAd?>(null);
   final RxBool isBannerAdLoaded = false.obs;
@@ -10,17 +12,40 @@ class BannerAdController extends GetxController {
   int _retryAttempt = 0;
   final int _maxRetryAttempts = 1;
 
-  final adUnitId = dotenv.get('ADMOB_AD_UNIT');
+  final homeController = Get.find<HomeController>();
+  // final adUnitId = dotenv.get('ADMOB_AD_UNIT');
+  // String adUnitId = Get.find<HomeController>().adMobUnit.value;
+  String? adUnitId;
 
   @override
   void onInit() {
     super.onInit();
-    _loadBannerAd();
+
+    // adUnitId = homeController.adMobUnit.value;
+    // print(adUnitId);
+    // _loadBannerAd();
+
+    // Wait for HomeController to be ready
+    ever(Get.find<HomeController>().adMobUnit, (value) {
+      if (value.isNotEmpty) {
+        adUnitId = value;
+        debugPrint('AdUnitId loaded: $adUnitId');
+        _loadBannerAd();
+      }
+    });
+
+    // Trigger initial check in case value was already set
+    final homeAdUnit = Get.find<HomeController>().adMobUnit.value;
+    if (homeAdUnit.isNotEmpty) {
+      adUnitId = homeAdUnit;
+      debugPrint('AdUnitId loaded immediately: $adUnitId');
+      _loadBannerAd();
+    }
   }
 
   void _loadBannerAd() {
     final ad = BannerAd(
-      adUnitId: adUnitId,
+      adUnitId: adUnitId!,
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(

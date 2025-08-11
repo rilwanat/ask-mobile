@@ -10,6 +10,7 @@ import '../models/cryptos/CryptosResponse.dart';
 import '../models/dnq/DnqResponse.dart';
 import '../models/dollar_exchange/DollarExchangeResponse.dart';
 import '../models/donations/DonationsResponse.dart';
+import '../models/keys/KeysResponse.dart';
 import '../models/login/LoginResponse.dart';
 import '../models/my_requests/MyHelpRequestsResponse.dart';
 import '../models/nominate/NominateResponse.dart';
@@ -1115,5 +1116,38 @@ class SecureService {
     }
   }
 
+
+
+  // Keys
+  Future<KeysResponse?> readKeys() async {
+    KeysResponse? responseData;
+
+    // // Convert FormData to a JSON string
+    // Map<String, dynamic> formDataMap = {
+    //   "email": email,
+    //   "password": password
+    // };
+    // String formDataString = json.encode(formDataMap);
+
+    // print(formDataString);
+
+    try {
+      final response = await apiClient.get(
+        "/response/ask-user-read-keys.php",
+        // data: formDataString,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json'
+          }, // Specify the content type
+        ),
+      );
+
+      responseData = KeysResponse.fromJson(response.data);
+      return responseData;
+    } catch (e, s) {
+      print(s);
+      rethrow;
+    }
+  }
 
 }
