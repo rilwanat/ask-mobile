@@ -327,6 +327,21 @@ class Utils {
 
 
 
+                            if (message.contains("Device recently used to nominate, try again in")) {
+
+                              if (Get.find<HomeController>().profileData.value!.voteWeight == "1") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => InterstitialAdExample()),
+                                );
+                              }
+
+                            }
+
+
+
+
+
 
 
                           },
