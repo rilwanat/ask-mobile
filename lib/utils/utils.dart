@@ -327,7 +327,12 @@ class Utils {
 
 
 
-                            if (message.contains("Device recently used to nominate, try again in")) {
+                            if (
+                            message.contains("Device recently used to nominate, try again in")
+                                ||
+                            message.contains("Try again tomorrow. You have either nominated already or trying to share device")
+
+                            ) {
 
                               if (Get.find<HomeController>().profileData.value!.voteWeight == "1") {
                                 Navigator.push(
