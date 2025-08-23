@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../global/app_color.dart';
 import '../../../../global/app_strings.dart';
@@ -316,6 +317,54 @@ class RegisterView extends GetView<AuthController> {
                               ),
                             ),
 
+                            const SizedBox(height: 20),
+
+                            GestureDetector(
+                              onTap: () {
+                                launchUrl(Uri.parse('https://askfoundations.org/terms-and-conditions'));
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "A.S.K Terms & Conditions",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "LatoRegular",
+                                      color: AppColors.askBlue,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.askBlue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Obx(() => GestureDetector(
+                              onTap: () {
+                                controller.toggleTermsCheckbox();
+                              },
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: controller.isTermsChecked,
+                                    onChanged: (value) => controller.toggleTermsCheckbox(),
+                                    activeColor: AppColors.askBlue,
+                                    checkColor: AppColors.askGray,
+                                  ),
+                                  const Text(
+                                    "Accept A.S.K Terms & Conditions",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "LatoRegular",
+                                      color: AppColors.askText,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+
 
                             Flexible(
                               child: Align(
@@ -336,7 +385,15 @@ class RegisterView extends GetView<AuthController> {
                                         AskButton(
                                           text: "Register with Google",
                                           function: () async {
-                                            // controller.finalStep();
+                                            if (!controller.isTermsChecked) {
+                                              Utils.showInformationDialog(
+                                                status: null,
+                                                title: "A.S.K Registration", message: "Please accept A.S.K Terms & Conditions.",
+                                              );
+                                              return;
+                                            }
+
+
                                             await controller.registerWithGoogle();
                                           },
                                           backgroundColor: AppColors.askSoftTheme,
@@ -404,6 +461,15 @@ class RegisterView extends GetView<AuthController> {
                             enabled: true,
                             text: "Register",
                             function: () async {
+
+                              if (!controller.isTermsChecked) {
+                                Utils.showInformationDialog(
+                                  status: null,
+                                  title: "A.S.K Registration", message: "Please accept A.S.K Terms & Conditions.",
+                                );
+                                return;
+                              }
+
 
                               String email = controller.registerEmailController.text;
                               String password = controller.registerPasswordController.text;

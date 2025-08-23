@@ -51,6 +51,9 @@ class AuthController extends GetxController {
 
   RxString errorMessage = "".obs;
 
+  final _isTermsChecked = false.obs;
+  bool get isTermsChecked => _isTermsChecked.value;
+
   setLoading(bool? b) {
     _isLoading.value = b!;
     update();
@@ -119,6 +122,10 @@ class AuthController extends GetxController {
 
   toggleObscurePassword() {
     update([_obscurePassword.value = !_obscurePassword.value]);
+  }
+
+  toggleTermsCheckbox() {
+    update([_isTermsChecked.value = !_isTermsChecked.value]);
   }
 
   @override
