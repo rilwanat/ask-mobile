@@ -379,7 +379,7 @@ class RegisterView extends GetView<AuthController> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         const SizedBox(
-                                          height: 32,
+                                          height: 0, //32,
                                         ),
 
                                         AskButton(

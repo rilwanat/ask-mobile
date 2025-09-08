@@ -506,18 +506,44 @@ class Utils {
 // share
 
 
+  // static Future<String?> getDeviceId() async {
+  //   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //
+  //   if (Platform.isAndroid) {
+  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //     // return androidInfo.id; // Android ID (changes on factory reset)
+  //     return androidInfo.serialNumber; // Android ID (changes on factory reset)
+  //   } else if (Platform.isIOS) {
+  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //     // return iosInfo.identifierForVendor; // IDFV (changes on app reinstall)
+  //     return iosInfo.identifierForVendor; // IDFV (changes on app reinstall)
+  //   }
+  //   return null;
+  // }
+
   static Future<String?> getDeviceId() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
+
+
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id; // Android ID (changes on factory reset)
+      final androidInfo = await deviceInfo.androidInfo;
+      return
+        // androidInfo.a +
+          androidInfo.brand +
+            androidInfo.model +
+            androidInfo.board +
+            androidInfo.device +
+            androidInfo.hardware +
+            androidInfo.product
+    ; // ANDROID_ID (stable, survives reboots, resets on factory reset)
     } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor; // IDFV (changes on app reinstall)
+      final iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor; // Unique per app/vendor, resets on reinstall
     }
     return null;
   }
+
 
 
 

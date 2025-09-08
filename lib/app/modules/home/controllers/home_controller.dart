@@ -1045,7 +1045,15 @@ class HomeController extends GetxController {
     //   startAutoScrollBeneficiaries();
     // });
 
+    // showAMessage();
     super.onInit();
+  }
+
+  Future<void> showAMessage() async {
+    String? s = await Utils.getDeviceId();
+    Utils.showTopSnackBar(t:s!, m: s!, tc: AppColors.black, d: 5, bc: AppColors.white, sp: SnackPosition.TOP);
+    print(s!);
+    print(s.length);
   }
 
   //
